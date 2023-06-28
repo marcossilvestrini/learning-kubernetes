@@ -70,7 +70,7 @@ Start-Process -Wait -NoNewWindow -FilePath "$virtualboxFolder\VBoxManage.exe" `
 setx VAGRANT_HOME "$vagrantHome" >$null
 
 # Copy app files
-Copy-Item -Force "$baseProject\index.html" -Destination "$baseProject\configs\linux\kubernetes\apps\app-silvestrini"
+#Copy-Item -Force "$baseProject\index.html" -Destination "$baseProject\configs\linux\kubernetes\apps\app-silvestrini"
 
 # Up kubernetes stack
 $kubernetes = "$baseVagrantfile"

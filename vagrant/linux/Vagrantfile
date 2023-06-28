@@ -91,7 +91,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   end
 
-  # VM debian_server01 - Docker Node 1
+  # VM debian_server01 - Kubernetes control pane 1
   config.vm.define "debian-server01"  do |debian_server01|
     debian_server01.vm.box = BOX_DEBIAN_NAME
 
@@ -138,7 +138,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
   end  
 
-  # VM debian_server02 - Docker Node 2
+  # VM debian_server02 - Kubernetes control pane 2
   config.vm.define "debian-server02"  do |debian_server02|
     debian_server02.vm.box = BOX_DEBIAN_NAME
 
@@ -184,7 +184,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
   end  
 
-  # VM debian_server03 - Docker Node 3
+  # VM debian_server03 - Kubernetes worker 1
   config.vm.define "debian-server03"  do |debian_server03|
     debian_server03.vm.box = BOX_DEBIAN_NAME
 
@@ -230,51 +230,97 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     
   end  
 
-  # VM debian_client - Some serviec utils, thunderbird,jxplorer,google-chrome, firefox
-  config.vm.define "debian-client01"  do |debian_client01|
-    debian_client01.vm.box = BOX_DEBIAN_NAME
+  # VM debian_server03 - Kubernetes worker 2
+  config.vm.define "debian-server04"  do |debian_server04|
+    debian_server04.vm.box = BOX_DEBIAN_NAME
+
+    # REZISE PRIMARY DISK
+    debian_server04.vm.disk :disk, size: DEBIAN_DISK_SIZE, primary: true
 
     # VARIABLE HOSTNAME
-    VM_DEBIAN_CLIENT01= "debian-client01"
+      VM_DEBIAN_SERVER04= "debian-server04"
 
     # HOSTNAME
-    debian_client01.vm.hostname =VM_DEBIAN_CLIENT01
+    debian_server04.vm.hostname = VM_DEBIAN_SERVER04
 
     # NETWORK
-    debian_client01.vm.network "public_network", mac: "080027f3096a" ,ip: "192.168.0.150",mode: "bridge",bridge: [
+    debian_server04.vm.network "public_network", mac: "080027f3069b", ip: "192.168.0.143", netmask: "255.255.255.0", mode: "bridge",bridge:[
       "Intel(R) I211 Gigabit Network Connection",
       "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
     ]
-    #debian_client01.vm.network "private_network",type: "dhcp",ip: "172.36.12.1",mac: "080027f3096b"
+    #debian_server04.vm.network "private_network", mac: "080027f3069b", ip: "172.36.12.242", netmask: "255.255.255.0"
 
     # MOUNTS
-    debian_client01.vm.synced_folder ".", "/vagrant", disabled: true
-    debian_client01.vm.synced_folder "../../security/", "/home/vagrant/security"
-    debian_client01.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
-    debian_client01.vm.synced_folder "../../scripts/linux", "/home/vagrant/scripts"    
-    debian_client01.vm.synced_folder "../../test/linux/", "/home/vagrant/test"
+    debian_server04.vm.synced_folder ".", "/vagrant", disabled: true
+    debian_server04.vm.synced_folder "../../security/", "/home/vagrant/security"
+    debian_server04.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
+    debian_server04.vm.synced_folder "../../scripts/linux/", "/home/vagrant/scripts"
 
     #PROVIDER
-    debian_client01.vm.provider "virtualbox" do |vb|
+    debian_server04.vm.provider "virtualbox" do |vb|
       vb.linked_clone = true
-      vb.name =VM_DEBIAN_CLIENT01
+      vb.name =  VM_DEBIAN_SERVER04
       vb.memory = 8192
       vb.cpus = 3
       vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
     end
 
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-    debian_client01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
+    debian_server04.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
 
     # INSTALL DOCKER
-    debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/userdata-docker.sh"
+    debian_server04.vm.provision "shell", path: "../../scripts/linux/docker/userdata-docker.sh"
 
-    # CREATE DOCKER IMAGE FOR TESTING
-    debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/create-docker-image.sh"
+    # SET DOCKER SWARM
+    debian_server04.vm.provision "shell", path: "../../scripts/linux/docker/docker-swarm.sh"
+    
+  end  
 
-    # CHECK DOCKER IMAGE
-    debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/check-docker-image.sh"
+  # # VM debian_client 
+  # config.vm.define "debian-client01"  do |debian_client01|
+  #   debian_client01.vm.box = BOX_DEBIAN_NAME
 
-  end
+  #   # VARIABLE HOSTNAME
+  #   VM_DEBIAN_CLIENT01= "debian-client01"
+
+  #   # HOSTNAME
+  #   debian_client01.vm.hostname =VM_DEBIAN_CLIENT01
+
+  #   # NETWORK
+  #   debian_client01.vm.network "public_network", mac: "080027f3096a" ,ip: "192.168.0.150",mode: "bridge",bridge: [
+  #     "Intel(R) I211 Gigabit Network Connection",
+  #     "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
+  #   ]
+  #   #debian_client01.vm.network "private_network",type: "dhcp",ip: "172.36.12.1",mac: "080027f3096b"
+
+  #   # MOUNTS
+  #   debian_client01.vm.synced_folder ".", "/vagrant", disabled: true
+  #   debian_client01.vm.synced_folder "../../security/", "/home/vagrant/security"
+  #   debian_client01.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
+  #   debian_client01.vm.synced_folder "../../scripts/linux", "/home/vagrant/scripts"    
+  #   debian_client01.vm.synced_folder "../../test/linux/", "/home/vagrant/test"
+
+  #   #PROVIDER
+  #   debian_client01.vm.provider "virtualbox" do |vb|
+  #     vb.linked_clone = true
+  #     vb.name =VM_DEBIAN_CLIENT01
+  #     vb.memory = 8192
+  #     vb.cpus = 3
+  #     vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+  #   end
+
+  #   # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
+
+  #   # INSTALL DOCKER
+  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/userdata-docker.sh"
+
+  #   # CREATE DOCKER IMAGE FOR TESTING
+  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/create-docker-image.sh"
+
+  #   # CHECK DOCKER IMAGE
+  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/check-docker-image.sh"
+
+  # end
 
 end
