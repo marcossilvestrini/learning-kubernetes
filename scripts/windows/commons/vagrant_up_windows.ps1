@@ -82,7 +82,7 @@ Copy-Item .\.vagrant\machines\debian-server01\virtualbox\private_key $vagrantPK\
 Copy-Item .\.vagrant\machines\debian-server02\virtualbox\private_key $vagrantPK\debian-server02
 Copy-Item .\.vagrant\machines\debian-server03\virtualbox\private_key $vagrantPK\debian-server03
 Copy-Item .\.vagrant\machines\debian-server04\virtualbox\private_key $vagrantPK\debian-server04
-Copy-Item .\.vagrant\machines\debian-client01\virtualbox\private_key $vagrantPK\debian-client01
+#Copy-Item .\.vagrant\machines\debian-client01\virtualbox\private_key $vagrantPK\debian-client01
 
 # Fix powershell error
 $Env:VAGRANT_PREFER_SYSTEM_BIN += 0

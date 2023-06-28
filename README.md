@@ -155,6 +155,12 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 ## Acknowledgments
 
 * [kubernetes Website](https://kubernetes.io/)
+* [Github](https://github.com/kubernetes/kubernetes/)
+* [Issues](https://github.com/kubernetes/kubernetes/issues)
+* [CKA Certification](https://www.cncf.io/certification/cka/)
+* [CKAD Certification](https://www.cncf.io/certification/ckad/)
+* [CKS Certification](https://www.cncf.io/certification/cks/)
+* [Livro Linuxips](https://livro.descomplicandokubernetes.com.br/pt/SUMMARY.md)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
