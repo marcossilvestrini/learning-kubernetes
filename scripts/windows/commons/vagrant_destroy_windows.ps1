@@ -53,11 +53,7 @@ $kubernetes="$baseVagrantfile\linux"
 
 # VM name
 $vmName= @(
-    "ol9-server01",
-    "debian-server01",
-    "debian-server02",
-    "debian-server03",
-    "debian-server04"
+    "infra-server01"    
 )
 
 # Folder vagrant virtualbox machines artefacts

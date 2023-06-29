@@ -1,0 +1,6 @@
+
+write-kubeconfig-mode: "0644"
+server: https://rancher.skynet.com.br:9345
+token: tokenNode
+tls-san:
+  - rancher.skynet.com.br

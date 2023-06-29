@@ -77,11 +77,8 @@ $kubernetes = "$baseVagrantfile"
 Set-Location $kubernetes
 vagrant up
 #Start-Process -Wait -WindowStyle Minimized -FilePath $vagrant -ArgumentList "up"  -Verb runAs
-Copy-Item .\.vagrant\machines\ol9-server01\virtualbox\private_key $vagrantPK\ol9-server01
-Copy-Item .\.vagrant\machines\debian-server01\virtualbox\private_key $vagrantPK\debian-server01
-Copy-Item .\.vagrant\machines\debian-server02\virtualbox\private_key $vagrantPK\debian-server02
-Copy-Item .\.vagrant\machines\debian-server03\virtualbox\private_key $vagrantPK\debian-server03
-Copy-Item .\.vagrant\machines\debian-server04\virtualbox\private_key $vagrantPK\debian-server04
+Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
+
 #Copy-Item .\.vagrant\machines\debian-client01\virtualbox\private_key $vagrantPK\debian-client01
 
 # Fix powershell error

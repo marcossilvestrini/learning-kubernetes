@@ -200,6 +200,8 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 * [Minikube](https://github.com/kubernetes/minikube)
 * [k0s](https://k0sproject.io/)
 * [k3s](https://k3s.io/)
+* [RKE2](https://docs.rke2.io/architecture)
+* [Up RKE2 Cluster HA](https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

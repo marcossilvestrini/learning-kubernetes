@@ -1,0 +1,26 @@
+nodes:
+  - address: 192.168.0.140
+    internal_address: 192.168.0.140
+    user: root
+    role: [controlplane, worker, etcd]
+  - address: 192.168.0.141
+    internal_address: 192.168.0.141
+    user: root
+    role: [controlplane, worker, etcd]
+  - address: 192.168.0.142
+    internal_address: 192.168.0.142
+    user: root
+    role: [controlplane, worker, etcd]
+
+services:
+  etcd:
+    snapshot: true
+    creation: 6h
+    retention: 24h
+
+# Required for external TLS termination with
+# ingress-nginx v0.22+
+ingress:
+  provider: nginx
+  options:
+    use-forwarded-headers: "true"

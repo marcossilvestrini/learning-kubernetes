@@ -1,0 +1,4 @@
+write-kubeconfig-mode: "0644"
+tls-san:
+  - rancher.skynet.com.br
+  - 192.168.0.140

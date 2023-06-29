@@ -118,6 +118,9 @@ export PS1="\[\e[31m\][\[\e[m\]\[\e[38;5;172m\]\u\[\e[m\]@\[\e[38;5;153m\]\h\[\e
 # Timezone
 export TZ='America/Sao_Paulo'
 
+# kubectl path
+export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
+
 # kubectl autocomplete
 source <(kubectl completion bash)
 
