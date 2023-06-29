@@ -96,6 +96,35 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   end
 
+  # VM load_balancer - racher.skynet.com.br
+  config.vm.define "load_balance"  do |load_balance|
+    load_balance.vm.box = BOX_ROCK_NAME
+    
+    # VARIABLE HOSTNAME
+    VM_LOAD_BALANCE= "load_balance"
+
+    # HOSTNAM
+    load_balance.vm.hostname =VM_LOAD_BALANCE
+
+    # NETWORK
+    load_balance.vm.network "public_network", nic_type: "virtio", mac: "080027f3066b", ip: "192.168.0.131", netmask: "255.255.255.0", mode: "bridge",bridge: [
+      "Intel(R) I211 Gigabit Network Connection",
+      "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
+    ]
+
+    # PROVIDER
+    load_balance.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name =VM_LOAD_BALANCE
+      vb.memory = 2048
+      vb.cpus = 1
+    end
+
+    # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+    load_balance.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
+
+  end
+
   # # Control Plane Servers
   # PLANES = ["rock-server01","rock-server02","rock-server03"]
   # N = 2
