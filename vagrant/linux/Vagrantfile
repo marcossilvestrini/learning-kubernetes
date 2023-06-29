@@ -130,8 +130,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
     debian_server01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
 
-    # INSTALL DOCKER
-    debian_server01.vm.provision "shell", path: "../../scripts/linux/kubernetes/install.sh"
+    # INSTALL KUBCTL
+    debian_server01.vm.provision "shell", path: "../../scripts/linux/kubctl/install.sh"
+
+    # INSTALL RKE2
+    debian_server01.vm.provision "shell", path: "../../scripts/linux/rke2/install.sh"
     
   end  
 
@@ -173,8 +176,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
     debian_server02.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
 
-    # INSTALL DOCKER
-    debian_server02.vm.provision "shell", path: "../../scripts/linux/kubernetes/install.sh"
+    # INSTALL KUBCTL
+    debian_server02.vm.provision "shell", path: "../../scripts/linux/kubctl/install.sh"
+
+    # INSTALL RKE2
+    debian_server02.vm.provision "shell", path: "../../scripts/linux/rke2/install.sh"    
     
   end  
 
@@ -216,8 +222,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
     debian_server03.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
 
-    # INSTALL DOCKER
-    debian_server03.vm.provision "shell", path: "../../scripts/linux/kubernetes/install.sh"
+    # INSTALL KUBCTL
+    debian_server03.vm.provision "shell", path: "../../scripts/linux/kubctl/install.sh"
+
+    # INSTALL RKE2
+    debian_server03.vm.provision "shell", path: "../../scripts/linux/rke2/install.sh"
     
   end  
 
@@ -259,8 +268,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
     debian_server04.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
 
-    # INSTALL DOCKER
-    debian_server04.vm.provision "shell", path: "../../scripts/linux/kubernetes/install.sh"
+    # INSTALL KUBCTL
+    debian_server04.vm.provision "shell", path: "../../scripts/linux/kubctl/install.sh"
+
+    # INSTALL RKE2
+    debian_server04.vm.provision "shell", path: "../../scripts/linux/rke2/install.sh"
    
     
   end  

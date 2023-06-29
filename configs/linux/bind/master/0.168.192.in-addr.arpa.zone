@@ -19,3 +19,6 @@ $TTL 1h
 142                 PTR     debian-server03.skynet.com.br.
 143                 PTR     debian-server04.skynet.com.br.
 150                 PTR     debian-client01.skynet.com.br.
+140                 PTR     rancher.skynet.com.br.
+141                 PTR     rancher.skynet.com.br.
+142                 PTR     rancher.skynet.com.br.

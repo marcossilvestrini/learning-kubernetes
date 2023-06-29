@@ -15,12 +15,14 @@ $TTL 1h
 ol9-server01                A       192.168.0.130   ;glue record,dns master
 debian-server01             A       192.168.0.140   ;kubernetes control plane server
 debian-server02             A       192.168.0.141   ;kubernetes control plane server
-debian-server03             A       192.168.0.142   ;kubernetes worker server
+debian-server03             A       192.168.0.142   ;kubernetes control plane server
 debian-server04             A       192.168.0.143   ;kubernetes worker plane server
 debian-client01             A       192.168.0.150   ;client server
 win-silvestrini             A       192.168.0.100   ;my desktop
-win-silvestrini2            A      192.168.0.101    ;my notebook
-kubernets                   A       192.168.0.140   ;kubernetes control plane server
+win-silvestrini2            A       192.168.0.101   ;my notebook
+rancher                     A       192.168.0.140   ;rke2 node server
+rancher                     A       192.168.0.141   ;rke2 node server
+rancher                     A       192.168.0.142   ;rke2 node server
 mail                        A       192.168.0.130   ;mail
 ftp                         CNAME   ol9-server01    ;ftp
 www                         CNAME   ol9-server02    ;http

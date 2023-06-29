@@ -79,13 +79,37 @@ and how to install them.
 
 ### Installation
 
-Clone the repo
+#### Clone repository
 
 ```sh
 git clone https://github.com/marcossilvestrini/learning-kubernetes.git
 ```
 
-Up kubernets cluster
+#### Set ssh keys in security folder
+
+```sh
+# generate ssh key pair for your user access hosts
+ssh-keygen -q -t ecdsa -b 521 -N '' -f ~/.ssh/id_ecdsa <<<y >/dev/null 2>&1
+cp ~/.ssh/id_ecdsa.pub security/
+
+# generate ssh key pair for rancher
+ssh-keygen -q -t ecdsa -b 521 -N '' -f security/rancher-key-ecdsa <<<y >/dev/null 2>&1
+```
+
+#### Set network
+
+Set network configuration in Vagrantfile.
+Example:
+
+```sh
+# NETWORK
+    ol9_server01.vm.network "public_network", nic_type: "virtio", mac: "080027f3066a", ip: "192.168.0.130", netmask: "255.255.255.0", mode: "bridge",bridge: [
+      "Intel(R) I211 Gigabit Network Connection",
+      "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
+    ]    
+```
+
+#### Up kubernetes cluster
 
 ```sh
 cd learning-kubernetes/vagrant/linux
@@ -106,12 +130,20 @@ Use this repository for get learning about kubernetes exam
 
 * [x] Create repository
 * [x] Create github action for automation tasks
-* [x] Create examples about kubernetes
+* [ ] Install kubernetes cluster
 
 <p align="right">(<a href="#roadmap">back to roadmap</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 >kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.
+
+Kubernetes ports
+
+![kubernetes control plane ports](images/kubernetes-cp-ports.jpg)
+
+![kubernetes works ports](images/kubernetes-wk-ports.jpg)
+
+Font: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 
 ## Install kubernetes
 
@@ -154,13 +186,20 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 
 ## Acknowledgments
 
+* [CNCF - Cloud Native Computing Foundation](https://www.cncf.io/)
+* [OCI - Open Container Initiative](https://opencontainers.org/)
+* [Borg](https://kubernetes.io/blog/2015/04/borg-predecessor-to-kubernetes/)
 * [kubernetes Website](https://kubernetes.io/)
 * [Github](https://github.com/kubernetes/kubernetes/)
 * [Issues](https://github.com/kubernetes/kubernetes/issues)
 * [CKA Certification](https://www.cncf.io/certification/cka/)
 * [CKAD Certification](https://www.cncf.io/certification/ckad/)
 * [CKS Certification](https://www.cncf.io/certification/cks/)
-* [Livro Linuxips](https://livro.descomplicandokubernetes.com.br/pt/SUMMARY.md)
+* [Book Linuxips](https://livro.descomplicandokubernetes.com.br/pt/)
+* [Kind](https://kind.sigs.k8s.io/docs/user/quick-start)
+* [Minikube](https://github.com/kubernetes/minikube)
+* [k0s](https://k0sproject.io/)
+* [k3s](https://k3s.io/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

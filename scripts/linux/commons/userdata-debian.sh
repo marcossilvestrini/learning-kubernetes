@@ -59,10 +59,13 @@ chown vagrant:vagrant .bashrc
 cp -f .bashrc .vimrc /root
 
 # Set Swap memory
-fallocate -l 4G /swapfile
-chmod 600 /swapfile
-mkswap /swapfile
-swapon /swapfile
+# fallocate -l 4G /swapfile
+# chmod 600 /swapfile
+# mkswap /swapfile
+# swapon /swapfile
+
+# disable for rke2 purposes
+swapoff -a 
 
 # Enabling IP forwarding on Linux
 cp configs/commons/sysctl.conf /etc
@@ -70,11 +73,30 @@ dos2unix /etc/sysctl.conf
 systemctl daemon-reload
 
 # Set ssh
+
+## set sshd
 cp -f configs/commons/01-sshd-custom.conf /etc/ssh/sshd_config.d
 dos2unix /etc/ssh/sshd_config.d/01-sshd-custom.conf
 systemctl restart sshd
-cat security/id_ecdsa.pub >>.ssh/authorized_keys
+
+## create key pair for user vagrant
 echo vagrant | $(su -c "ssh-keygen -q -t ecdsa -b 521 -N '' -f .ssh/id_ecdsa <<<y >/dev/null 2>&1" -s /bin/bash vagrant)
+
+## set your public key here
+cat security/id_ecdsa.pub >>.ssh/authorized_keys
+
+## set ssh for root user. This is required for setu RKE2 nodes and workers
+if [ -d "$HOME/.ssh" ]; then
+    rm -rf "$HOME/.ssh"
+fi
+mkdir -p "$HOME/.ssh"
+chmod 700 "$HOME/.ssh"
+cp -f security/rancher-key-ecdsa "$HOME/.ssh"
+chmod 600 "$HOME/.ssh/rancher-key-ecdsa"
+cp -f security/rancher-key-ecdsa.pub "$HOME/.ssh"
+chmod 644 "$HOME/.ssh/rancher-key-ecdsa.pub"
+cp -f security/authorized_keys "$HOME/.ssh"
+chmod 600 "$HOME/.ssh/authorized_keys"
 
 # Set GnuGP
 echo vagrant | $(su -c "gpg --batch --gen-key configs/commons/gen-key-script" -s /bin/bash vagrant)
@@ -100,10 +122,12 @@ dos2unix /etc/hosts
 ## Set Networkmanager
 cp -f configs/commons/01-NetworkManager-custom.conf /etc/NetworkManager/conf.d/
 dos2unix /etc/NetworkManager/conf.d/01-NetworkManager-custom.conf
+cp -f configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d/
+dos2unix /etc/NetworkManager/conf.d/rke2-canal.conf
 systemctl reload NetworkManager
 
 ## Set resolv.conf file
 rm /etc/resolv.conf
-cp configs/commons/resolv.conf.manually-configured /etc
+cp -f configs/commons/resolv.conf.manually-configured /etc
 dos2unix /etc/resolv.conf.manually-configured
 ln -s /etc/resolv.conf.manually-configured /etc/resolv.conf
