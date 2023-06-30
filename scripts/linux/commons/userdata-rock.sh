@@ -28,24 +28,28 @@ https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
 dnf update -y
 dnf upgrade --refresh -y
 dnf makecache --refresh
-dnf install -y bash-completion
-dnf install -y vim
-dnf install -y curl
-dnf install -y git
-dnf install -y dos2unix
-dnf install -y sshpass
-dnf install -y htop
-dnf install -y lsof
-dnf install -y tree
-dnf install -y net-tools
-dnf install -y bind-utils
-dnf install -y telnet
-dnf install -y traceroute
-dnf install -y sysstat
-dnf install -y NetworkManager-initscripts-updown
-dnf install -y python3-pip
-dnf install -y zip
-dnf install -y lvm2
+dnf install -y bash-completion \
+vim \
+curl \
+git \
+dos2unix \
+sshpass \
+htop \
+lsof \
+tree \
+net-tools \
+bind-utils \
+telnet \
+traceroute \
+sysstat \
+NetworkManager-initscripts-updown \
+python3-pip \
+zip \
+lvm2 \
+nfs-utils \
+cryptsetup  \
+iscsi-initiator-utils \
+ca-certificates
 
 # Set profile in /etc/profile
 cp -f configs/commons/profile-rock /etc/profile
@@ -130,3 +134,10 @@ rm /etc/resolv.conf
 cp configs/commons/resolv.conf.manually-configured /etc
 dos2unix  /etc/resolv.conf.manually-configured
 ln -s /etc/resolv.conf.manually-configured /etc/resolv.conf
+
+# Set iscsid
+ systemctl start iscsid.service
+ systemctl enable iscsid.service
+
+# Clean updates
+ dnf clean all

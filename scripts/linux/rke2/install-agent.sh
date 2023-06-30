@@ -19,7 +19,7 @@ DISTRO=$(cat /etc/*release | grep -ws NAME=)
 TOKEN_NODE=$(cat configs/rke2/token-first-node)
 
 # Check if distribution is Debian
-if [[ "$DISTRO" == *"Debian"* ]]; then
+if [[ "$DISTRO" == *"Rock"* ]]; then
     echo "Distribution is Debian...Congratulations!!!"
 else
     echo "This script is available only Debian distributions!!!";exit 1;
@@ -28,6 +28,18 @@ fi
 # https://docs.rke2.io/install/quickstart
 # https://docs.rke2.io/install/ha
 # https://docs.rke2.io/reference/server_config
+
+# Fix network interface. RKE2 geta etho, but dns is set in eth1. Force eth1 here
+#cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
+#chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
+#systemctl restart NetworkManager
+systemctl stop NetworkManager
+
+# Create etcd user
+useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
+
+# Set default route for RKE2
+ip route add default  via 192.168.0.1 dev eth1
 
 # install server node
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
@@ -43,6 +55,24 @@ systemctl enable rke2-agent.service
 
 # start the service
 systemctl start rke2-agent.service
+
+# # Copy kubectl to the local user bin folder:
+# cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
+
+# # Add kubectl to the PATH variable on the first server:
+# export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
+
+# # Export the kubeconfig file on the first server:
+# export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+
+# # set .bashrc
+# # Set bash session
+# cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
+# dos2unix .bashrc
+# chown vagrant:vagrant .bashrc
+
+# # Set properties for user root
+# cp -f .bashrc .vimrc /root/
 
 # # follow the logs, if you like
 # # journalctl -u rke2-server -f

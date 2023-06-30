@@ -9,10 +9,6 @@ MULTILINE-COMMENT
 
 export LANG=C
 
-#Variables
-PRIVATE_IP=$(ip add show | grep 192.168.0 | cut -c 10-22)
-MACHINE_NAME=$(hostname -f)
-
 cd /home/vagrant || exit
 
 # Install Nginx

@@ -124,11 +124,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     load_balance.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
 
     # CONFIGURE NGINX LOAD BALANCE
+    load_balance.vm.provision "shell", path: "../../scripts/linux/commons/generate-certificates.sh"
+
+    # CONFIGURE NGINX LOAD BALANCE
     load_balance.vm.provision "shell", path: "../../scripts/linux/load-balance/install.sh"
 
   end
 
-  # Control Plane Servers
+  # Node|Control Plane Servers
   PLANES = ["control-plane01","control-plane02","control-plane03"]
   N = 2
 
@@ -163,43 +166,43 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   end  
 
-  # # Control Plane Servers
-  # WORKERS = ["rock-server04","rock-server05","rock-server06"]
-  # M = 2
-  # iprange = 3
+  # Agent|Workers Servers
+  WORKERS = ["worker01","worker02","worker03"]
+  M = 2
+  iprange = 3
 
-  # (0..M).each do |j|
-  #   config.vm.define WORKERS[j] do |node|
+  (0..M).each do |j|
+    config.vm.define WORKERS[j] do |node|
       
-  #     # BOX NAME
-  #     node.vm.box = BOX_ROCK_NAME
+      # BOX NAME
+      node.vm.box = BOX_ROCK_NAME
       
-  #     # REZISE PRIMARY DISK
-  #     node.vm.disk :disk, size: DEBIAN_DISK_SIZE, primary: true
-
-  #     # VARIABLE HOSTNAME      
-  #     node.vm.hostname = WORKERS[j]
+      # VARIABLE HOSTNAME      
+      node.vm.hostname = WORKERS[j]
             
-  #     # NETWORK      
-  #     node.vm.network "public_network", mac: "080022f3067#{j}", ip: "192.168.0.14#{iprange}", netmask: "255.255.255.0", mode: "bridge",bridge:[
-  #       "Intel(R) I211 Gigabit Network Connection",
-  #       "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
-  #     ]
-  #     iprange += 1
+      # NETWORK      
+      node.vm.network "public_network", mac: "080022f3067#{j}", ip: "192.168.0.14#{iprange}", netmask: "255.255.255.0", mode: "bridge",bridge:[
+        "Intel(R) I211 Gigabit Network Connection",
+        "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
+      ]
+      iprange += 1
 
-  #      #PROVIDER
-  #     node.vm.provider "virtualbox" do |vb|        
-  #       vb.name =  WORKERS[j]
-  #       vb.memory = 8192
-  #       vb.cpus = 3        
-  #     end
+       #PROVIDER
+      node.vm.provider "virtualbox" do |vb|        
+        vb.name =  WORKERS[j]
+        vb.memory = 8192
+        vb.cpus = 3        
+      end
 
-  #     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-  #     node.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
+      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+      node.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
       
-  #   end    
+      # INSTAL RKE2 AGENT
+      node.vm.provision "shell", path: "../../scripts/linux/rke2/install-agent.sh"
+      
+    end    
 
-  # end  
+  end  
 
   # # VM debian_client 
   # config.vm.define "debian-client01"  do |debian_client01|

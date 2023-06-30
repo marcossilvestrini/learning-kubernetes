@@ -13,6 +13,7 @@ export LANG=C
 cd /home/vagrant || exit
 
 # Variables
+CA_CONFIG_PATH="configs/load-balance/certs"
 CA_EXTFILE="/etc/ssl/ca_cert.cnf"
 CA_CRT="/etc/ssl/certs/skynet.com.br-ca-cert.pem"
 CA_KEY="/etc/ssl/certs/skynet.com.br-ca-key.pem"
@@ -32,7 +33,7 @@ CLIENT_P12="/etc/ssl/certs/skynet.com.br-client-cert.p12"
 
 ## Generate a private key for the CA:
 rm /etc/ssl/certs/*.pem
-cp -f configs/apache/certs/ca_cert.cnf $CA_EXTFILE
+cp -f "$CA_CONFIG_PATH/ca_cert.cnf" $CA_EXTFILE
 dos2unix $CA_EXTFILE
 openssl genrsa -out $CA_KEY 4096 2>/dev/null
 [[ $? -ne 0 ]] && echo "ERROR: Failed to generate $CA_KEY"
@@ -56,8 +57,8 @@ openssl  x509 -noout -text -in $CA_CRT >/dev/null 2>&1
 # Creating the Server's Certificate and Keys
 
 ## Generate the private key and certificate request:
-cp -f configs/apache/certs/server_cert.cnf $SERVER_CONF
-cp -f configs/apache/certs/server_ext.cnf $SERVER_EXT
+cp -f "$CA_CONFIG_PATH/server_cert.cnf" $SERVER_CONF
+cp -f "$CA_CONFIG_PATH/server_ext.cnf" $SERVER_EXT
 dos2unix $SERVER_CONF
 dos2unix $SERVER_EXT
 openssl \
@@ -90,8 +91,8 @@ openssl verify -CAfile $CA_CRT $SERVER_CRT >/dev/null 2>&1
 # Creating the Client's Certificate and Keys
 
 ## Generate the private key and certificate request:
-cp -f configs/apache/certs/client_cert.cnf $CLIENT_CONF
-cp -f configs/apache/certs/server_ext.cnf $CLIENT_EXT
+cp -f "$CA_CONFIG_PATH/client_cert.cnf" $CLIENT_CONF
+cp -f "$CA_CONFIG_PATH/server_ext.cnf" $CLIENT_EXT
 dos2unix $CLIENT_CONF
 dos2unix $CLIENT_EXT
 openssl \
@@ -156,8 +157,7 @@ systemctl daemon-reload
 update-ca-trust
 
 # Copy certificates for share
-cp -p /etc/ssl/certs/skynet.com.br-ca-cert.pem /etc/ssl/certs/skynet.com.br-client-cert.p12 configs/apache/security
-cp -p /etc/ssl/certs/skynet.com.br-ca-cert.pem /etc/ssl/certs/skynet.com.br-client-cert.p12 configs/nginx/security
+cp -p /etc/ssl/certs/skynet.com.br-ca-cert.pem /etc/ssl/certs/skynet.com.br-client-cert.p12 security/
 
 # Restart apache service
 #apachectl configtest
