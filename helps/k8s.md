@@ -9,6 +9,9 @@ ip route add default  via 192.168.0.1 dev eth1
 #ip link set eth0 down
 rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml
 systemctl start rke2-server.service
+
+set linux for disable
+
 ## Get node internal ip
 
 kubectl get nodes -o wide | awk -v OFS='\t\t' '{print $1, $6, $7}'

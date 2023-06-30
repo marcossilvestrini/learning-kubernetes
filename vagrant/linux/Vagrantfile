@@ -195,7 +195,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      node.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
+      node.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
       
       # INSTAL RKE2 AGENT
       node.vm.provision "shell", path: "../../scripts/linux/rke2/install-agent.sh"

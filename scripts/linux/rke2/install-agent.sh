@@ -54,7 +54,7 @@ sed -i "s/tokenNode/$TOKEN_NODE/g" /etc/rancher/rke2/config.yaml
 systemctl enable rke2-agent.service
 
 # start the service
-systemctl start rke2-agent.service
+systemctl restart rke2-agent.service
 
 # # Copy kubectl to the local user bin folder:
 # cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin

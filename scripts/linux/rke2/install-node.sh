@@ -59,17 +59,19 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
     cp configs/rke2/config-first-node.yaml /etc/rancher/rke2/config.yaml
     chmod 600 /etc/rancher/rke2/config.yaml    
 
-    # start the service
-    systemctl start rke2-server.service
-
     # enable service
     systemctl enable rke2-server.service
+
+    # start the service
+    echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
+    systemctl restart rke2-server.service
 
     # save first node token 
     TOKEN_NODE=$(cat /var/lib/rancher/rke2/server/node-token)    
     echo "$TOKEN_NODE" > configs/rke2/token-first-node    
 else
-    echo "ADD NODE $(hostname -f) IN CLUSTER"
+    echo "ADD NODE $(hostname -f) IN CLUSTER"   
+    
     # Add nodes to cluster
     #rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml 
     cp configs/rke2/config-nodes.yaml /etc/rancher/rke2/config.yaml
@@ -77,12 +79,22 @@ else
     # Get server node token
     TOKEN_NODE=$(cat configs/rke2/token-first-node)
     sed -i "s/tokenNode/$TOKEN_NODE/g" /etc/rancher/rke2/config.yaml    
-
-    # start the service
-    systemctl start rke2-server.service
-
+    
     # enable service
     systemctl enable rke2-server.service
+
+    # start the service
+    echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
+    systemctl restart rke2-server.service & 
+    n=30
+    for((i=0;i<n;i++)); do        
+        echo "Apply fix for bug network in Vagrant|Virtualbox. Waiting:[$((n-i))]"
+        sleep 1
+        clear
+    done    
+    systemctl stop rke2-server.service    
+    rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml    
+    systemctl restart rke2-server.service        
 fi
 
 # Copy kubectl to the local user bin folder:
@@ -102,7 +114,7 @@ chown vagrant:vagrant .bashrc
 
 # Set properties for user root
 cp -f .bashrc .vimrc /root/
-source .bashrc
+# source .bashrc
 
 
 # Check the health of the deployment by running a status command:
