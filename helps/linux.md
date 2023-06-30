@@ -14,4 +14,4 @@ sshpass -p 'vagrant' ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/rancher-k
 
 ## Connect in remote
 
-ssh -o StrictHostKeyChecking=no -i ~/.ssh/rancher-key-ecdsa  root@debian-server02
+ssh -o StrictHostKeyChecking=no -i ~/.ssh/rancher-key-ecdsa  root@control-plane02

@@ -53,7 +53,8 @@ $kubernetes="$baseVagrantfile\linux"
 
 # VM name
 $vmName= @(
-    "infra-server01"    
+    "infra-server01",
+    "load-balance"    
 )
 
 # Folder vagrant virtualbox machines artefacts

@@ -1,0 +1,13 @@
+# Helps Kubernetes
+
+## Fix RKE2 error get ip of not mapped in dns
+
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+ip link set eth0 down
+ip route add default  via 192.168.0.1 dev eth1
+rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml
+
+## Get node internal ip
+
+kubectl get nodes -o wide | awk -v OFS='\t\t' '{print $1, $6, $7}'

@@ -43,12 +43,6 @@ dos2unix /var/named/0.168.192.in-addr.arpa.zone
 chown root:named /var/named/0.168.192.in-addr.arpa.zone
 chmod 640 /var/named/0.168.192.in-addr.arpa.zone
 
-## Set reverse zone file with type record (PTR) - Network 172.36.12.0/24
-cp -f configs/bind/master/12.36.172.in-addr.arpa.zone /var/named
-dos2unix /var/named/12.36.172.in-addr.arpa.zone
-chown root:named /var/named/12.36.172.in-addr.arpa.zone
-chmod 640 /var/named/12.36.172.in-addr.arpa.zone
-
 ## Sign DNSSEC key
 cp configs/bind/master/Kskynet.com.br.+013+29838.* /var/named
 dnssec-signzone -P -o skynet.com.br /var/named/skynet.zone /var/named/Kskynet.com.br.+013+29838.private

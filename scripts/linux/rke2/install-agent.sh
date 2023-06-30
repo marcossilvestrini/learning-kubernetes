@@ -36,14 +36,13 @@ curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
 mkdir -p /etc/rancher/rke2
 cp configs/rke2/config-agent.yaml /etc/rancher/rke2/config.yaml
 chmod 600 /etc/rancher/rke2/config.yaml
-TOKEN_NODE=$(cat configs/rke2/token-first-node)
 sed -i "s/tokenNode/$TOKEN_NODE/g" /etc/rancher/rke2/config.yaml
 
 # enable service
-systemctl enable rke2-server.service
+systemctl enable rke2-agent.service
 
 # start the service
-systemctl start rke2-server.service
+systemctl start rke2-agent.service
 
 # # follow the logs, if you like
 # # journalctl -u rke2-server -f

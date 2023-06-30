@@ -16,88 +16,68 @@ cd $WORKDIR || exit
 
 # Variables
 DISTRO=$(cat /etc/*release | grep -ws NAME=)
-NODE_MASTER="debian-server01"
+NODE_MASTER="control-plane01"
 NODE_NAME=$(hostname)
-IP=$(hostname -i)
 
 # Check if distribution is Debian
-if [[ "$DISTRO" == *"Debian"* ]]; then
+if [[ "$DISTRO" == *"Rock"* ]]; then
     echo "Distribution is Debian...Congratulations!!!"
 else
-    echo "This script is available only Debian distributions!!!";exit 1;
+    echo "This script is available only Rock Linux distributions!!!";exit 1;
 fi
 
 # https://docs.rke2.io/install/quickstart
 # https://docs.rke2.io/install/ha
 # https://docs.rke2.io/reference/server_config
-
-# Stop network manager
-#systemctl stop NetworkManager
-#systemctl disable NetworkManager
-
-# Create etcd user
-useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
-
-# uninstall old installation
-umount /var/lib/kubelet/pods/9aef503e-58e8-4363-9a55-c4f99746ca9b/volumes/kubernetes.io~projected/kube-api-access-t74g4
-sh ./scripts/rke2/uninstall-rke2.sh
+# https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1
 
 # install server node
 #curl -sfL https://get.rke2.io | sh -
 INSTALL_RKE2_TYPE=server ./scripts/rke2/install.sh
 
-# Set CIS
-cp -f /usr/local/share/rke2/rke2-cis-sysctl.conf /etc/sysctl.d/60-rke2-cis.conf
-systemctl restart systemd-sysctl
 
 # Fix network interface. RKE2 geta etho, but dns is set in eth1. Force eth1 here
-cp configs/rke2/rke2-fix-network.yaml /var/lib/rancher/rke2/server/manifests
-chmod 644 /var/lib/rancher/rke2/server/manifests/rke2-fix-network.yaml
-
-# enable service
-systemctl enable rke2-server.service
-
-# start the service
-systemctl start rke2-server.service
+cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
+chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
+#systemctl reload NetworkManager
+#systemctl restart NetworkManager
+#cp configs/rke2/rke2-fix-network.yaml /var/lib/rancher/rke2/server/manifests
+#chmod 644 /var/lib/rancher/rke2/server/manifests/rke2-fix-network.yaml
 
 # set first node
-mkdir -p /etc/rancher/rke2
-#TOKEN_NODE=$(cat /var/lib/rancher/rke2/server/node-token)
 if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-    echo "INSTALL FIRST NODE $(hostname -f)"
-    
+    echo "INSTALL FIRST NODE $(hostname -f)"    
     # Set first node
+    #rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml 
     cp configs/rke2/config-first-node.yaml /etc/rancher/rke2/config.yaml
-    chmod 600 /etc/rancher/rke2/config.yaml
-    
-    # enable service
-    #systemctl enable rke2-server.service
+    chmod 600 /etc/rancher/rke2/config.yaml    
 
     # start the service
-    #systemctl start rke2-server.service
-    
+    systemctl start rke2-server.service
+
+    # enable service
+    systemctl enable rke2-server.service
+
     # save first node token 
     TOKEN_NODE=$(cat /var/lib/rancher/rke2/server/node-token)
     #sed -i "s/tokenNode/$TOKEN_NODE/g" /etc/rancher/rke2/config.yaml
     echo "$TOKEN_NODE" > configs/rke2/token-first-node    
 else
     echo "ADD NODE $(hostname -f) IN CLUSTER"
+    # Add nodes to cluster
+    #rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml 
     cp configs/rke2/config-nodes.yaml /etc/rancher/rke2/config.yaml
     chmod 600 /etc/rancher/rke2/config.yaml
+    # Get server node token
     TOKEN_NODE=$(cat configs/rke2/token-first-node)
-    sed -i "s/tokenNode/$TOKEN_NODE/g" /etc/rancher/rke2/config.yaml
+    sed -i "s/tokenNode/$TOKEN_NODE/g" /etc/rancher/rke2/config.yaml    
 
-    # # enable service
-    # systemctl enable rke2-server.service
+    # start the service
+    systemctl start rke2-server.service
 
-    # # start the service
-    # systemctl start rke2-server.service
+    # enable service
+    systemctl enable rke2-server.service
 fi
-
-systemctl stop rke2-server.service
-
-# reset cluster - fix some errors in up service
-#rke2 server --cluster-reset --node-ip "$IP" --node-external-ip "$IP"  --advertise-address "$IP"
 
 # Copy kubectl to the local user bin folder:
 cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
@@ -107,6 +87,15 @@ export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
 
 # Export the kubeconfig file on the first server:
 export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+
+# set .bashrc
+# Set bash session
+cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
+dos2unix .bashrc
+chown vagrant:vagrant .bashrc
+
+# Set properties for user root
+cp -f .bashrc .vimrc /root/
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses

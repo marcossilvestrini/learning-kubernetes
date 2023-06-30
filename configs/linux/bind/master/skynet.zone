@@ -13,7 +13,10 @@ $TTL 1h
                             MX      5       mail                            
 
 infra-server01              A       192.168.0.130   ;glue record,dns master
-load-balancer               A       192.168.0.131   ;rancher load balance
+load-balance                A       192.168.0.131   ;rancher load balance
+control-plane01             A       192.168.0.140   ;rancher control plane 1
+control-plane02             A       192.168.0.141   ;rancher control plane 2
+control-plane03             A       192.168.0.142   ;rancher control plane 3
 win-silvestrini             A       192.168.0.100   ;my desktop
 win-silvestrini2            A       192.168.0.101   ;my notebook
 win-silvestrini3            A       192.168.0.101   ;magalu notebook

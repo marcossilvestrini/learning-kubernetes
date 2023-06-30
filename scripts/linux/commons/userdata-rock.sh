@@ -79,6 +79,8 @@ echo vagrant | $(su -c "ssh-keygen -q -t ecdsa -b 521 -N '' -f .ssh/id_ecdsa <<<
 systemctl restart sshd
 systemctl stop firewalld
 systemctl disable firewalld
+systemctl start nftables
+systemctl enable nftables
 setenforce Permissive
 
 ## set your public key here
@@ -120,6 +122,7 @@ dos2unix /etc/hosts
 ## Set Networkmanager
 cp -f configs/commons/01-NetworkManager-custom.conf /etc/NetworkManager/conf.d/
 dos2unix /etc/NetworkManager/conf.d/01-NetworkManager-custom.conf
+chmod 644 /etc/NetworkManager/conf.d/01-NetworkManager-custom.conf
 systemctl reload NetworkManager
 
 ## Set resolv.conf file

@@ -14,11 +14,11 @@
 #>
 
 #Execute script as Administrator
-if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {  
-   $arguments = "& '" + $myinvocation.mycommand.definition + "'"
-   Start-Process -Wait powershell -Verb runAs -WindowStyle Minimized -ArgumentList $arguments
-   Break
-}
+# if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {  
+#    $arguments = "& '" + $myinvocation.mycommand.definition + "'"
+#    Start-Process -Wait powershell -Verb runAs -WindowStyle Minimized -ArgumentList $arguments
+#    Break
+# }
 
 # Clear screen
 Clear-Host
@@ -76,10 +76,11 @@ setx VAGRANT_HOME "$vagrantHome" >$null
 $kubernetes = "$baseVagrantfile"
 Set-Location $kubernetes
 vagrant up
-#Start-Process -Wait -WindowStyle Minimized -FilePath $vagrant -ArgumentList "up"  -Verb runAs
 Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
-
-#Copy-Item .\.vagrant\machines\debian-client01\virtualbox\private_key $vagrantPK\debian-client01
+Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
+Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
+Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
+Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
 
 # Fix powershell error
 $Env:VAGRANT_PREFER_SYSTEM_BIN += 0
