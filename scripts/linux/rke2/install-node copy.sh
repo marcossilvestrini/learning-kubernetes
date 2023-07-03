@@ -35,11 +35,11 @@ fi
 # Fix network interface. RKE2 geta etho, but dns is set in eth1. Force eth1 here
 cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
 chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
-systemctl reload NetworkManager
-systemctl restart NetworkManager
+#systemctl reload NetworkManager
+#systemctl restart NetworkManager
 #cp configs/rke2/rke2-fix-network.yaml /var/lib/rancher/rke2/server/manifests
 #chmod 644 /var/lib/rancher/rke2/server/manifests/rke2-fix-network.yaml
-#systemctl stop NetworkManager
+systemctl stop NetworkManager
 
 # Create etcd user
 useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
@@ -83,7 +83,7 @@ else
     
     # Fix error create etcd pod
     if [ -f "/var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml" ]; then
-         rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml     
+        rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml     
     fi
 
     # Add nodes to cluster    
@@ -98,11 +98,34 @@ else
     # enable service
     systemctl enable rke2-server.service
 
-    # start the service
     echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
-        
-    systemctl restart rke2-server.service
+    echo "Execute this commands manually..."   
     
+    # start the service
+    systemctl restart rke2-server.service
+    n=60
+    for((i=0;i<n;i++)); do                
+        echo "Waiting for creating cluster...:[$((n-i))]"
+        sleep 1
+        clear
+    done    
+    CHECK_STATUS=$(systemctl status rke2-server.service | grep -o "running")
+    #GET_ERROR=$(journalctl -u rke2-server | grep -o "Error" | wc -l)
+    if [[ "$CHECK_STATUS" != "running" ]]; then        
+        echo "Error in up cluster!!!"
+        echo "Try Apply fix for bug network in Vagrant|Virtualbox. Waiting:[$((n-i))]"
+        systemctl stop rke2-server.service
+        # if [ -f "/var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml" ]; then
+        #     rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml     
+        # fi    
+        if [ -d "/var/lib/rancher/rke2/server/manifests" ]; then
+            rm -rf /var/lib/rancher/rke2/server/
+        fi 
+        if [ -d "/var/lib/rancher/rke2/agent/pod-manifests" ]; then
+            rm -rf /var/lib/rancher/rke2/agent/pod-manifests/
+        fi            
+        systemctl start rke2-server.service
+    fi    
 fi
 
 # Copy kubectl to the local user bin folder:

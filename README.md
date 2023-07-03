@@ -153,6 +153,18 @@ Font: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 foo
 ```
 
+## Kubectl
+
+```sh
+# list nodes
+kubectl get nodes
+kubectl get nodes -o wide
+
+# delete node
+kubectl drain <node_name> --ignore-daemonsets --delete-emptydir-data
+kubectl delete node <node_name>
+```
+
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

@@ -56,23 +56,28 @@ systemctl enable rke2-agent.service
 # start the service
 systemctl restart rke2-agent.service
 
-# # Copy kubectl to the local user bin folder:
-# cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
+# Copy kubectl to the local user bin folder:
+if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
+    
+    # Copy kubectl binary to the local user bin folder
+    cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
+    
+    # Add kubectl to the PATH variable on the first server:
+    export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
 
-# # Add kubectl to the PATH variable on the first server:
-# export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
+    # Export the kubeconfig file on the node servers:
+    export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 
-# # Export the kubeconfig file on the first server:
-# export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+    
+    # Set bash session
+    cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
+    dos2unix .bashrc
+    chown vagrant:vagrant .bashrc
 
-# # set .bashrc
-# # Set bash session
-# cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
-# dos2unix .bashrc
-# chown vagrant:vagrant .bashrc
+    # Set properties for user root
+    cp -f .bashrc .vimrc /root/
+fi
 
-# # Set properties for user root
-# cp -f .bashrc .vimrc /root/
 
 # # follow the logs, if you like
 # # journalctl -u rke2-server -f

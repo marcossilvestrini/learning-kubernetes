@@ -83,16 +83,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-    infra_server01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
+    infra_server01.vm.provision "shell", name: "[Script userdata-rock.sh]", path: "../../scripts/linux/commons/userdata-rock.sh"
 
     # SET DNS BIND
-    infra_server01.vm.provision "shell", path: "../../scripts/linux/bind/userdata-bind-master.sh"
+    infra_server01.vm.provision "shell", name: "[Script userdata-bind-master.sh]", path: "../../scripts/linux/bind/userdata-bind-master.sh"
 
     # SET ISC DHCP
-    infra_server01.vm.provision "shell", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
+    infra_server01.vm.provision "shell", name: "[Script userdata-dhcp.sh]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
     # CONFIGURE PURE-FTP
-    infra_server01.vm.provision "shell", path: "../../scripts/linux/pure-ftp/userdata-pureftp.sh"
+    infra_server01.vm.provision "shell", name: "[Script userdata-pureftp.sh]", path: "../../scripts/linux/pure-ftp/userdata-pureftp.sh"
 
   end
 
@@ -121,13 +121,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-    load_balance.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
+    load_balance.vm.provision "shell", name: "[Script userdata-rock.sh]", path: "../../scripts/linux/commons/userdata-rock.sh"
 
     # CONFIGURE NGINX LOAD BALANCE
-    load_balance.vm.provision "shell", path: "../../scripts/linux/commons/generate-certificates.sh"
+    load_balance.vm.provision "shell", name: "[Script generate-certificates.sh]", path: "../../scripts/linux/commons/generate-certificates.sh"
 
     # CONFIGURE NGINX LOAD BALANCE
-    load_balance.vm.provision "shell", path: "../../scripts/linux/load-balance/install.sh"
+    load_balance.vm.provision "shell", name: "[Script userdata-load-balance.sh]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
 
   end
 
@@ -160,7 +160,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      node.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
+      node.vm.provision "shell", name: "[Script userdata-rock.sh]", path: "../../scripts/linux/commons/userdata-rock.sh"
+
+     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+     node.vm.provision "shell", name: "[Script install-node.sh]", path: "../../scripts/linux/rke2/install-node.sh"
       
     end
 
@@ -195,10 +198,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      node.vm.provision "shell", path: "../../scripts/linux/commons/userdata-rock.sh"
+      node.vm.provision "shell", name: "[Script userdata-rock.sh]", path: "../../scripts/linux/commons/userdata-rock.sh"
       
       # INSTAL RKE2 AGENT
-      node.vm.provision "shell", path: "../../scripts/linux/rke2/install-agent.sh"
+      node.vm.provision "shell", name: "[Script install-agent.sh]", path: "../../scripts/linux/rke2/install-agent.sh"
       
     end    
 
