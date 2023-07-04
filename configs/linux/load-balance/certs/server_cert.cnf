@@ -7,5 +7,5 @@ countryName             = BR
 stateOrProvinceName     = Sao Paulo
 localityName            = Sao Paulo 
 organizationName        = SKYNET Inc.
-commonName              = load-balance
+commonName              = rancher
 emailAddress			= admin@skynet.com.br

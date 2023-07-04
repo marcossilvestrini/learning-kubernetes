@@ -1,6 +1,6 @@
 $TTL 1h
 
-@                   IN      SOA     ol9-server01.skynet.com.br.   admin.skynet.com.br. (
+@                   IN      SOA     infra-server01.skynet.com.br.   admin.skynet.com.br. (
                     01      ; serial
                     28800   ; refresh (8h)
                     7200    ; retry (2h)
@@ -8,15 +8,13 @@ $TTL 1h
                     3600    ; negative caching (1h)
 )
 
-                    NS      ol9-server01.skynet.com.br. ;primary nameserver                    
+                    NS      infra-server01.skynet.com.br. ;primary nameserver                    
 
 1                   PTR     router.skynet.com.br.
 100                 PTR     win-silvestrini.skynet.com.br.
 101                 PTR     win-silvestrini2.skynet.com.br.
-102                 PTR     win-silvestrini2.skynet.com.br.
 130                 PTR     infra-server01.skynet.com.br.
 131                 PTR     load-balance.skynet.com.br.
-131                 PTR     rancher.skynet.com.br.
 140                 PTR     control-plane01.skynet.com.br.
 141                 PTR     control-plane02.skynet.com.br.
 142                 PTR     control-plane03.skynet.com.br.

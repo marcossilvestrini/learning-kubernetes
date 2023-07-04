@@ -22,12 +22,10 @@ worker02                    A       192.168.0.144   ;rancher worker 2
 worker03                    A       192.168.0.145   ;rancher worker 3
 win-silvestrini             A       192.168.0.100   ;my desktop
 win-silvestrini2            A       192.168.0.101   ;my notebook
-win-silvestrini3            A       192.168.0.102   ;magalu notebook
 mail                        A       192.168.0.130   ;mail
 ftp                         CNAME   infra-server01  ;ftp
-www                         CNAME   infra-server01  ;http
 rancher                     CNAME   load-balance    ;;rancher load balance
 
-@                      IN   TXT     "skynet - The Company for crazy people!!!"
+@                   IN      TXT     "skynet - The Company for crazy people!!!"
 
 skynet.com.br. IN DNSKEY 256 3 13 qzYHNPMPd6QjO66oHI4RL95LBSb3wRuEGJSXgByHJalof0DBJOucDKE1 MMudvv7eNoOabO+m91rQKUbRw6n/Vg==
