@@ -22,15 +22,6 @@ export PS1="\[\e[31m\][\[\e[m\]\[\e[38;5;172m\]\u\[\e[m\]@\[\e[38;5;153m\]\h\[\e
 # Timezone
 export TZ='America/Sao_Paulo'
 
-# Copy kubectl to the local user bin folder:
-sudo cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
-
-# Add rke2 to the PATH variable
-export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
-
-# Export the kubeconfig file on the first server:
-export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
-
 NODE_MASTER="control-plane01"
 NODE_NAME=$(hostname)
 IP_NODE=$(hostname -i)
