@@ -78,8 +78,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     infra_server01.vm.provider "virtualbox" do |vb|
       vb.linked_clone = true
       vb.name =VM_INFRA_SERVER01
-      vb.memory = 4092
-      vb.cpus = 2
+      vb.memory = 2048
+      vb.cpus = 1
     end
 
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
@@ -116,7 +116,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     load_balance.vm.provider "virtualbox" do |vb|
       vb.linked_clone = true
       vb.name =VM_LOAD_BALANCE
-      vb.memory = 2048
+      vb.memory = 1024
       vb.cpus = 1
     end
 

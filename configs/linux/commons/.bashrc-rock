@@ -31,7 +31,7 @@ IP_NODE=$(hostname -i)
 if [ -d "/var/lib/rancher/rke2/bin" ]; then
     
     # Copy kubectl binary to the local user bin folder
-    cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
+    sudo cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
     
     # Add kubectl to the PATH variable on the first server:
     export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
@@ -46,7 +46,7 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     chown vagrant:vagrant .bashrc
 
     # Set properties for user root
-    cp -f .bashrc .vimrc /root/
+    sudo cp -f .bashrc .vimrc /root/
 
     # kubectl autocomplete
     source <(kubectl completion bash)
