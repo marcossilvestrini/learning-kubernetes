@@ -13,6 +13,7 @@ $TTL 1h
 1                   PTR     router.skynet.com.br.
 100                 PTR     win-silvestrini.skynet.com.br.
 101                 PTR     win-silvestrini2.skynet.com.br.
+102                 PTR     win-silvestrini2.skynet.com.br.
 130                 PTR     infra-server01.skynet.com.br.
 131                 PTR     load-balance.skynet.com.br.
 131                 PTR     rancher.skynet.com.br.

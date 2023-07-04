@@ -150,7 +150,7 @@ Font: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 <a name="kubernetes-install"></a>
 
 ```sh
-foo
+Working in process...
 ```
 
 ## Kubectl

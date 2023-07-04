@@ -35,6 +35,7 @@ fi
 # Fix network interface. RKE2 geta etho, but dns is set in eth1. Force eth1 here
 cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
 chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
+systemctl reload NetworkManager
 systemctl restart NetworkManager
 #cp configs/rke2/rke2-fix-network.yaml /var/lib/rancher/rke2/server/manifests
 #chmod 644 /var/lib/rancher/rke2/server/manifests/rke2-fix-network.yaml
@@ -49,6 +50,7 @@ ip route add default  via 192.168.0.1 dev eth1
 # install server node
 curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server sh -
 #INSTALL_RKE2_TYPE=server ./scripts/rke2/install.sh
+
 
 # set first node
 if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
