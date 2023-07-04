@@ -20,3 +20,6 @@ $TTL 1h
 140                 PTR     control-plane01.skynet.com.br.
 141                 PTR     control-plane02.skynet.com.br.
 142                 PTR     control-plane03.skynet.com.br.
+143                 PTR     worker01.skynet.com.br.
+144                 PTR     worker02.skynet.com.br.
+145                 PTR     worker03.skynet.com.br.

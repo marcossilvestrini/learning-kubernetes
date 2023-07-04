@@ -36,8 +36,6 @@ fi
 cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
 chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
 systemctl restart NetworkManager
-#cp configs/rke2/rke2-fix-network.yaml /var/lib/rancher/rke2/server/manifests
-#chmod 644 /var/lib/rancher/rke2/server/manifests/rke2-fix-network.yaml
 #systemctl stop NetworkManager
 
 # Create etcd user
@@ -97,8 +95,7 @@ else
     systemctl enable rke2-server.service
 
     # start the service
-    echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
-        
+    echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"        
     systemctl restart rke2-server.service
     
 fi
@@ -122,7 +119,7 @@ if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
     chown vagrant:vagrant .bashrc
 
     # Set properties for user root
-    cp -f .bashrc .vimrc /root/
+    cp -f .bashrc /root/
 fi
 
 # source .bashrc

@@ -37,7 +37,7 @@ IP_NODE=$(hostname -i)
 
 
 # Copy kubectl to the local user bin folder:
-if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
+if [ -d "/var/lib/rancher/rke2/bin" ]; then
     
     # Copy kubectl binary to the local user bin folder
     cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    

@@ -149,13 +149,107 @@ Font: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 
 <a name="kubernetes-install"></a>
 
+### Minikube
+
 ```sh
-Working in process...
+# install
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+chmod +x ./minikube
+sudo mv ./minikube /usr/local/bin/minikube
+
+# get version
+minikube version
+
+# set hypervisor
+minikube config set driver <YOUR_HYPERVISOR>
+
+# up without hypervisor
+minikube start --driver=hyperkit
+
+# create cluster
+minikube start --nodes 3 -p multinode-cluster
+
+# get status of cluster
+minikube status
+
+# get ip address
+minikube ip
+
+# access minikube host
+minikube ssh
+
+# dashboard
+minikube dashboard
+
+# logs
+minikube logs
+
+# delete cluster
+minikube delete
+minikube delete --purge
 ```
+
+### Kind
+
+```sh
+# Install
+curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.14.0/kind-linux-amd64
+chmod +x ./kind
+sudo mv ./kind /usr/local/bin/kind
+
+# create cluster
+kind create cluster
+kind create cluster --name silvestrini
+
+# get clusters
+kind get clusters
+
+# delete clusters
+kind delete clusters $(kind get clusters)
+
+## create yaml
+cat << EOF > $HOME/kind-3nodes.yaml
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+nodes:
+  - role: control-plane
+  - role: worker
+  - role: worker
+EOF
+
+# create cluster
+kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
+```
+
+Reference: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 
 ## Kubectl
 
+### Install
+
 ```sh
+# install
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s \ 
+https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
+
+# get version
+kubectl version  --output=yaml --client
+
+# kubectl autocomplete
+source <(kubectl completion bash)
+
+# kubectl alias
+alias k=kubectl
+complete -F __start_kubectl k
+```
+
+### Commands
+
+```sh
+# get namespaces
+
 # list nodes
 kubectl get nodes
 kubectl get nodes -o wide
@@ -163,6 +257,9 @@ kubectl get nodes -o wide
 # delete node
 kubectl drain <node_name> --ignore-daemonsets --delete-emptydir-data
 kubectl delete node <node_name>
+
+# list pods
+kubectl get pods
 ```
 
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
