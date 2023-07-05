@@ -55,3 +55,8 @@ terraform.rc
 
 # Locks
 .terraform.lock*
+
+
+# kubernetes
+configs/kubectl/pods/*
+
