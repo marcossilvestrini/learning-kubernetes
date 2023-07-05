@@ -94,20 +94,37 @@ cp ~/.ssh/id_ecdsa.pub security/
 
 # generate ssh key pair for rancher
 ssh-keygen -q -t ecdsa -b 521 -N '' -f security/rancher-key-ecdsa <<<y >/dev/null 2>&1
+cat security/rancher-key-ecdsa.pub >security/authorized_keys
 ```
 
 #### Set network
 
-Set network configuration in Vagrantfile.
+Set network configuration for each VM in Vagrantfile.
 Example:
 
-```sh
+```ruby
 # NETWORK
     ol9_server01.vm.network "public_network", nic_type: "virtio", mac: "080027f3066a", ip: "192.168.0.130", netmask: "255.255.255.0", mode: "bridge",bridge: [
       "Intel(R) I211 Gigabit Network Connection",
       "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
     ]    
 ```
+
+#### Set VM's resources
+
+Set resource configuration as CPU, Memory,etc for each VM in Vagrantfile.
+Example:
+
+```ruby
+# PROVIDER
+infra_server01.vm.provider "virtualbox" do |vb|
+    vb.linked_clone = true
+    vb.name =VM_INFRA_SERVER01
+    vb.memory = 2048
+    vb.cpus = 1
+end  
+```
+
 
 #### Up kubernetes cluster
 

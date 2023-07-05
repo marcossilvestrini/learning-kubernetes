@@ -25,9 +25,10 @@ https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
 https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
 
 # Install packages
+dnf makecache --refresh
 dnf update -y
 dnf upgrade --refresh -y
-dnf makecache --refresh
+
 dnf install -y bash-completion \
 vim \
 curl \
