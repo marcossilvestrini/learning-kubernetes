@@ -12,9 +12,9 @@
 **/.ssh/id_*
 **/.ssh/*_id_*
 **/.ssh/known_hosts
-!Klpic2.com.br.+013+29838.private
 security/*
 !security/README.md
+!Kskynet.com.br.+013+29838.private
 
 #Apps
 *.exe
