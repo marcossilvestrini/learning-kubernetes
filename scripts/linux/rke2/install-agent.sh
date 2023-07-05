@@ -56,8 +56,13 @@ systemctl enable rke2-agent.service
 # start the service
 systemctl restart rke2-agent.service
 
+# Set canal interface 
+# cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+# After that, please restart the canal daemonset to use the newer config by executing:
+# kubectl rollout restart ds rke2-canal -n kube-system
+
 # Copy kubectl to the local user bin folder:
-if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
+if [ -d "/var/lib/rancher/rke2/bin" ]; then
     
     # Copy kubectl binary to the local user bin folder
     cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    

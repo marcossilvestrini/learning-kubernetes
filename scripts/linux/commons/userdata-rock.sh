@@ -75,7 +75,9 @@ systemctl daemon-reload
 
 
 # SSH,FIREWALLD AND SELINUX
-rm /etc/ssh/sshd_config.d/90-vagrant.conf
+if [ -f "/etc/ssh/sshd_config.d/90-vagrant.conf" ]; then
+    rm /etc/ssh/sshd_config.d/90-vagrant.conf
+fi
 cp -f configs/commons/01-sshd-custom.conf /etc/ssh/sshd_config.d
 dos2unix /etc/ssh/sshd_config.d
 systemctl restart sshd
@@ -83,9 +85,9 @@ echo vagrant | $(su -c "ssh-keygen -q -t ecdsa -b 521 -N '' -f .ssh/id_ecdsa <<<
 systemctl restart sshd
 systemctl stop firewalld
 systemctl disable firewalld
+setenforce Permissive
 systemctl start nftables
 systemctl enable nftables
-setenforce Permissive
 
 ## set your public key here
 cat security/id_ecdsa.pub >>.ssh/authorized_keys

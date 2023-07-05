@@ -35,7 +35,7 @@ fi
 # Fix network interface. RKE2 geta etho, but dns is set in eth1. Force eth1 here
 cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
 chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
-systemctl restart NetworkManager
+systemctl reload NetworkManager
 #systemctl stop NetworkManager
 
 # Create etcd user
@@ -99,6 +99,11 @@ else
     systemctl restart rke2-server.service
     
 fi
+
+# Set canal interface 
+# cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+# After that, please restart the canal daemonset to use the newer config by executing:
+# kubectl rollout restart ds rke2-canal -n kube-system
 
 # Copy kubectl to the local user bin folder:
 if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
