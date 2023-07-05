@@ -56,11 +56,6 @@ systemctl enable rke2-agent.service
 # start the service
 systemctl restart rke2-agent.service
 
-# Set canal interface 
-# cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-# After that, please restart the canal daemonset to use the newer config by executing:
-# kubectl rollout restart ds rke2-canal -n kube-system
-
 # Copy kubectl to the local user bin folder:
 if [ -d "/var/lib/rancher/rke2/bin" ]; then
     
@@ -75,13 +70,18 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
 
     
     # Set bash session
-    cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
-    dos2unix .bashrc
-    chown vagrant:vagrant .bashrc
+    cp -f configs/commons/.bashrc-rock-kubernetes .
+    dos2unix .bashrc-rock-kubernetes
+    chown vagrant:vagrant .bashrc-rock-kubernetes
 
     # Set properties for user root
-    cp -f .bashrc .vimrc /root/
+    cp -f .bashrc-rock-kubernetes .vimrc /root/
 fi
+
+# Set canal interface 
+#cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+# After that, please restart the canal daemonset to use the newer config by executing:
+# kubectl rollout restart ds rke2-canal -n kube-system
 
 
 # # follow the logs, if you like

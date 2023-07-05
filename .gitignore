@@ -58,5 +58,5 @@ terraform.rc
 
 
 # kubernetes
-configs/kubectl/pods/*
+configs/kubectl/pods
 

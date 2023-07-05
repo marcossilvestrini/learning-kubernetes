@@ -100,13 +100,9 @@ else
     
 fi
 
-# Set canal interface 
-# cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-# After that, please restart the canal daemonset to use the newer config by executing:
-# kubectl rollout restart ds rke2-canal -n kube-system
-
 # Copy kubectl to the local user bin folder:
-if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
+if [ -d "/var/lib/rancher/rke2/bin" ]; then
+    echo "Copying kubectl to path"
     
     # Copy kubectl binary to the local user bin folder
     cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
@@ -117,17 +113,20 @@ if [ -d "/var/lib/rancher/rke2/bin/kubectl" ]; then
     # Export the kubeconfig file on the node servers:
     export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
 
-    
-    # Set bash session
+     # Set bash session
     cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
     dos2unix .bashrc
     chown vagrant:vagrant .bashrc
 
     # Set properties for user root
     cp -f .bashrc /root/
+    
 fi
-
-# source .bashrc
+source .bashrc
+# Set canal interface 
+cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+# After that, please restart the canal daemonset to use the newer config by executing:
+kubectl rollout restart ds rke2-canal -n kube-system
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses
