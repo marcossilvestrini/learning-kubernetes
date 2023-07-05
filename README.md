@@ -264,8 +264,12 @@ complete -F __start_kubectl k
 
 ### Commands
 
-```sh
+```bash
+# list all resources
+kubectl get all
+
 # get namespaces
+kubectl get namespaces
 
 # list nodes
 kubectl get nodes
@@ -277,6 +281,43 @@ kubectl delete node <node_name>
 
 # list pods
 kubectl get pods
+
+# list all pods
+kubectl get pods --all-namespaces
+kubectl get pods -A
+kubectl get pods -A -o wide
+
+# list pods in  kube-system namespace
+kubectl get pod -n kube-system
+
+# list pods with specif output
+kubectl get pods -n kube-system -o yaml
+
+# execute pods
+kubectl run nginx --image nginx
+
+# create manifest|template
+kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
+
+# delete pods
+kubectl delete pod nginx
+kubectl delete -f pod-template.yaml
+
+# deployment pod with manifest
+kubectl apply -f pod-template.yaml
+
+# create Service | expose pod
+kubectl expose pod my-nginx
+
+# list services
+kubectl get services
+kubectl get svc -o wide
+
+# list services in system namespace
+kubectl get svc -n kube-system
+
+# delete service
+kubectl delete service nginx
 ```
 
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
