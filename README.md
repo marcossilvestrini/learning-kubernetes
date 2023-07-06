@@ -154,7 +154,21 @@ Use this repository for get learning about kubernetes exam
 
 >kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.
 
-Kubernetes ports
+## Kubernetes Architecture
+
+![Kubernetes Architecture](images/kubernetes-architecture.jpg)
+
+### Control Plane
+
+![Control Plane](images/control-plane.jpg)
+
+### Node
+
+![Control Plane](images/worker.jpg)
+
+Reference: <https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/>
+
+## Kubernetes ports
 
 ![kubernetes control plane ports](images/kubernetes-cp-ports.jpg)
 
@@ -339,6 +353,41 @@ kubectl exec silvestrini -c infra -it sh
 kubectl logs my-nginx
 kubectl logs -f my-nginx
 ```
+
+## Pod
+
+![Pod](images/pod.jpg)
+
+A pod is the smallest execution unit in Kubernetes. A pod encapsulates one or more applications.\
+Pods are ephemeral by nature, if a pod (or the node it executes on) fails,\
+Kubernetes can automatically create a new replica of that pod to continue operations.\
+Pods include one or more containers (such as Docker containers).
+
+Pods also provide environmental dependencies, including persistent\
+storage volumes (storage that is permanent and available to all pods\
+in the cluster) and configuration data needed to run the container(s) within the pod.
+
+### Understanding Pod Resources
+
+![Pod Resources](images/resources.jpg)
+
+## Deployment
+
+![Deployment](images/deployment.jpg)
+
+A Deployment provides declarative updates for Pods and ReplicaSets.
+You describe a desired state in a Deployment,and the Deployment Controller\
+changes the actual state to the desired state at a controlled rate.\
+You can define Deployments to create new ReplicaSets, or to remove existing\
+Deployments and adopt all their resources with new Deployments.
+
+### ReplicaSet
+
+A ReplicaSet's purpose is to maintain a stable set of replica Pods running\
+at any given time. As such, it is often used to guarantee the availability of\
+a specified number of identical Pods.
+
+![ReplicaSet](images/replicaset.jpg)
 
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

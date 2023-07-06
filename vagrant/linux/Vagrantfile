@@ -152,7 +152,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[Script userdata-rock.sh]", path: "../../scripts/linux/commons/userdata-rock.sh"
 
      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-     #node.vm.provision "shell", name: "[Script install-node.sh]", path: "../../scripts/linux/rke2/install-node.sh"
+     node.vm.provision "shell", name: "[Script install-node.sh]", path: "../../scripts/linux/rke2/install-node.sh"
       
     end
 
@@ -190,7 +190,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[Script userdata-rock.sh]", path: "../../scripts/linux/commons/userdata-rock.sh"
       
       # INSTAL RKE2 AGENT
-      #node.vm.provision "shell", name: "[Script install-agent.sh]", path: "../../scripts/linux/rke2/install-agent.sh"
+      node.vm.provision "shell", name: "[Script install-agent.sh]", path: "../../scripts/linux/rke2/install-agent.sh"
       
     end    
 
