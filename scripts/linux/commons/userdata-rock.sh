@@ -76,10 +76,9 @@ cp configs/commons/sysctl.conf /etc
 dos2unix /etc/sysctl.conf
 systemctl daemon-reload
 
-
 # SSH,FIREWALLD AND SELINUX
-if [ -f "/etc/ssh/sshd_config.d/90-vagrant.conf" ]; then
-    rm /etc/ssh/sshd_config.d/90-vagrant.conf
+if [ -f "/etc/ssh/sshd_config.d/50-redhat.conf" ]; then
+    rm /etc/ssh/sshd_config.d/50-redhat.conf
 fi
 cp -f configs/commons/01-sshd-custom.conf /etc/ssh/sshd_config.d
 dos2unix /etc/ssh/sshd_config.d
