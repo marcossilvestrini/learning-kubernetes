@@ -29,7 +29,8 @@ dnf makecache --refresh
 dnf update -y
 dnf upgrade --refresh -y
 
-dnf install -y bash-completion \
+dnf install -y \
+bash-completion \
 vim \
 curl \
 git \
@@ -50,7 +51,8 @@ lvm2 \
 nfs-utils \
 cryptsetup  \
 iscsi-initiator-utils \
-ca-certificates
+ca-certificates \
+jq
 
 # Set profile in /etc/profile
 cp -f configs/commons/profile-rock /etc/profile

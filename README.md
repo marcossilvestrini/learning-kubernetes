@@ -271,6 +271,9 @@ kubectl get all
 # get namespaces
 kubectl get namespaces
 
+# describe namespaces
+kubectl describe namespaces
+
 # list nodes
 kubectl get nodes
 kubectl get nodes -o wide
@@ -292,6 +295,14 @@ kubectl get pod -n kube-system
 
 # list pods with specif output
 kubectl get pods -n kube-system -o yaml
+kubectl get pods -n kube-system -o json
+
+# describe details of pods
+kubectl describe pod nginx
+
+# create pod with manifest
+kubectl apply -f pod-template.yaml
+kubectl create -f pod.yaml
 
 # execute pods
 kubectl run nginx --image nginx
@@ -302,9 +313,6 @@ kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-temp
 # delete pods
 kubectl delete pod nginx
 kubectl delete -f pod-template.yaml
-
-# deployment pod with manifest
-kubectl apply -f pod-template.yaml
 
 # create Service | expose pod
 kubectl expose pod my-nginx
@@ -318,6 +326,18 @@ kubectl get svc -n kube-system
 
 # delete service
 kubectl delete service nginx
+
+# connect in container
+kubectl attach silvestrini -c infra
+
+# execute command in container
+kubectl exec infra ls
+kubectl exec silvestrini -c infra -- ls
+kubectl exec silvestrini -c infra -it sh 
+
+# get logs
+kubectl logs my-nginx
+kubectl logs -f my-nginx
 ```
 
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
