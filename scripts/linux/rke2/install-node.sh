@@ -58,6 +58,7 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
     # Set first node
     cp configs/rke2/config-first-node.yaml /etc/rancher/rke2/config.yaml
     chmod 600 /etc/rancher/rke2/config.yaml    
+    sed -i "s/ipNode/$IP_NODE/g" /etc/rancher/rke2/config.yaml    
 
     # enable service
     systemctl enable rke2-server.service
