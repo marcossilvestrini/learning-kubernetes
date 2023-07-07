@@ -1,14 +1,28 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: Enter deployment name
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
 spec:
-  replicas: Enter the number of replicas
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-deployment
+  strategy: {}    
   template:
     metadata:
       labels:
-        editor: vscode
+        app: nginx-deployment
     spec:
       containers:
-      - name: name
-        image: Enter containers image
+      - image: nginx
+        name: nginx
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "256Mi"
+          requests:
+            cpu: "o.25"
+            memory: "128Mi"
+      

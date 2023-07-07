@@ -38,7 +38,7 @@
     {
       "label": "Cleanup slack channel",
       "type": "shell",
-      "command": "python -u ../slack/clean_app-github.py",
+      "command": "/usr/bin/python3 -u slack/clean_app-github.py",
       "windows": {
         "command": [
           "python -u slack/clean_app-github.py"          

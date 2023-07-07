@@ -1,8 +1,7 @@
 ---
 apiVersion: v1
 kind: Pod
-metadata:
-  creationTimestamp: null
+metadata:  
   labels:
     run: my-nginx
   name: my-nginx
@@ -12,7 +11,13 @@ spec:
     name: my-nginx
     ports:
     - containerPort: 80
-    resources: {}
+    resources: 
+      limits:
+        memory: "256Mi"
+        cpu: "0.5"
+      requests:
+        memory: "128Mi"
+        cpu: "0.2"
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
