@@ -24,7 +24,7 @@ win-silvestrini             A       192.168.0.100   ;my desktop
 win-silvestrini2            A       192.168.0.101   ;my notebook
 mail                        A       192.168.0.130   ;mail
 ftp                         CNAME   infra-server01  ;ftp
-rancher                     CNAME   load-balance    ;;rancher load balance
+rancher                     CNAME   load-balance    ;rancher load balance
 
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
 

@@ -15,3 +15,12 @@ set linux for disable
 ## Get node internal ip
 
 kubectl get nodes -o wide | awk -v OFS='\t\t' '{print $1, $6, $7}'
+
+## Delete node
+
+```sh
+Run on Master
+# kubectl cordon <node-name>
+# kubectl drain <node-name> --force --ignore-daemonsets  --delete-emptydir-data
+# kubectl delete node <node-name>
+```

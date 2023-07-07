@@ -126,7 +126,7 @@ source .bashrc
 # Set canal interface 
 cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
 # After that, please restart the canal daemonset to use the newer config by executing:
-kubectl rollout restart ds rke2-canal -n kube-system
+kubectl rollout restart ds rke2-canal -n kube-system 2>&1
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses
