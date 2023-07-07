@@ -125,7 +125,6 @@ infra_server01.vm.provider "virtualbox" do |vb|
 end  
 ```
 
-
 #### Up kubernetes cluster
 
 ```sh
@@ -252,107 +251,56 @@ EOF
 kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
 ```
 
-Reference: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
+## RKE2
 
-## Kubectl
+For create kubernetes cluster using RKE2, see scripts in folder scripts/rke2
 
-### Install
+### Some commands of stack rke2
+
+<https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf>
+
+Set your PATH variable:
 
 ```sh
-# install
-curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s \ 
-https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
-chmod +x ./kubectl
-mv ./kubectl /usr/local/bin/kubectl
-
-# get version
-kubectl version  --output=yaml --client
-
-# kubectl autocomplete
-source <(kubectl completion bash)
-
-# kubectl alias
-alias k=kubectl
-complete -F __start_kubectl k
+export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
 ```
 
-### Commands
+#### CONTAINERD - ctr Commands
 
-```bash
-# list all resources
-kubectl get all
-
-# get namespaces
-kubectl get namespaces
-
-# describe namespaces
-kubectl describe namespaces
-
-# list nodes
-kubectl get nodes
-kubectl get nodes -o wide
-
-# delete node
-kubectl drain <node_name> --ignore-daemonsets --delete-emptydir-data
-kubectl delete node <node_name>
-
-# list pods
-kubectl get pods
-
-# list all pods
-kubectl get pods --all-namespaces
-kubectl get pods -A
-kubectl get pods -A -o wide
-
-# list pods in  kube-system namespace
-kubectl get pod -n kube-system
-
-# list pods with specif output
-kubectl get pods -n kube-system -o yaml
-kubectl get pods -n kube-system -o json
-
-# describe details of pods
-kubectl describe pod nginx
-
-# create pod with manifest
-kubectl apply -f pod-template.yaml
-kubectl create -f pod.yaml
-
-# execute pods
-kubectl run nginx --image nginx
-
-# create manifest|template
-kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
-
-# delete pods
-kubectl delete pod nginx
-kubectl delete -f pod-template.yaml
-
-# create Service | expose pod
-kubectl expose pod my-nginx
-
-# list services
-kubectl get services
-kubectl get svc -o wide
-
-# list services in system namespace
-kubectl get svc -n kube-system
-
-# delete service
-kubectl delete service nginx
-
-# connect in container
-kubectl attach silvestrini -c infra
-
-# execute command in container
-kubectl exec infra ls
-kubectl exec silvestrini -c infra -- ls
-kubectl exec silvestrini -c infra -it sh 
-
-# get logs
-kubectl logs my-nginx
-kubectl logs -f my-nginx
+```zhs
+#list containers using ctr
+ctr --address /run/k3s/containerd/containerd.sock --namespace k8s.io container ls
 ```
+
+#### CONTAINERD - crictl Commands
+
+```zhs
+#list containers using crictl
+
+## example 1
+export CRI_CONFIG_FILE=/var/lib/rancher/rke2/agent/etc/crictl.yaml
+crictl ps
+
+## example 2
+crictl --config /var/lib/rancher/rke2/agent/etc/crictl.yaml ps
+
+## example 3
+crictl --runtime-endpoint unix:///run/k3s/containerd/containerd.sock ps -a
+
+
+# stats containers
+crictl stats
+```
+
+### Logging
+
+```sh
+journalctl -f -u rke2-server
+/var/lib/rancher/rke2/agent/containerd/containerd.log
+/var/lib/rancher/rke2/agent/logs/kubelet.log
+```
+
+Reference: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 
 ## Pod
 
@@ -388,6 +336,136 @@ at any given time. As such, it is often used to guarantee the availability of\
 a specified number of identical Pods.
 
 ![ReplicaSet](images/replicaset.jpg)
+
+## Kubectl
+
+### Install
+
+```sh
+# install
+curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s \ 
+https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+chmod +x ./kubectl
+mv ./kubectl /usr/local/bin/kubectl
+
+# get version
+kubectl version  --output=yaml --client
+
+# kubectl autocomplete
+source <(kubectl completion bash)
+
+# kubectl alias
+alias k=kubectl
+complete -F __start_kubectl k
+```
+
+### Commands
+
+```bash
+
+########## resources ############
+
+# list all resources
+kubectl get all
+
+########## namespaces ###########
+
+# get namespaces
+kubectl get namespaces
+
+# describe namespaces
+kubectl describe namespaces
+
+########## nodes ############
+
+# list nodes
+kubectl get nodes
+kubectl get nodes -o wide
+
+# delete node
+kubectl drain <node_name> --ignore-daemonsets --delete-emptydir-data
+kubectl delete node <node_name>
+
+########## Pods ###########
+
+# list pods
+kubectl get pods
+
+# list all pods
+kubectl get pods --all-namespaces
+kubectl get pods -A
+kubectl get pods -A -o wide
+
+# list pods in inspec node
+
+kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=worker01
+
+# list pods in  kube-system namespace
+kubectl get pod -n kube-system
+
+# list pods with specif output
+kubectl get pods -n kube-system -o yaml
+kubectl get pods -n kube-system -o json
+
+# describe details of pods
+kubectl describe pod nginx
+kubectl -n kube-system  describe pods kube-proxy-worker01
+
+# create pod with manifest
+kubectl apply -f pod-template.yaml
+kubectl create -f pod.yaml
+
+# execute pods
+kubectl run nginx --image nginx
+
+# delete pods
+kubectl delete pod nginx
+kubectl delete -f pod-template.yaml
+
+# create Service | expose pod
+kubectl expose pod my-nginx
+
+# create manifest|template
+kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
+
+########### Services ###########
+
+# list services
+kubectl get services
+kubectl get svc -o wide
+
+# list services in system namespace
+kubectl get svc -n kube-system
+
+# delete service
+kubectl delete service nginx
+
+########### Containers ###########
+
+# get containers in pod
+kubectl -n kube-system  describe pods kube-proxy-worker01 | grep -ws -A 10  Containers
+
+# connect in container
+kubectl attach silvestrini -c infra
+
+# connect in container
+kubectl exec -it pod_name -c container_name bash
+kubectl exec infra ls
+kubectl exec silvestrini -c infra -- ls
+kubectl exec silvestrini -c infra -it sh 
+
+# access container in specific namespace
+kubectl exec -it -n kube-system  kube-proxy-worker01 -c kube-proxy -- bash
+
+
+
+
+########### Logs ###########
+
+# get logs
+kubectl logs my-nginx
+kubectl logs -f my-nginx
+```
 
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
