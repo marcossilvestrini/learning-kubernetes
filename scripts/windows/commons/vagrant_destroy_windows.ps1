@@ -54,7 +54,13 @@ $kubernetes="$baseVagrantfile\linux"
 # VM name
 $vmName= @(
     "infra-server01",
-    "load-balance"    
+    "load-balance",
+    "control-plane01",
+    "control-plane02",
+    "control-plane03",
+    "worker01",
+    "worker02",
+    "worker03"
 )
 
 # Folder vagrant virtualbox machines artefacts

@@ -10,17 +10,35 @@ MULTILINE-COMMENT
 # Set language/locale and encoding
 export LANG=C
 
+# Set workdir
 cd /home/vagrant || exit
 
 # Set password account
 usermod --password $(echo vagrant | openssl passwd -1 -stdin) vagrant
 usermod --password $(echo vagrant | openssl passwd -1 -stdin) root
 
+# Update system
+dnf makecache --refresh
+dnf update -y
+#dnf upgrade --refresh -y
+
 # Enable Epel repo
-dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+# https://linux.how2shout.com/enable-epel-and-epel-next-in-almalinux-or-rocky-linux-9/
+dnf install yum-utils
+dnf config-manager --set-enabled crb
+dnf install epel-release
+dnf install epel-next-release
+#dnf repolist
+
+# https://www.linuxcapable.com/how-to-install-epel-on-rocky-linux/
+# dnf config-manager --set-enabled crb
+# dnf install -y \
+# https://dl.fedoraproject.org/pub/epel/epel-release-latest-9.noarch.rpm \
+# https://dl.fedoraproject.org/pub/epel/epel-next-release-latest-9.noarch.rpm
+# dnf config-manager --set-enabled epel
 
 # Install packages
-dnf update -y
+
 dnf install -y \
 bash-completion \
 vim \
@@ -47,7 +65,7 @@ ca-certificates \
 jq
 
 # Set profile in /etc/profile
-cp -f configs/commons/profile-ol9 /etc/profile
+cp -f configs/commons/profile-alma9 /etc/profile
 dos2unix /etc/profile
 
 # Set vim profile
@@ -56,7 +74,7 @@ dos2unix .vimrc
 chown vagrant:vagrant .vimrc
 
 # Set bash session
-cp -f configs/commons/.bashrc-ol9 .bashrc
+cp -f configs/commons/.bashrc-alma9 .bashrc
 dos2unix .bashrc
 chown vagrant:vagrant .bashrc
 
@@ -103,10 +121,9 @@ chmod 600 "$HOME/.ssh/authorized_keys"
 echo vagrant | $(su -c "gpg -k" -s /bin/bash vagrant)
 
 # Install X11 Server
-dnf config-manager --set-enabled ol9_codeready_builder
-dnf update -y
-dnf install -y xorg-x11-server-Xorg.x86_64 xorg-x11-xauth.x86_64 \
-xorg-x11-server-utils.x86_64 xorg-x11-utils.x86_64
+# https://installati.one/rockylinux/8/xorg-x11-server-common/
+dnf -y install xorg-x11-server-common
+dnf -y install xorg-x11-xauth
 
 # Enable sadc collected system activity
 cp -f configs/commons/sysstat /etc/default/
@@ -123,6 +140,7 @@ dos2unix /etc/hosts
 ## Set Networkmanager
 cp -f configs/commons/01-NetworkManager-custom.conf /etc/NetworkManager/conf.d/
 dos2unix /etc/NetworkManager/conf.d/01-NetworkManager-custom.conf
+chmod 644 /etc/NetworkManager/conf.d/01-NetworkManager-custom.conf
 systemctl reload NetworkManager
 
 ## Set resolv.conf file
@@ -131,10 +149,9 @@ cp configs/commons/resolv.conf.manually-configured /etc
 dos2unix  /etc/resolv.conf.manually-configured
 ln -s /etc/resolv.conf.manually-configured /etc/resolv.conf
 
-
 # Set iscsid
-systemctl start iscsid.service
-systemctl enable iscsid.service
+ systemctl start iscsid.service
+ systemctl enable iscsid.service
 
 # # Clean updates
 dnf clean all

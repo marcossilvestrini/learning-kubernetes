@@ -12,11 +12,11 @@ First...Install packages, configure host,etc
 ## Install latest VBoxGuestAdditions
 
 ```sh
-wget http://download.virtualbox.org/virtualbox/7.0.0/VBoxGuestAdditions_7.0.0.iso
+wget http://download.virtualbox.org/virtualbox/7.0.8/VBoxGuestAdditions_7.0.8.iso
 sudo mkdir /media/VBoxGuestAdditions
-sudo mount -o loop,ro VBoxGuestAdditions_7.0.0.iso /media/VBoxGuestAdditions
+sudo mount -o loop,ro VBoxGuestAdditions_7.0.8.iso /media/VBoxGuestAdditions
 sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
-rm VBoxGuestAdditions_7.0.0.iso
+rm VBoxGuestAdditions_7.0.8.iso
 sudo umount /media/VBoxGuestAdditions
 sudo rmdir /media/VBoxGuestAdditions
 ```
@@ -63,7 +63,7 @@ vagrant package --base infra-server01 --output silvestrini-rocky9.box
 ## Test the box
 
 ```sh
-vagrant box add ubuntu64 package.box
+vagrant box add silvestrini-ol9 silvestrini-ol9.box
 vagrant init ubuntu64
 vagrant up
 ```

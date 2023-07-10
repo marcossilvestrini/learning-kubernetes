@@ -18,11 +18,11 @@ cd $WORKDIR || exit
 DISTRO=$(cat /etc/*release | grep -ws NAME=)
 TOKEN_NODE=$(cat configs/rke2/token-first-node)
 
-# Check if distribution is Debian
-if [[ "$DISTRO" == *"Rock"* ]]; then
-    echo "Distribution is Debian...Congratulations!!!"
+# Check if distribution is RPM-->Oracle Linux Server
+if [[ "$DISTRO" == *"Oracle"* ]]; then
+    echo "Distribution is Oracle Linux Server...Congratulations!!!"
 else
-    echo "This script is available only Debian distributions!!!";exit 1;
+    echo "This script is available only Oracle Linux Server distributions!!!";exit 1;
 fi
 
 # https://docs.rke2.io/install/quickstart

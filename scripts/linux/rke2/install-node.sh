@@ -20,11 +20,11 @@ NODE_MASTER="control-plane01"
 NODE_NAME=$(hostname)
 IP_NODE=$(hostname -i)
 
-# Check if distribution is Debian
-if [[ "$DISTRO" == *"Rock"* ]]; then
-    echo "Distribution is Debian...Congratulations!!!"
+# Check if distribution is RPM-->Oracle Linux Server
+if [[ "$DISTRO" == *"Oracle"* ]]; then
+    echo "Distribution is Oracle Linux Server...Congratulations!!!"
 else
-    echo "This script is available only Rock Linux distributions!!!";exit 1;
+    echo "This script is available only Oracle Linux Server distributions!!!";exit 1;
 fi
 
 # https://docs.rke2.io/install/quickstart
