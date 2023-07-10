@@ -455,7 +455,6 @@ kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
     <h2 id="rke2"><a class="anchor" aria-hidden="true" tabindex="-1" href="#rke2"><span class="octicon octicon-link"></span></a>RKE2</h2>
     <p>For create kubernetes cluster using RKE2, see scripts in folder scripts/rke2</p>
     <h3 id="some-commands-of-stack-rke2"><a class="anchor" aria-hidden="true" tabindex="-1" href="#some-commands-of-stack-rke2"><span class="octicon octicon-link"></span></a>Some commands of stack rke2</h3>
-    <p><a href="https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf">https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf</a></p>
     <p>Set your PATH variable:</p>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token environment constant">$PATH</span>:/opt/rke2/bin:/var/lib/rancher/rke2/bin
 </span></code><div onclick="copied(this)" data-code="export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
@@ -506,7 +505,7 @@ crictl stats
 /var/lib/rancher/rke2/agent/containerd/containerd.log
 /var/lib/rancher/rke2/agent/logs/kubelet.log
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
-    <p>Reference: <a href="https://livro.descomplicandokubernetes.com.br/pt/day_one/">https://livro.descomplicandokubernetes.com.br/pt/day_one/</a></p>
+    <p>Reference: <a href="https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf">https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf</a></p>
     <h2 id="pod"><a class="anchor" aria-hidden="true" tabindex="-1" href="#pod"><span class="octicon octicon-link"></span></a>Pod</h2>
     <p>
       <img src="images/pod.jpg" alt="Pod">
@@ -630,43 +629,85 @@ complete -F __start_kubectl k
 </span><span class="code-line line-number" line="64"><span class="token comment"># create manifest|template</span>
 </span><span class="code-line line-number" line="65">kubectl run my-nginx  <span class="token parameter variable">--image</span> nginx <span class="token parameter variable">--port</span> <span class="token number">80</span> --dry-run<span class="token operator">=</span>client <span class="token parameter variable">-o</span> yaml <span class="token operator">></span>pod-template.yaml
 </span><span class="code-line line-number" line="66">
-</span><span class="code-line line-number" line="67"><span class="token comment">########### Services ###########</span>
+</span><span class="code-line line-number" line="67"><span class="token comment">########### Deployment #########</span>
 </span><span class="code-line line-number" line="68">
-</span><span class="code-line line-number" line="69"><span class="token comment"># list services</span>
-</span><span class="code-line line-number" line="70">kubectl get services
-</span><span class="code-line line-number" line="71">kubectl get svc <span class="token parameter variable">-o</span> wide
-</span><span class="code-line line-number" line="72">
-</span><span class="code-line line-number" line="73"><span class="token comment"># list services in system namespace</span>
-</span><span class="code-line line-number" line="74">kubectl get svc <span class="token parameter variable">-n</span> kube-system
-</span><span class="code-line line-number" line="75">
-</span><span class="code-line line-number" line="76"><span class="token comment"># delete service</span>
-</span><span class="code-line line-number" line="77">kubectl delete <span class="token function">service</span> nginx
-</span><span class="code-line line-number" line="78">
-</span><span class="code-line line-number" line="79"><span class="token comment">########### Containers ###########</span>
-</span><span class="code-line line-number" line="80">
-</span><span class="code-line line-number" line="81"><span class="token comment"># get containers in pod</span>
-</span><span class="code-line line-number" line="82">kubectl <span class="token parameter variable">-n</span> kube-system  describe pods kube-proxy-worker01 <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-ws</span> <span class="token parameter variable">-A</span> <span class="token number">10</span>  Containers
-</span><span class="code-line line-number" line="83">
-</span><span class="code-line line-number" line="84"><span class="token comment"># connect in container</span>
-</span><span class="code-line line-number" line="85">kubectl attach silvestrini <span class="token parameter variable">-c</span> infra
-</span><span class="code-line line-number" line="86">
-</span><span class="code-line line-number" line="87"><span class="token comment"># connect in container</span>
-</span><span class="code-line line-number" line="88">kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> pod_name <span class="token parameter variable">-c</span> container_name <span class="token function">bash</span>
-</span><span class="code-line line-number" line="89">kubectl <span class="token builtin class-name">exec</span> infra <span class="token function">ls</span>
-</span><span class="code-line line-number" line="90">kubectl <span class="token builtin class-name">exec</span> silvestrini <span class="token parameter variable">-c</span> infra -- <span class="token function">ls</span>
-</span><span class="code-line line-number" line="91">kubectl <span class="token builtin class-name">exec</span> silvestrini <span class="token parameter variable">-c</span> infra <span class="token parameter variable">-it</span> <span class="token function">sh</span> 
-</span><span class="code-line line-number" line="92">
-</span><span class="code-line line-number" line="93"><span class="token comment"># access container in specific namespace</span>
-</span><span class="code-line line-number" line="94">kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> <span class="token parameter variable">-n</span> kube-system  kube-proxy-worker01 <span class="token parameter variable">-c</span> kube-proxy -- <span class="token function">bash</span>
-</span><span class="code-line line-number" line="95">
+</span><span class="code-line line-number" line="69"><span class="token comment"># apply\update deployment</span>
+</span><span class="code-line line-number" line="70">kubectl apply <span class="token parameter variable">-f</span> deployment.yaml
+</span><span class="code-line line-number" line="71">
+</span><span class="code-line line-number" line="72"><span class="token comment"># list deployments</span>
+</span><span class="code-line line-number" line="73">kubectl get deployments <span class="token parameter variable">-A</span>
+</span><span class="code-line line-number" line="74">kubectl <span class="token parameter variable">-n</span> kube-system get deployments.apps
+</span><span class="code-line line-number" line="75">kubectl get deployments <span class="token parameter variable">-l</span> <span class="token assign-left variable">app</span><span class="token operator">=</span>nginx-deployment
+</span><span class="code-line line-number" line="76">
+</span><span class="code-line line-number" line="77"><span class="token comment"># get pods management by deployment</span>
+</span><span class="code-line line-number" line="78">kubectl get pods <span class="token parameter variable">-l</span> <span class="token assign-left variable">app</span><span class="token operator">=</span>nginx-deployment
+</span><span class="code-line line-number" line="79">
+</span><span class="code-line line-number" line="80"><span class="token comment"># describe deployment</span>
+</span><span class="code-line line-number" line="81">kubectl describe deployment nginx-deployment
+</span><span class="code-line line-number" line="82">
+</span><span class="code-line line-number" line="83"><span class="token comment"># check status of deployment</span>
+</span><span class="code-line line-number" line="84">kubectl rollout status deployment nginx-deployment
+</span><span class="code-line line-number" line="85">
+</span><span class="code-line line-number" line="86"><span class="token comment"># running rollback deployment</span>
+</span><span class="code-line line-number" line="87">kubectl rollout undo deployment nginx-deployment
+</span><span class="code-line line-number" line="88">kubectl rollout undo deployment nginx-deployment --to-revision<span class="token operator">=</span><span class="token number">1</span>
+</span><span class="code-line line-number" line="89">
+</span><span class="code-line line-number" line="90"><span class="token comment"># get deployment history</span>
+</span><span class="code-line line-number" line="91">kubectl rollout <span class="token function">history</span> deployment nginx-deployment
+</span><span class="code-line line-number" line="92">kubectl rollout <span class="token function">history</span> deployment nginx-deployment <span class="token parameter variable">--revision</span><span class="token operator">=</span><span class="token number">2</span>
+</span><span class="code-line line-number" line="93">
+</span><span class="code-line line-number" line="94"><span class="token comment"># pause deployment(block updates)</span>
+</span><span class="code-line line-number" line="95">kubectl rollout pause deployment nginx-deployment
 </span><span class="code-line line-number" line="96">
-</span><span class="code-line line-number" line="97">
-</span><span class="code-line line-number" line="98">
-</span><span class="code-line line-number" line="99"><span class="token comment">########### Logs ###########</span>
-</span><span class="code-line line-number" line="100">
-</span><span class="code-line line-number" line="101"><span class="token comment"># get logs</span>
-</span><span class="code-line line-number" line="102">kubectl logs my-nginx
-</span><span class="code-line line-number" line="103">kubectl logs <span class="token parameter variable">-f</span> my-nginx
+</span><span class="code-line line-number" line="97"><span class="token comment"># resume deployment(allow updates)</span>
+</span><span class="code-line line-number" line="98">kubectl rollout resume deployment nginx-deployment
+</span><span class="code-line line-number" line="99">
+</span><span class="code-line line-number" line="100"><span class="token comment"># restart deployment (recreate all pods in deployment)</span>
+</span><span class="code-line line-number" line="101">kubectl rollout restart deployment nginx-deployment
+</span><span class="code-line line-number" line="102">
+</span><span class="code-line line-number" line="103"><span class="token comment"># delete deployment</span>
+</span><span class="code-line line-number" line="104">kubectl delete deployment nginx-deployment
+</span><span class="code-line line-number" line="105">
+</span><span class="code-line line-number" line="106">
+</span><span class="code-line line-number" line="107"><span class="token comment">########### Replicaset #########</span>
+</span><span class="code-line line-number" line="108">
+</span><span class="code-line line-number" line="109"><span class="token comment"># list replicaset</span>
+</span><span class="code-line line-number" line="110">kubectl get replicaset <span class="token parameter variable">-l</span> <span class="token assign-left variable">app</span><span class="token operator">=</span>nginx-deployment
+</span><span class="code-line line-number" line="111">
+</span><span class="code-line line-number" line="112"><span class="token comment">########### Services ###########</span>
+</span><span class="code-line line-number" line="113">
+</span><span class="code-line line-number" line="114"><span class="token comment"># list services</span>
+</span><span class="code-line line-number" line="115">kubectl get services
+</span><span class="code-line line-number" line="116">kubectl get svc <span class="token parameter variable">-o</span> wide
+</span><span class="code-line line-number" line="117">
+</span><span class="code-line line-number" line="118"><span class="token comment"># list services in system namespace</span>
+</span><span class="code-line line-number" line="119">kubectl get svc <span class="token parameter variable">-n</span> kube-system
+</span><span class="code-line line-number" line="120">
+</span><span class="code-line line-number" line="121"><span class="token comment"># delete service</span>
+</span><span class="code-line line-number" line="122">kubectl delete <span class="token function">service</span> nginx
+</span><span class="code-line line-number" line="123">
+</span><span class="code-line line-number" line="124"><span class="token comment">########### Containers ###########</span>
+</span><span class="code-line line-number" line="125">
+</span><span class="code-line line-number" line="126"><span class="token comment"># get containers in pod</span>
+</span><span class="code-line line-number" line="127">kubectl <span class="token parameter variable">-n</span> kube-system  describe pods kube-proxy-worker01 <span class="token operator">|</span> <span class="token function">grep</span> <span class="token parameter variable">-ws</span> <span class="token parameter variable">-A</span> <span class="token number">10</span>  Containers
+</span><span class="code-line line-number" line="128">
+</span><span class="code-line line-number" line="129"><span class="token comment"># connect in container</span>
+</span><span class="code-line line-number" line="130">kubectl attach silvestrini <span class="token parameter variable">-c</span> infra
+</span><span class="code-line line-number" line="131">
+</span><span class="code-line line-number" line="132"><span class="token comment"># connect in container</span>
+</span><span class="code-line line-number" line="133">kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> pod_name <span class="token parameter variable">-c</span> container_name <span class="token function">bash</span>
+</span><span class="code-line line-number" line="134">kubectl <span class="token builtin class-name">exec</span> infra <span class="token function">ls</span>
+</span><span class="code-line line-number" line="135">kubectl <span class="token builtin class-name">exec</span> silvestrini <span class="token parameter variable">-c</span> infra -- <span class="token function">ls</span>
+</span><span class="code-line line-number" line="136">kubectl <span class="token builtin class-name">exec</span> silvestrini <span class="token parameter variable">-c</span> infra <span class="token parameter variable">-it</span> <span class="token function">sh</span> 
+</span><span class="code-line line-number" line="137">
+</span><span class="code-line line-number" line="138"><span class="token comment"># access container in specific namespace</span>
+</span><span class="code-line line-number" line="139">kubectl <span class="token builtin class-name">exec</span> <span class="token parameter variable">-it</span> <span class="token parameter variable">-n</span> kube-system  kube-proxy-worker01 <span class="token parameter variable">-c</span> kube-proxy -- <span class="token function">bash</span>
+</span><span class="code-line line-number" line="140">
+</span><span class="code-line line-number" line="141"><span class="token comment">########### Logs ###########</span>
+</span><span class="code-line line-number" line="142">
+</span><span class="code-line line-number" line="143"><span class="token comment"># get logs</span>
+</span><span class="code-line line-number" line="144">kubectl logs my-nginx
+</span><span class="code-line line-number" line="145">kubectl logs <span class="token parameter variable">-f</span> my-nginx
 </span></code><div onclick="copied(this)" data-code="
 ########## resources ############
 
@@ -733,6 +774,51 @@ kubectl expose pod my-nginx
 # create manifest|template
 kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
 
+########### Deployment #########
+
+# apply\update deployment
+kubectl apply -f deployment.yaml
+
+# list deployments
+kubectl get deployments -A
+kubectl -n kube-system get deployments.apps
+kubectl get deployments -l app=nginx-deployment
+
+# get pods management by deployment
+kubectl get pods -l app=nginx-deployment
+
+# describe deployment
+kubectl describe deployment nginx-deployment
+
+# check status of deployment
+kubectl rollout status deployment nginx-deployment
+
+# running rollback deployment
+kubectl rollout undo deployment nginx-deployment
+kubectl rollout undo deployment nginx-deployment --to-revision=1
+
+# get deployment history
+kubectl rollout history deployment nginx-deployment
+kubectl rollout history deployment nginx-deployment --revision=2
+
+# pause deployment(block updates)
+kubectl rollout pause deployment nginx-deployment
+
+# resume deployment(allow updates)
+kubectl rollout resume deployment nginx-deployment
+
+# restart deployment (recreate all pods in deployment)
+kubectl rollout restart deployment nginx-deployment
+
+# delete deployment
+kubectl delete deployment nginx-deployment
+
+
+########### Replicaset #########
+
+# list replicaset
+kubectl get replicaset -l app=nginx-deployment
+
 ########### Services ###########
 
 # list services
@@ -761,9 +847,6 @@ kubectl exec silvestrini -c infra -it sh
 
 # access container in specific namespace
 kubectl exec -it -n kube-system  kube-proxy-worker01 -c kube-proxy -- bash
-
-
-
 
 ########### Logs ###########
 
