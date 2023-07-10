@@ -62,27 +62,21 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     # Copy kubectl binary to the local user bin folder
     cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
     
-    # Add kubectl to the PATH variable on the first server:
-    export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
-
-    # Export the kubeconfig file on the node servers:
-    export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
-
-    
     # Set bash session
-    cp -f configs/commons/.bashrc-rock-kubernetes .
-    dos2unix .bashrc-rock-kubernetes
-    chown vagrant:vagrant .bashrc-rock-kubernetes
+    cp -f configs/commons/.bashrc-ol9-kubernetes .bashrc
+    dos2unix .bashrc
+    chown vagrant:vagrant .bashrc
 
     # Set properties for user root
-    cp -f .bashrc-rock-kubernetes .vimrc /root/
+    cp -f .bashrc /root/
+    source .bashrc
+
+    # Set canal interface 
+    cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+    
+    # After that, please restart the canal daemonset to use the newer config by executing:
+    kubectl rollout restart ds rke2-canal -n kube-system
 fi
-
-# Set canal interface 
-#cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-# After that, please restart the canal daemonset to use the newer config by executing:
-# kubectl rollout restart ds rke2-canal -n kube-system
-
 
 # # follow the logs, if you like
 # # journalctl -u rke2-server -f

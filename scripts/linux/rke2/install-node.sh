@@ -103,31 +103,35 @@ fi
 
 # Copy kubectl to the local user bin folder:
 if [ -d "/var/lib/rancher/rke2/bin" ]; then
-    echo "Copying kubectl to path"
+    echo "Setting kubectl and profile..."
     
     # Copy kubectl binary to the local user bin folder
     cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
-    
-    # Add kubectl to the PATH variable on the first server:
-    export PATH=$PATH:/opt/rke2/bin:/var/lib/rancher/rke2/bin
 
-    # Export the kubeconfig file on the node servers:
-    export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
+    # Install kubecolor
+    wget -q https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25_Linux_x86_64.tar.gz
+    tar xvfz kubecolor_0.0.25_Linux_x86_64.tar.gz
+    mv  kubecolor /usr/local/bin    
+    chmod +x /usr/local/bin/kubecolor  
+    rm kubecolor_0.0.25_Linux_x86_64.tar.gz LICENSE  README.md
 
      # Set bash session
-    cp -f configs/commons/.bashrc-rock-kubernetes .bashrc
+    cp -f configs/commons/.bashrc-ol9-kubernetes .bashrc
     dos2unix .bashrc
     chown vagrant:vagrant .bashrc
 
     # Set properties for user root
     cp -f .bashrc /root/
+
+    # source .bashrc
+    source .bashrc
+
+    # Set canal interface 
+    cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
     
+    # After that, please restart the canal daemonset to use the newer config by executing:
+    kubectl rollout restart ds rke2-canal -n kube-system > /dev/null 2>&1    
 fi
-source .bashrc
-# Set canal interface 
-cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-# After that, please restart the canal daemonset to use the newer config by executing:
-kubectl rollout restart ds rke2-canal -n kube-system 2>&1
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses
