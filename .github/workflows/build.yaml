@@ -25,8 +25,7 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v4
         with:
-          context: "{{defaultContext}}:apps/app-silvestrini"
-          file: "{{defaultContext}}:apps/app-silvestrini/Dockerfile"
+          context: "{{defaultContext}}:apps/app-silvestrini"          
           push: true
           tags: mrsilvestrini/app-silvestrini:v1.0.0
           
