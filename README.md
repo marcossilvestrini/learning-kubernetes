@@ -43,6 +43,14 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#kubernetes-architecture">Kubernetes Architecture</a></li>
+    <li><a href="#install-kubernetes">Install Kubernetes</a></li>
+    <li><a href="#rke2">Rancher RKE2</a></li>
+    <li><a href="#kubectl">Kubectl</a></li>
+    <li><a href="#containers">Containers</a></li>
+    <li><a href="#pods">Pods</a></li>
+    <li><a href="#deployment">Deployment</a></li>
+    <li><a href="#services">Services</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -146,7 +154,11 @@ Use this repository for get learning about kubernetes exam
 
 * [x] Create repository
 * [x] Create github action for automation tasks
-* [ ] Install kubernetes cluster
+* [x] Install kubernetes cluster
+* [x] Install kubectl
+* [x] Add Examples kubernetes pods
+* [x] Add Examples kubernetes deployment
+* [x] Add app deployment
 
 <p align="right">(<a href="#roadmap">back to roadmap</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -154,6 +166,8 @@ Use this repository for get learning about kubernetes exam
 >kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.
 
 ## Kubernetes Architecture
+
+<a name="kubernetes-architecture"></a>
 
 ![Kubernetes Architecture](images/kubernetes-architecture.jpg)
 
@@ -167,7 +181,7 @@ Use this repository for get learning about kubernetes exam
 
 Reference: <https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/>
 
-## Kubernetes ports
+### Kubernetes ports
 
 ![kubernetes control plane ports](images/kubernetes-cp-ports.jpg)
 
@@ -177,7 +191,7 @@ Font: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 
 ## Install kubernetes
 
-<a name="kubernetes-install"></a>
+<a name="install-kubernetes"></a>
 
 ### Minikube
 
@@ -253,6 +267,8 @@ kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
 
 ## RKE2
 
+<a name="rke2"></a>
+
 For create kubernetes cluster using RKE2, see scripts in folder scripts/rke2
 
 ### Some commands of stack rke2
@@ -300,42 +316,9 @@ journalctl -f -u rke2-server
 
 Reference: <https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf>
 
-## Pod
-
-![Pod](images/pod.jpg)
-
-A pod is the smallest execution unit in Kubernetes. A pod encapsulates one or more applications.\
-Pods are ephemeral by nature, if a pod (or the node it executes on) fails,\
-Kubernetes can automatically create a new replica of that pod to continue operations.\
-Pods include one or more containers (such as Docker containers).
-
-Pods also provide environmental dependencies, including persistent\
-storage volumes (storage that is permanent and available to all pods\
-in the cluster) and configuration data needed to run the container(s) within the pod.
-
-### Understanding Pod Resources
-
-![Pod Resources](images/resources.jpg)
-
-## Deployment
-
-![Deployment](images/deployment.jpg)
-
-A Deployment provides declarative updates for Pods and ReplicaSets.
-You describe a desired state in a Deployment,and the Deployment Controller\
-changes the actual state to the desired state at a controlled rate.\
-You can define Deployments to create new ReplicaSets, or to remove existing\
-Deployments and adopt all their resources with new Deployments.
-
-### ReplicaSet
-
-A ReplicaSet's purpose is to maintain a stable set of replica Pods running\
-at any given time. As such, it is often used to guarantee the availability of\
-a specified number of identical Pods.
-
-![ReplicaSet](images/replicaset.jpg)
-
 ## Kubectl
+
+<a name="kubectl"></a>
 
 ### Install
 
@@ -357,7 +340,7 @@ alias k=kubectl
 complete -F __start_kubectl k
 ```
 
-### Commands
+### Commands - Kubectl
 
 ```bash
 
@@ -384,8 +367,55 @@ kubectl get nodes -o wide
 kubectl drain <node_name> --ignore-daemonsets --delete-emptydir-data
 kubectl delete node <node_name>
 
-########## Pods ###########
+# get logs
+kubectl logs my-nginx
+kubectl logs -f my-nginx
+```
 
+## Containers
+
+<a name="containers"></a>
+
+![Containers](images/docker.jpg)
+
+
+### Commands - Containers
+
+```sh
+# get containers in pod
+kubectl -n kube-system  describe pods kube-proxy-worker01 | grep -ws -A 10  Containers
+
+# connect in container
+kubectl attach silvestrini -c infra
+
+# connect in container
+kubectl exec -it pod_name -c container_name bash
+kubectl exec infra ls
+kubectl exec silvestrini -c infra -- ls
+kubectl exec silvestrini -c infra -it sh 
+
+# access container in specific namespace
+kubectl exec -it -n kube-system  kube-proxy-worker01 -c kube-proxy -- bash
+```
+
+## Pods
+
+<a name="pods"></a>
+
+![Pod](images/pod.jpg)
+
+A pod is the smallest execution unit in Kubernetes. A pod encapsulates one or more applications.\
+Pods are ephemeral by nature, if a pod (or the node it executes on) fails,\
+Kubernetes can automatically create a new replica of that pod to continue operations.\
+Pods include one or more containers (such as Docker containers).
+
+Pods also provide environmental dependencies, including persistent\
+storage volumes (storage that is permanent and available to all pods\
+in the cluster) and configuration data needed to run the container(s) within the pod.
+
+### Commands - Pods
+
+```sh
 # list pods
 kubectl get pods
 
@@ -425,9 +455,27 @@ kubectl expose pod my-nginx
 
 # create manifest|template
 kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
+```
 
-########### Deployment #########
+### Understanding Pod Resources
 
+![Pod Resources](images/resources.jpg)
+
+## Deployment
+
+<a name="deployment"></a>
+
+![Deployment](images/deployment.jpg)
+
+A Deployment provides declarative updates for Pods and ReplicaSets.
+You describe a desired state in a Deployment,and the Deployment Controller\
+changes the actual state to the desired state at a controlled rate.\
+You can define Deployments to create new ReplicaSets, or to remove existing\
+Deployments and adopt all their resources with new Deployments.
+
+### Commands - Deployment
+
+```sh
 # apply\update deployment
 kubectl apply -f deployment.yaml
 
@@ -465,14 +513,30 @@ kubectl rollout restart deployment nginx-deployment
 # delete deployment
 kubectl delete deployment nginx-deployment
 
+```
 
-########### Replicaset #########
+### ReplicaSet
 
+A ReplicaSet's purpose is to maintain a stable set of replica Pods running\
+at any given time. As such, it is often used to guarantee the availability of\
+a specified number of identical Pods.
+
+![ReplicaSet](images/replicaset.jpg)
+
+#### Commands - ReplicaSet
+
+```sh
 # list replicaset
 kubectl get replicaset -l app=nginx-deployment
+```
 
-########### Services ###########
+## Services
 
+<a name="services"></a>
+
+### Commands - Services
+
+```sh
 # list services
 kubectl get services
 kubectl get svc -o wide
@@ -482,29 +546,6 @@ kubectl get svc -n kube-system
 
 # delete service
 kubectl delete service nginx
-
-########### Containers ###########
-
-# get containers in pod
-kubectl -n kube-system  describe pods kube-proxy-worker01 | grep -ws -A 10  Containers
-
-# connect in container
-kubectl attach silvestrini -c infra
-
-# connect in container
-kubectl exec -it pod_name -c container_name bash
-kubectl exec infra ls
-kubectl exec silvestrini -c infra -- ls
-kubectl exec silvestrini -c infra -it sh 
-
-# access container in specific namespace
-kubectl exec -it -n kube-system  kube-proxy-worker01 -c kube-proxy -- bash
-
-########### Logs ###########
-
-# get logs
-kubectl logs my-nginx
-kubectl logs -f my-nginx
 ```
 
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
