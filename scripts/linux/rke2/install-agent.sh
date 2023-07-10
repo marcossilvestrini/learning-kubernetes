@@ -70,12 +70,7 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     # Set properties for user root
     cp -f .bashrc /root/
     source .bashrc
-
-    # Set canal interface 
-    cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-    
-    # After that, please restart the canal daemonset to use the newer config by executing:
-    kubectl rollout restart ds rke2-canal -n kube-system
+   
 fi
 
 # # follow the logs, if you like
