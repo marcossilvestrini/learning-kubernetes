@@ -5,24 +5,27 @@ metadata:
     app: nginx-deployment
   name: nginx-deployment
 spec:
-  replicas: 1
+  replicas: 10
   selector:
     matchLabels:
       app: nginx-deployment
-  strategy: {}    
+  strategy:
+    type: Recreate    
   template:
     metadata:
       labels:
         app: nginx-deployment
     spec:
       containers:
-      - image: nginx
+      - image: nginx:1.16.0
         name: nginx
         resources:
           limits:
             cpu: "0.5"
             memory: "256Mi"
           requests:
-            cpu: "o.25"
+            cpu: "0.25"
             memory: "128Mi"
+        ports:
+          - containerPort: 80
       

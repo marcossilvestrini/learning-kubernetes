@@ -257,8 +257,6 @@ For create kubernetes cluster using RKE2, see scripts in folder scripts/rke2
 
 ### Some commands of stack rke2
 
-<https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf>
-
 Set your PATH variable:
 
 ```sh
@@ -300,7 +298,7 @@ journalctl -f -u rke2-server
 /var/lib/rancher/rke2/agent/logs/kubelet.log
 ```
 
-Reference: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
+Reference: <https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf>
 
 ## Pod
 
@@ -428,6 +426,51 @@ kubectl expose pod my-nginx
 # create manifest|template
 kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
 
+########### Deployment #########
+
+# apply\update deployment
+kubectl apply -f deployment.yaml
+
+# list deployments
+kubectl get deployments -A
+kubectl -n kube-system get deployments.apps
+kubectl get deployments -l app=nginx-deployment
+
+# get pods management by deployment
+kubectl get pods -l app=nginx-deployment
+
+# describe deployment
+kubectl describe deployment nginx-deployment
+
+# check status of deployment
+kubectl rollout status deployment nginx-deployment
+
+# running rollback deployment
+kubectl rollout undo deployment nginx-deployment
+kubectl rollout undo deployment nginx-deployment --to-revision=1
+
+# get deployment history
+kubectl rollout history deployment nginx-deployment
+kubectl rollout history deployment nginx-deployment --revision=2
+
+# pause deployment(block updates)
+kubectl rollout pause deployment nginx-deployment
+
+# resume deployment(allow updates)
+kubectl rollout resume deployment nginx-deployment
+
+# restart deployment (recreate all pods in deployment)
+kubectl rollout restart deployment nginx-deployment
+
+# delete deployment
+kubectl delete deployment nginx-deployment
+
+
+########### Replicaset #########
+
+# list replicaset
+kubectl get replicaset -l app=nginx-deployment
+
 ########### Services ###########
 
 # list services
@@ -456,9 +499,6 @@ kubectl exec silvestrini -c infra -it sh
 
 # access container in specific namespace
 kubectl exec -it -n kube-system  kube-proxy-worker01 -c kube-proxy -- bash
-
-
-
 
 ########### Logs ###########
 
