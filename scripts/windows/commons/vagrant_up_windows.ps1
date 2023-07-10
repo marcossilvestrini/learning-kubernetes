@@ -70,20 +70,21 @@ Start-Process -Wait -NoNewWindow -FilePath "$virtualboxFolder\VBoxManage.exe" `
 setx VAGRANT_HOME "$vagrantHome" >$null
 
 # Copy app files
-#Copy-Item -Force "$baseProject\index.html" -Destination "$baseProject\configs\linux\kubernetes\apps\app-silvestrini"
+Copy-Item -Force "$baseProject\index.html" -Destination "$baseProject\apps\app-silvestrini"
+Copy-Item -Force -Recurse "$baseProject\images" -Destination "$baseProject\apps\app-silvestrini"
 
-# Up kubernetes stack
-$kubernetes = "$baseVagrantfile"
-Set-Location $kubernetes
-vagrant up
-Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
-Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
-Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
-Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
-Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
-Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker01
-Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
-Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
+# # Up kubernetes stack
+# $kubernetes = "$baseVagrantfile"
+# Set-Location $kubernetes
+# vagrant up
+# Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
+# Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
+# Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
+# Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
+# Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
+# Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker01
+# Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
+# Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
 
 # Fix powershell error
 $Env:VAGRANT_PREFER_SYSTEM_BIN += 0

@@ -60,3 +60,6 @@ terraform.rc
 # kubernetes
 configs/linux/kubectl/rke2.yaml
 
+# Docker
+security/.docker-secrets
+

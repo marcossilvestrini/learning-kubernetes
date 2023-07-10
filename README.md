@@ -159,6 +159,8 @@ Use this repository for get learning about kubernetes exam
 * [x] Add Examples kubernetes pods
 * [x] Add Examples kubernetes deployment
 * [x] Add app deployment
+* [x] Create docker image with project contents
+* [ ] Create github action for build docker image
 
 <p align="right">(<a href="#roadmap">back to roadmap</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
