@@ -4,6 +4,7 @@
         "CNCF",
         "cpus",
         "crictl",
+        "Daemonset",
         "journalctl",
         "kubelet",
         "Linuxips",
