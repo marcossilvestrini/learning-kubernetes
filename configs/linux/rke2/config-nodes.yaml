@@ -13,12 +13,11 @@ tls-san:
   - "control-plane03.skynet.com.br"
   - "192.168.0.142"
 node-ip: ipNode
-node-external-ip: 192.168.0.131
+#node-external-ip: 192.168.0.131
 bind-address: ipNode
 advertise-address: ipNode
 etcd-expose-metrics: true
 cni:
   - canal
-
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"

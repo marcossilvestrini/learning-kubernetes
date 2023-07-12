@@ -570,6 +570,21 @@ kubectl apply -f daemonset.yaml
 kubectl delete daemonset node-exporter
 ```
 
+## Probes
+
+Kubernetes probes are health checks that are used to monitor the health of applications and services in a Kubernetes cluster.\
+Kubernetes probes are typically implemented using the Kubernetes API, which allows them to query the application or service for information.\
+This information can then be used to determine the application's or service's health.\
+Kubernetes probes can also be used to detect changes in the application or\ service and send a notification to the Kubernetes control plane, which can\ then take corrective action.
+
+
+![Probes](images/probes.jpg)
+
+### Types of Probes
+
+>livenessProbe\
+readinessProbe\
+startupProbe
 
 ## Services
 
