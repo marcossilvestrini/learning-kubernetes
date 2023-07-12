@@ -432,10 +432,14 @@ kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=worker0
 
 # list pods in  kube-system namespace
 kubectl get pod -n kube-system
+kubectl get pods -n kube-system -o=jsonpath='{range.items[*]}{"\n"}{.metadata.name}{range.spec.containers}'
 
 # list pods with specif output
 kubectl get pods -n kube-system -o yaml
 kubectl get pods -n kube-system -o json
+
+# list images used in pods
+kubectl get pods -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{"\t"}{range .spec.containers[*]}{.image}{"\t"}{end}{end}'
 
 # describe details of pods
 kubectl describe pod nginx
@@ -517,7 +521,7 @@ kubectl delete deployment nginx-deployment
 
 ```
 
-### ReplicaSet
+## ReplicaSet
 
 A ReplicaSet's purpose is to maintain a stable set of replica Pods running\
 at any given time. As such, it is often used to guarantee the availability of\
@@ -525,14 +529,23 @@ a specified number of identical Pods.
 
 ![ReplicaSet](images/replicaset.jpg)
 
-#### Commands - ReplicaSet
+### Commands - ReplicaSet
 
 ```sh
 # list replicaset
 kubectl get replicaset -l app=nginx-deployment
+
+# describe replicaset
+kubectl describe replicaset nginx-replicaset
+
+# create replicaset - see folder replicaset/ for examples
+kubectl apply -f replicaset.yaml
+
+# delete replicaset
+kubectl delete replicaset nginx-deployment
 ```
 
-### Daemonset
+## Daemonset
 
 A DaemonSet ensures that all (or some) Nodes run a copy of a Pod.\
 As nodes are added to the cluster, Pods are added to them.\
@@ -540,6 +553,23 @@ As nodes are removed from the cluster, those Pods are garbage collected.\
 Deleting a DaemonSet will clean up the Pods it created.
 
 ![Daemonset](images/daemonset.png)
+
+### Commands - Daemonset
+
+```sh
+# list daemonset
+kubectl get daemonset -A
+
+#$ describe daemonset
+kubectl describe daemonset node-exporter
+
+# create daemonset - see folder daemonset/ for examples
+kubectl apply -f daemonset.yaml
+
+# delete daemonset
+kubectl delete daemonset node-exporter
+```
+
 
 ## Services
 
