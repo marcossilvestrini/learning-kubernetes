@@ -889,6 +889,15 @@ kubectl apply -f daemonset.yaml
 # delete daemonset
 kubectl delete daemonset node-exporter
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h2 id="probes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#probes"><span class="octicon octicon-link"></span></a>Probes</h2>
+    <p>Kubernetes probes are health checks that are used to monitor the health of applications and services in a Kubernetes cluster.<br>Kubernetes probes are typically implemented using the Kubernetes API, which allows them to query the application or service for information.<br>This information can then be used to determine the application's or service's health.<br>Kubernetes probes can also be used to detect changes in the application or\ service and send a notification to the Kubernetes control plane, which can\ then take corrective action.</p>
+    <p>
+      <img src="images/probes.jpg" alt="Probes">
+    </p>
+    <h3 id="types-of-probes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#types-of-probes"><span class="octicon octicon-link"></span></a>Types of Probes</h3>
+    <blockquote>
+      <p>livenessProbe<br>readinessProbe<br>startupProbe</p>
+    </blockquote>
     <h2 id="services"><a class="anchor" aria-hidden="true" tabindex="-1" href="#services"><span class="octicon octicon-link"></span></a>Services</h2>
     <p><a name="services"></a></p>
     <h3 id="commands---services"><a class="anchor" aria-hidden="true" tabindex="-1" href="#commands---services"><span class="octicon octicon-link"></span></a>Commands - Services</h3>
