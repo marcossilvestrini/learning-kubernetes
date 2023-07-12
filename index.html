@@ -895,9 +895,12 @@ kubectl delete daemonset node-exporter
       <img src="images/probes.jpg" alt="Probes">
     </p>
     <h3 id="types-of-probes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#types-of-probes"><span class="octicon octicon-link"></span></a>Types of Probes</h3>
-    <blockquote>
-      <p>livenessProbe<br>readinessProbe<br>startupProbe</p>
-    </blockquote>
+    <h4 id="startup-probes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#startup-probes"><span class="octicon octicon-link"></span></a>Startup Probes</h4>
+    <p>A startup probe is used to determine if a container has started successfully.<br>This type of probe is typically used for applications that take longer to start up,<br>or for containers that perform initialization tasks before they become ready to receive traffic.<br>The startup probe is run only once, after the container has been created, and it will delay the start<br>of the readiness and liveness probes until it succeeds.<br>If the startup probe fails, the container is considered to have failed to start<br>and Kubernetes will attempt to restart the container.</p>
+    <h4 id="readiness-probes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#readiness-probes"><span class="octicon octicon-link"></span></a>Readiness Probes</h4>
+    <p>A readiness probe is used to determine if a container is ready to receive traffic.<br>This type of probe is used to ensure that a container is fully up and running and can<br>accept incoming connections before it is added to the service load balancer.<br>A readiness probe can be used to check the availability of an application's dependencies<br>or to perform any other check that indicates the container is ready to serve traffic.<br>If the readiness probe fails, the container is removed from the service load balancer until the probe succeeds again.</p>
+    <h4 id="liveness-probes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#liveness-probes"><span class="octicon octicon-link"></span></a>Liveness Probes</h4>
+    <p>A liveness probe is used to determine if a container is still running and functioning properly.<br>This type of probe is used to detect and recover from container crashes or hang-ups.<br>A liveness probe can be used to check the responsiveness of an application or to perform<br>any other check that indicates the container is still alive and healthy.<br>If the liveness probe fails, Kubernetes will attempt to restart the container to restore its functionality.</p>
     <h2 id="services"><a class="anchor" aria-hidden="true" tabindex="-1" href="#services"><span class="octicon octicon-link"></span></a>Services</h2>
     <p><a name="services"></a></p>
     <h3 id="commands---services"><a class="anchor" aria-hidden="true" tabindex="-1" href="#commands---services"><span class="octicon octicon-link"></span></a>Commands - Services</h3>
