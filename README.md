@@ -582,9 +582,32 @@ Kubernetes probes can also be used to detect changes in the application or\ serv
 
 ### Types of Probes
 
->livenessProbe\
-readinessProbe\
-startupProbe
+#### Startup Probes
+
+A startup probe is used to determine if a container has started successfully.\
+This type of probe is typically used for applications that take longer to start up,\
+or for containers that perform initialization tasks before they become ready to receive traffic.\
+The startup probe is run only once, after the container has been created, and it will delay the start\
+of the readiness and liveness probes until it succeeds.\
+If the startup probe fails, the container is considered to have failed to start\
+and Kubernetes will attempt to restart the container.
+
+#### Readiness Probes
+
+A readiness probe is used to determine if a container is ready to receive traffic.\
+This type of probe is used to ensure that a container is fully up and running and can\
+accept incoming connections before it is added to the service load balancer.\
+A readiness probe can be used to check the availability of an application's dependencies\
+or to perform any other check that indicates the container is ready to serve traffic.\
+If the readiness probe fails, the container is removed from the service load balancer until the probe succeeds again.
+
+#### Liveness Probes
+
+A liveness probe is used to determine if a container is still running and functioning properly.\
+This type of probe is used to detect and recover from container crashes or hang-ups.\
+A liveness probe can be used to check the responsiveness of an application or to perform\
+any other check that indicates the container is still alive and healthy.\
+If the liveness probe fails, Kubernetes will attempt to restart the container to restore its functionality.
 
 ## Services
 
