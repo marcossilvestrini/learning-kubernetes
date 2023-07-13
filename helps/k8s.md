@@ -1,5 +1,9 @@
 # Helps Kubernetes
 
+## Install kubectl autocomplete windows
+
+kubectl completion powershell | Out-String | Invoke-Expression
+
 ## Fix RKE2 error get ip of not mapped in dns
 
 systemctl stop rke2-server.service

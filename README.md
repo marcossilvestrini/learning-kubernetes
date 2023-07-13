@@ -459,8 +459,6 @@ kubectl delete -f pod-template.yaml
 # create Service | expose pod
 kubectl expose pod my-nginx
 
-# create manifest|template
-kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
 ```
 
 ### Understanding Pod Resources
@@ -482,6 +480,9 @@ Deployments and adopt all their resources with new Deployments.
 ### Commands - Deployment
 
 ```sh
+# create manifest|template
+kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
+
 # apply\update deployment
 kubectl apply -f deployment.yaml
 

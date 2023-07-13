@@ -21,10 +21,10 @@ NODE_NAME=$(hostname)
 IP_NODE=$(hostname -i)
 
 # Check if distribution is RPM-->Oracle Linux Server
-if [[ "$DISTRO" == *"Debian"* ]]; then
-    echo "Distribution is Debian Server...Congratulations!!!"
+if [[ "$DISTRO" == *"Oracle"* ]]; then
+    echo "Distribution is Oracle Linux Server...Congratulations!!!"
 else
-    echo "This script is available only Debian Linux Server distributions!!!";exit 1;
+    echo "This script is available only Oracle Linux Server distributions!!!";exit 1;
 fi
 
 # Set default route for RKE2
@@ -67,5 +67,13 @@ sudo systemctl status containerd
 # enable kubelet service
 sudo systemctl enable --now kubelet
 
-# set ports
+# start cluster
+sudo kubeadm init --pod-network-cidr=10.10.0.0/16 --apiserver-advertise-address=192.168.0.140
+
+# set access for cluster
+
+#mkdir -p $HOME/.kube
+#sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
 
