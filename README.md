@@ -181,15 +181,12 @@ Use this repository for get learning about kubernetes exam
 
 ![Control Plane](images/worker.jpg)
 
-Reference: <https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/>
-
 ### Kubernetes ports
 
 ![kubernetes control plane ports](images/kubernetes-cp-ports.jpg)
 
 ![kubernetes works ports](images/kubernetes-wk-ports.jpg)
 
-Font: <https://livro.descomplicandokubernetes.com.br/pt/day_one/>
 
 ## Install kubernetes
 
@@ -459,8 +456,6 @@ kubectl delete -f pod-template.yaml
 # create Service | expose pod
 kubectl expose pod my-nginx
 
-# create manifest|template
-kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
 ```
 
 ### Understanding Pod Resources
@@ -482,6 +477,9 @@ Deployments and adopt all their resources with new Deployments.
 ### Commands - Deployment
 
 ```sh
+# create manifest|template
+kubectl run my-nginx  --image nginx --port 80 --dry-run=client -o yaml >pod-template.yaml
+
 # apply\update deployment
 kubectl apply -f deployment.yaml
 
@@ -676,6 +674,7 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 * [k3s](https://k3s.io/)
 * [RKE2](https://docs.rke2.io/architecture)
 * [Up RKE2 Cluster HA](https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1)
+* [Kubernetes Architecture](https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

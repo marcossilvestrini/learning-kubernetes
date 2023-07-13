@@ -8,7 +8,7 @@ services:
     networks:
       - skynet
     ports:
-      - 8080:80
+      - 8001:80
 
 volumes:
   volume-app-silvestrini:
