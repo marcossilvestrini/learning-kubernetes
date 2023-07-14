@@ -101,36 +101,53 @@ else
     
 fi
 
-# Copy kubectl to the local user bin folder:
+# Set kubectl, .bashrc and apply patch for CNI Canal
 if [ -d "/var/lib/rancher/rke2/bin" ]; then
     echo "Setting kubectl and profile..."
     
     # Copy kubectl binary to the local user bin folder
+    echo "Copy kubectl binary to the local user bin folder"
     cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin    
 
     # Install kubecolor
+    echo "Download kubecolor"
     wget -q https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25_Linux_x86_64.tar.gz
+    echo "Extract kubecolor files"
     tar xvfz kubecolor_0.0.25_Linux_x86_64.tar.gz
+
+    echo "Move kubecolor binary to the local user bin folder"
     mv  kubecolor /usr/local/bin    
+
+    echo "Set permissions for kubecolor"
     chmod +x /usr/local/bin/kubecolor  
+
+    echo "Remove kubecolor trash files"
     rm kubecolor_0.0.25_Linux_x86_64.tar.gz LICENSE  README.md
 
-     # Set bash session
+    # Set bash session
+    echo "Set .bashrc for user vagrant [configs/commons/.bashrc-ol9-kubernetes --> /home/vagrant/.bashrc]"
     cp -f configs/commons/.bashrc-ol9-kubernetes .bashrc
     dos2unix .bashrc
+    
+    echo "Set permissions for user vagrant in .bashrc"
     chown vagrant:vagrant .bashrc
 
     # Set properties for user root
+    echo "Set .bashrc for user root [/home/vagrant --> /root/.bashrc]"
     cp -f .bashrc /root/
 
     # source .bashrc
+    echo "Source /home/vagrant/.bashrc"
     source .bashrc
 
     # Set canal interface 
-    cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+    # echo "Copy fix for CNI canal [configs/rke2/rke2-canal-config.yaml --> /var/lib/rancher/rke2/server/manifests/]"
+    # cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
     
     # After that, please restart the canal daemonset to use the newer config by executing:
-    kubectl rollout restart ds rke2-canal -n kube-system > /dev/null 2>&1    
+    # echo "Apply fix for CNI canal"    
+    # kubectl apply -f configs/rke2/rke2-canal-config.yaml
+    # kubectl rollout restart ds rke2-canal -n kube-system
 fi
 
 # Check the health of the deployment by running a status command:

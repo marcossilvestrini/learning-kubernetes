@@ -628,6 +628,15 @@ kubectl delete service nginx
 <p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Volumes
+
+![PVC](images/volumes01.png)
+
+Types of volumes in kubernetes:\
+>EmptyDir
+PV
+PVCs
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
