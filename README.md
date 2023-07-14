@@ -637,6 +637,7 @@ Types of volumes in kubernetes:\
 Storage Class
 PV
 PVCs
+Configmaps
 
 ## Contributing
 
