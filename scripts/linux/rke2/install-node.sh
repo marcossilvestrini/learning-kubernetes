@@ -141,6 +141,7 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     source .bashrc
 
     # Set canal interface 
+<<<<<<< HEAD
     # echo "Copy fix for CNI canal [configs/rke2/rke2-canal-config.yaml --> /var/lib/rancher/rke2/server/manifests/]"
     # cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
     
@@ -148,6 +149,15 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     # echo "Apply fix for CNI canal"    
     # kubectl apply -f configs/rke2/rke2-canal-config.yaml
     # kubectl rollout restart ds rke2-canal -n kube-system
+=======
+    echo "Copy fix for CNI canal [configs/rke2/rke2-canal-config.yaml --> /var/lib/rancher/rke2/server/manifests/]"
+    cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
+    
+    # After that, please restart the canal daemonset to use the newer config by executing:
+    echo "Apply fix for CNI canal"    
+    kubectl apply -f configs/rke2/rke2-canal-config.yaml
+    kubectl rollout restart ds rke2-canal -n kube-system
+>>>>>>> 003fea8f687564f4cee2ffb30ac2de673558eb66
 fi
 
 # Check the health of the deployment by running a status command:
