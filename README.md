@@ -634,6 +634,7 @@ kubectl delete service nginx
 
 Types of volumes in kubernetes:\
 >EmptyDir
+Storage Class
 PV
 PVCs
 
