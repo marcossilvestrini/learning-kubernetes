@@ -634,6 +634,8 @@ kubectl delete service nginx
 
 ### Storage Class
 
+![Storage Class](/images/storageclass.png)
+
 Some Storage Class providers
 
 * kubernetes.io/aws-ebs: AWS Elastic Block Store (EBS)
@@ -645,6 +647,8 @@ Some Storage Class providers
 * kubernetes.io/host-path: Volumes locais
 
 ### PV - Persistent volume
+
+![PV](images/pv.png)
 
 Some Types of PV
 
