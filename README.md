@@ -630,12 +630,7 @@ kubectl delete service nginx
 
 ## Volumes
 
-![PVC](images/volumes01.png)
-
-About volumes in kubernetes:
->PV
-PVCs
-Configmaps
+![Volumes](images/volumes01.png)
 
 ### Storage Class
 
@@ -649,11 +644,36 @@ Some Storage Class providers
 * kubernetes.io/no-provisioner: Volumes locais
 * kubernetes.io/host-path: Volumes locais
 
+### PV - Persistent volume
+
+Some Types of PV
+
+* Local
+  * HostPath
+* Network
+  * NFS
+  * iSCSI
+  * Ceph RBD(RAdos Block Device)
+  * GlusterFS
+  * Cloud Providers(EBS,Google Cloud Persistent Disk,Azure Disk Storage)
+
 ### Commands - Volumes
 
 ```bash
 # list storage classes
 kubectl get storageclass
+
+# describe storage class
+kubectl describe storageclass silvestrini
+
+# get storage class provisioners
+kubectl get storageclasses.storage.k8s.io  -o=jsonpath='{range.items[*]}{.provisioner}{"\n"}'
+
+# list pv in cluster
+kubectl get pv -A
+
+# describe pv
+kubectl describe pv my-pv
 
 # list pvc
 kubectl get pvc -o wide
