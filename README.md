@@ -632,7 +632,7 @@ kubectl delete service nginx
 
 ![PVC](images/volumes01.png)
 
-About volumes in kubernetes:\
+About volumes in kubernetes:
 >PV
 PVCs
 Configmaps

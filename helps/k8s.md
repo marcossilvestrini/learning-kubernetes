@@ -15,6 +15,16 @@ rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml
 systemctl start rke2-server.service
 set linux for disable
 
+## Fix error server is not ready: Node password rejected
+
+Erro:\
+Jul 17 09:09:33 worker02 rke2[36806]: time="2023-07-17T09:09:33-03:00" level=info msg="Waiting to retrieve agent configuration; server is not ready:\
+Node password rejected, duplicate hostname or contents of '/etc/rancher/node/password' may not match server node-passwd entry,\
+try enabling a unique node name with the --with-node-id flag"
+
+Solution:\
+kubectl -n kube-system delete secrets <agent-node-name>.node-password.rke2
+
 ## HAProxy
 
 <https://www.suse.com/support/kb/doc/?id=000020175>
