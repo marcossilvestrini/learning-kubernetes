@@ -633,7 +633,9 @@ kubectl delete service nginx
 ![PVC](images/volumes01.png)
 
 Types of volumes in kubernetes:\
->PV
+>EmptyDir
+Storage Class
+PV
 PVCs
 Configmaps
 
