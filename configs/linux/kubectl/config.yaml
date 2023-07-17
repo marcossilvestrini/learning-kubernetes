@@ -1,0 +1,14 @@
+debug: true
+write-kubeconfig-mode: "0644"
+tls-san:
+  - rancher.skynet.com.br
+  - 192.168.0.131
+node-ip: 192.168.0.140
+#node-external-ip: 192.168.0.131
+bind-address: 192.168.0.140
+advertise-address: 192.168.0.140
+etcd-expose-metrics: true
+cni:
+  - canal
+node-taint:
+  - "CriticalAddonsOnly=true:NoExecute"
