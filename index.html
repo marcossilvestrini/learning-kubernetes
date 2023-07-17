@@ -926,16 +926,8 @@ kubectl delete service nginx
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
     <h2 id="volumes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#volumes"><span class="octicon octicon-link"></span></a>Volumes</h2>
     <p>
-      <img src="images/volumes01.png" alt="PVC">
+      <img src="images/volumes01.png" alt="Volumes">
     </p>
-    <p>About volumes in kubernetes:</p>
-    <blockquote>
-      <p>
-        PV
-        PVCs
-        Configmaps
-      </p>
-    </blockquote>
     <h3 id="storage-class"><a class="anchor" aria-hidden="true" tabindex="-1" href="#storage-class"><span class="octicon octicon-link"></span></a>Storage Class</h3>
     <p>Some Storage Class providers</p>
     <ul>
@@ -947,14 +939,56 @@ kubectl delete service nginx
       <li>kubernetes.io/no-provisioner: Volumes locais</li>
       <li>kubernetes.io/host-path: Volumes locais</li>
     </ul>
+    <h3 id="pv---persistent-volume"><a class="anchor" aria-hidden="true" tabindex="-1" href="#pv---persistent-volume"><span class="octicon octicon-link"></span></a>PV - Persistent volume</h3>
+    <p>Some Types of PV</p>
+    <ul>
+      <li>Local
+        <ul>
+          <li>HostPath</li>
+        </ul>
+      </li>
+      <li>Network
+        <ul>
+          <li>NFS</li>
+          <li>iSCSI</li>
+          <li>Ceph RBD(RAdos Block Device)</li>
+          <li>GlusterFS</li>
+          <li>Cloud Providers(EBS,Google Cloud Persistent Disk,Azure Disk Storage)</li>
+        </ul>
+      </li>
+    </ul>
     <h3 id="commands---volumes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#commands---volumes"><span class="octicon octicon-link"></span></a>Commands - Volumes</h3>
     <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># list storage classes</span>
 </span><span class="code-line line-number" line="2">kubectl get storageclass
 </span><span class="code-line line-number" line="3">
-</span><span class="code-line line-number" line="4"><span class="token comment"># list pvc</span>
-</span><span class="code-line line-number" line="5">kubectl get pvc <span class="token parameter variable">-o</span> wide
+</span><span class="code-line line-number" line="4"><span class="token comment"># describe storage class</span>
+</span><span class="code-line line-number" line="5">kubectl describe storageclass silvestrini
+</span><span class="code-line line-number" line="6">
+</span><span class="code-line line-number" line="7"><span class="token comment"># get storage class provisioners</span>
+</span><span class="code-line line-number" line="8">kubectl get storageclasses.storage.k8s.io  <span class="token parameter variable">-o</span><span class="token operator">=</span>jsonpath<span class="token operator">=</span><span class="token string">'{range.items[*]}{.provisioner}{"\n"}'</span>
+</span><span class="code-line line-number" line="9">
+</span><span class="code-line line-number" line="10"><span class="token comment"># list pv in cluster</span>
+</span><span class="code-line line-number" line="11">kubectl get <span class="token function">pv</span> <span class="token parameter variable">-A</span>
+</span><span class="code-line line-number" line="12">
+</span><span class="code-line line-number" line="13"><span class="token comment"># describe pv</span>
+</span><span class="code-line line-number" line="14">kubectl describe <span class="token function">pv</span> my-pv
+</span><span class="code-line line-number" line="15">
+</span><span class="code-line line-number" line="16"><span class="token comment"># list pvc</span>
+</span><span class="code-line line-number" line="17">kubectl get pvc <span class="token parameter variable">-o</span> wide
 </span></code><div onclick="copied(this)" data-code="# list storage classes
 kubectl get storageclass
+
+# describe storage class
+kubectl describe storageclass silvestrini
+
+# get storage class provisioners
+kubectl get storageclasses.storage.k8s.io  -o=jsonpath=&#x27;{range.items[*]}{.provisioner}{&#x22;\n&#x22;}&#x27;
+
+# list pv in cluster
+kubectl get pv -A
+
+# describe pv
+kubectl describe pv my-pv
 
 # list pvc
 kubectl get pvc -o wide
