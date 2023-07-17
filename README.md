@@ -632,12 +632,32 @@ kubectl delete service nginx
 
 ![PVC](images/volumes01.png)
 
-Types of volumes in kubernetes:\
->EmptyDir
-Storage Class
-PV
+About volumes in kubernetes:\
+>PV
 PVCs
 Configmaps
+
+### Storage Class
+
+Some Storage Class providers
+
+* kubernetes.io/aws-ebs: AWS Elastic Block Store (EBS)
+* kubernetes.io/azure-disk: Azure Disk
+* kubernetes.io/gce-pd: Google Compute Engine (GCE) Persistent Disk
+* kubernetes.io/cinder: OpenStack Cinder
+* kubernetes.io/vsphere-volume: vSphere
+* kubernetes.io/no-provisioner: Volumes locais
+* kubernetes.io/host-path: Volumes locais
+
+### Commands - Volumes
+
+```bash
+# list storage classes
+kubectl get storageclass
+
+# list pvc
+kubectl get pvc -o wide
+```
 
 ## Contributing
 
@@ -686,6 +706,7 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 * [RKE2](https://docs.rke2.io/architecture)
 * [Up RKE2 Cluster HA](https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1)
 * [Kubernetes Architecture](https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/)
+* [Rancher Local Path Provisioner](https://github.com/rancher/local-path-provisioner)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

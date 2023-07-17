@@ -67,6 +67,9 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
     echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
     systemctl restart rke2-server.service
 
+    # Create storage class 
+    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
+
     # save first node token 
     TOKEN_NODE=$(cat /var/lib/rancher/rke2/server/node-token)    
     echo "$TOKEN_NODE" > configs/rke2/token-first-node    
@@ -155,6 +158,12 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     # echo "Apply fix for CNI canal"    
     # kubectl apply -f configs/rke2/rke2-canal-config.yaml
     # kubectl rollout restart ds rke2-canal -n kube-system
+fi
+
+# Deploy Local Path Provisioner
+if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
+    echo "Deploy Local Path Provisioner"
+    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
 fi
 
 # Check the health of the deployment by running a status command:
