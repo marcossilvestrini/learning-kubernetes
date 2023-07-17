@@ -147,23 +147,30 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
 
     # echo "Copy fix for CNI canal [configs/rke2/rke2-canal-config.yaml --> /var/lib/rancher/rke2/server/manifests/]"
     # cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-
-    # echo "Copy fix for CNI canal [configs/rke2/rke2-canal-config.yaml --> /var/lib/rancher/rke2/server/manifests/]"
-    # cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-    
+   
     # After that, please restart the canal daemonset to use the newer config by executing:
     # echo "Apply fix for CNI canal"    
     # kubectl apply -f configs/rke2/rke2-canal-config.yaml
     # kubectl rollout restart ds rke2-canal -n kube-system
-    # echo "Apply fix for CNI canal"    
-    # kubectl apply -f configs/rke2/rke2-canal-config.yaml
-    # kubectl rollout restart ds rke2-canal -n kube-system
+    
 fi
 
-# Deploy Local Path Provisioner
+# Deploy Local Path Storage Class Provisioner
 if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-    echo "Deploy Local Path Provisioner"
+    echo "Set NFS for PV provision..."
+    mkdir /mnt/nfs
+    dnf install nfs-utils
+    systemctl enable rpcbind
+    systemctl enable nfs-server
+    cp configs/nfs/exports /etc
+    dos2unix /etc/exports
+    chmod 644 /etc/exports
+    systemctl start rpcbind
+    systemctl start nfs-server
+    exportfs -arv 
+    echo "Deploy Rancher Local Path Provisioner..."
     kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
+       
 fi
 
 # Check the health of the deployment by running a status command:
