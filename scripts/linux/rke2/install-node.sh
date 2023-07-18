@@ -156,24 +156,18 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
 
     # source .bashrc
     echo "Source /home/vagrant/.bashrc"
-    source .bashrc
-
-    # Set canal interface 
-
-    # echo "Copy fix for CNI canal [configs/rke2/rke2-canal-config.yaml --> /var/lib/rancher/rke2/server/manifests/]"
-    # cp configs/rke2/rke2-canal-config.yaml /var/lib/rancher/rke2/server/manifests/
-   
-    # After that, please restart the canal daemonset to use the newer config by executing:
-    # echo "Apply fix for CNI canal"    
-    # kubectl apply -f configs/rke2/rke2-canal-config.yaml
-    # kubectl rollout restart ds rke2-canal -n kube-system
-    
+    source .bashrc    
 fi
 
 # Deploy Local Path Storage Class Provisioner
 if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then    
     echo "Deploy Rancher Local Path Provisioner..."
-    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml       
+    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
+
+    # Set default Storage Class    
+    kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+
+    # Set Default Storage Class   
 fi
 
 # Check the health of the deployment by running a status command:
