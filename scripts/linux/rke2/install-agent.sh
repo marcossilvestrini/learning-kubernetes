@@ -25,9 +25,25 @@ else
     echo "This script is available only Oracle Linux Server distributions!!!";exit 1;
 fi
 
+# Configure NFS
+echo "Set NFS for PV provision..."
+mkdir /mnt/nfs
+dnf install nfs-utils
+systemctl enable rpcbind
+systemctl enable nfs-server
+cp configs/nfs/exports /etc
+dos2unix /etc/exports
+chmod 644 /etc/exports
+systemctl start rpcbind
+systemctl start nfs-server
+exportfs -arv 
+
+#  RKE2 Docs
+
 # https://docs.rke2.io/install/quickstart
 # https://docs.rke2.io/install/ha
 # https://docs.rke2.io/reference/server_config
+# https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1
 
 # Fix network interface. RKE2 geta etho, but dns is set in eth1. Force eth1 here
 #cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 

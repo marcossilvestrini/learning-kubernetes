@@ -27,6 +27,21 @@ else
     echo "This script is available only Oracle Linux Server distributions!!!";exit 1;
 fi
 
+# Configure NFS
+echo "Set NFS for PV provision..."
+mkdir /mnt/nfs
+dnf install nfs-utils
+systemctl enable rpcbind
+systemctl enable nfs-server
+cp configs/nfs/exports /etc
+dos2unix /etc/exports
+chmod 644 /etc/exports
+systemctl start rpcbind
+systemctl start nfs-server
+exportfs -arv 
+
+#  RKE2 Docs
+
 # https://docs.rke2.io/install/quickstart
 # https://docs.rke2.io/install/ha
 # https://docs.rke2.io/reference/server_config
@@ -156,18 +171,7 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
 fi
 
 # Deploy Local Path Storage Class Provisioner
-if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-    echo "Set NFS for PV provision..."
-    mkdir /mnt/nfs
-    dnf install nfs-utils
-    systemctl enable rpcbind
-    systemctl enable nfs-server
-    cp configs/nfs/exports /etc
-    dos2unix /etc/exports
-    chmod 644 /etc/exports
-    systemctl start rpcbind
-    systemctl start nfs-server
-    exportfs -arv 
+if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then    
     echo "Deploy Rancher Local Path Provisioner..."
     kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml       
 fi
