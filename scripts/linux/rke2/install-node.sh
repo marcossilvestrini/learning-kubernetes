@@ -169,8 +169,7 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
     systemctl start nfs-server
     exportfs -arv 
     echo "Deploy Rancher Local Path Provisioner..."
-    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
-       
+    kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml       
 fi
 
 # Check the health of the deployment by running a status command:

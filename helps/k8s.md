@@ -53,3 +53,15 @@ Run on Master
 # kubectl drain <node-name> --force --ignore-daemonsets  --delete-emptydir-data
 # kubectl delete node <node-name>
 ```
+
+## Deploy Full App
+
+* build a docker image for app
+* push image to register
+* create a storage class
+* create pv
+* create pvc
+* create service
+* create pods with deployment
+  * create containers with your images
+  * create probes for check health containers

@@ -582,6 +582,7 @@ complete -F __start_kubectl k
 </span><span class="code-line line-number" line="25"><span class="token comment"># get logs</span>
 </span><span class="code-line line-number" line="26">kubectl logs my-nginx
 </span><span class="code-line line-number" line="27">kubectl logs <span class="token parameter variable">-f</span> my-nginx
+</span><span class="code-line line-number" line="28">kubectl logs <span class="token parameter variable">-n</span> kube-system --all-containers<span class="token operator">=</span>true etcd-control-plane01
 </span></code><div onclick="copied(this)" data-code="
 ########## resources ############
 
@@ -609,6 +610,7 @@ kubectl delete node <node_name>
 # get logs
 kubectl logs my-nginx
 kubectl logs -f my-nginx
+kubectl logs -n kube-system --all-containers=true etcd-control-plane01
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h2 id="containers"><a class="anchor" aria-hidden="true" tabindex="-1" href="#containers"><span class="octicon octicon-link"></span></a>Containers</h2>
     <p><a name="containers"></a></p>
@@ -926,18 +928,110 @@ kubectl delete service nginx
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
     <h2 id="volumes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#volumes"><span class="octicon octicon-link"></span></a>Volumes</h2>
     <p>
-      <img src="images/volumes01.png" alt="PVC">
+      <img src="images/volumes01.png" alt="Volumes">
     </p>
-    <p>Types of volumes in kubernetes:\</p>
-    <blockquote>
-      <p>
-        EmptyDir
-        Storage Class
-        PV
-        PVCs
-        Configmaps
-      </p>
-    </blockquote>
+    <h3 id="storage-class"><a class="anchor" aria-hidden="true" tabindex="-1" href="#storage-class"><span class="octicon octicon-link"></span></a>Storage Class</h3>
+    <p>
+      <img src="/images/storageclass.png" alt="Storage Class">
+    </p>
+    <p>Some Storage Class providers</p>
+    <ul>
+      <li>kubernetes.io/aws-ebs: AWS Elastic Block Store (EBS)</li>
+      <li>kubernetes.io/azure-disk: Azure Disk</li>
+      <li>kubernetes.io/gce-pd: Google Compute Engine (GCE) Persistent Disk</li>
+      <li>kubernetes.io/cinder: OpenStack Cinder</li>
+      <li>kubernetes.io/vsphere-volume: vSphere</li>
+      <li>kubernetes.io/no-provisioner: Volumes locais</li>
+      <li>kubernetes.io/host-path: Volumes locais</li>
+    </ul>
+    <h3 id="pv---persistent-volume"><a class="anchor" aria-hidden="true" tabindex="-1" href="#pv---persistent-volume"><span class="octicon octicon-link"></span></a>PV - Persistent volume</h3>
+    <p>
+      <img src="images/pv.png" alt="PV">
+    </p>
+    <p>Some Types of PV</p>
+    <ul>
+      <li>Local
+        <ul>
+          <li>HostPath</li>
+        </ul>
+      </li>
+      <li>Network
+        <ul>
+          <li>NFS</li>
+          <li>iSCSI</li>
+          <li>Ceph RBD(RAdos Block Device)</li>
+          <li>GlusterFS</li>
+          <li>Cloud Providers(EBS,Google Cloud Persistent Disk,Azure Disk Storage)</li>
+        </ul>
+      </li>
+    </ul>
+    <h4 id="type-of-storagehostpath"><a class="anchor" aria-hidden="true" tabindex="-1" href="#type-of-storagehostpath"><span class="octicon octicon-link"></span></a>Type of Storage(hostPath)</h4>
+    <ul>
+      <li>hostPath</li>
+      <li>nfs</li>
+      <li>iscsi</li>
+      <li>csi</li>
+      <li>local</li>
+      <li>fc</li>
+    </ul>
+    <h3 id="pvc---persistent-volume-claim"><a class="anchor" aria-hidden="true" tabindex="-1" href="#pvc---persistent-volume-claim"><span class="octicon octicon-link"></span></a>PVC - Persistent Volume Claim</h3>
+    <p>
+      <img src="/images/pvc.png" alt="PVC">
+    </p>
+    <h3 id="commands---volumes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#commands---volumes"><span class="octicon octicon-link"></span></a>Commands - Volumes</h3>
+    <pre class="language-bash"><code class="language-bash code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># list storage classes</span>
+</span><span class="code-line line-number" line="2">kubectl get storageclass
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># describe storage class</span>
+</span><span class="code-line line-number" line="5">kubectl describe storageclass silvestrini
+</span><span class="code-line line-number" line="6">
+</span><span class="code-line line-number" line="7"><span class="token comment"># get storage class provisioners</span>
+</span><span class="code-line line-number" line="8">kubectl get storageclasses.storage.k8s.io  <span class="token parameter variable">-o</span><span class="token operator">=</span>jsonpath<span class="token operator">=</span><span class="token string">'{range.items[*]}{.provisioner}{"\n"}'</span>
+</span><span class="code-line line-number" line="9">
+</span><span class="code-line line-number" line="10"><span class="token comment"># list pv in cluster</span>
+</span><span class="code-line line-number" line="11">kubectl get <span class="token function">pv</span> <span class="token parameter variable">-A</span>
+</span><span class="code-line line-number" line="12">
+</span><span class="code-line line-number" line="13"><span class="token comment"># describe pv</span>
+</span><span class="code-line line-number" line="14">kubectl describe <span class="token function">pv</span> my-pv
+</span><span class="code-line line-number" line="15">
+</span><span class="code-line line-number" line="16"><span class="token comment"># list pvc</span>
+</span><span class="code-line line-number" line="17">kubectl get pvc <span class="token parameter variable">-o</span> wide
+</span><span class="code-line line-number" line="18">
+</span><span class="code-line line-number" line="19"><span class="token comment"># delete pvc </span>
+</span><span class="code-line line-number" line="20">kubectl delete pvc my-pvc
+</span><span class="code-line line-number" line="21">
+</span><span class="code-line line-number" line="22"><span class="token comment"># describe pvc</span>
+</span><span class="code-line line-number" line="23">kubectl describe pvc my-pvc
+</span><span class="code-line line-number" line="24">
+</span><span class="code-line line-number" line="25"><span class="token comment"># get events</span>
+</span><span class="code-line line-number" line="26">kubectl get events my-pvc.1772cda2d4c7069b
+</span></code><div onclick="copied(this)" data-code="# list storage classes
+kubectl get storageclass
+
+# describe storage class
+kubectl describe storageclass silvestrini
+
+# get storage class provisioners
+kubectl get storageclasses.storage.k8s.io  -o=jsonpath=&#x27;{range.items[*]}{.provisioner}{&#x22;\n&#x22;}&#x27;
+
+# list pv in cluster
+kubectl get pv -A
+
+# describe pv
+kubectl describe pv my-pv
+
+# list pvc
+kubectl get pvc -o wide
+
+# delete pvc 
+kubectl delete pvc my-pvc
+
+# describe pvc
+kubectl describe pvc my-pvc
+
+# get events
+kubectl get events my-pvc.1772cda2d4c7069b
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h2 id="contributing"><a class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
     <p>
       Contributions are what make the open source community such an amazing place to
@@ -981,6 +1075,7 @@ kubectl delete service nginx
       <li><a href="https://docs.rke2.io/architecture">RKE2</a></li>
       <li><a href="https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1">Up RKE2 Cluster HA</a></li>
       <li><a href="https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/">Kubernetes Architecture</a></li>
+      <li><a href="https://github.com/rancher/local-path-provisioner">Rancher Local Path Provisioner</a></li>
     </ul><p align="right">(<a href="#readme-top">back to top</a>)</p>
     <!-- MARKDOWN LINKS & IMAGES-->
     <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
