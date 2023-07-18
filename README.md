@@ -187,7 +187,6 @@ Use this repository for get learning about kubernetes exam
 
 ![kubernetes works ports](images/kubernetes-wk-ports.jpg)
 
-
 ## Install kubernetes
 
 <a name="install-kubernetes"></a>
@@ -576,7 +575,6 @@ Kubernetes probes are typically implemented using the Kubernetes API, which allo
 This information can then be used to determine the application's or service's health.\
 Kubernetes probes can also be used to detect changes in the application or\ service and send a notification to the Kubernetes control plane, which can\ then take corrective action.
 
-
 ![Probes](images/probes.jpg)
 
 ### Types of Probes
@@ -608,26 +606,7 @@ A liveness probe can be used to check the responsiveness of an application or to
 any other check that indicates the container is still alive and healthy.\
 If the liveness probe fails, Kubernetes will attempt to restart the container to restore its functionality.
 
-## Services
 
-<a name="services"></a>
-
-### Commands - Services
-
-```sh
-# list services
-kubectl get services
-kubectl get svc -o wide
-
-# list services in system namespace
-kubectl get svc -n kube-system
-
-# delete service
-kubectl delete service nginx
-```
-
-<p align="right">(<a href="#kubernetes-secrets">back to install kubernetes</a>)</p>
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Volumes
 
@@ -705,6 +684,41 @@ kubectl describe pvc my-pvc
 # get events
 kubectl get events my-pvc.1772cda2d4c7069b
 ```
+
+## StatefullSet
+
+<a name="statefullset"></a>
+
+![StatefullSet](images/statefullset.png)
+
+## Services
+
+<a name="services"></a>
+
+![Services](images/services.png)
+
+A Kubernetes service is a logical abstraction for a deployed group of pods in a cluster\
+(which all perform the same function).\
+Since pods are ephemeral, a service enables a group of pods, which provide pecific\
+functions (web services, image processing, etc.) to be assigned\
+a name and unique IP address (clusterIP).
+
+### Commands - Services
+
+```sh
+# list services
+kubectl get services
+kubectl get svc -o wide
+
+# list services in system namespace
+kubectl get svc -n kube-system
+
+# delete service
+kubectl delete service nginx
+```
+
+<p align="right">(<a href="#services">back to services</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contributing
 
