@@ -20,7 +20,7 @@ security/*
 *.exe
 
 #Slack
-Slack/silvestrini.py
+slack/silvestrini.py
 *__pycache__*
 
 
