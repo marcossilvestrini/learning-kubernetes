@@ -30,7 +30,10 @@ spec:
             memory: "128Mi"
         ports:
           - containerPort: 80
-            hostPort: 8001  
+            hostPort: 8001
+        volumeMounts:
+        - name: my-pvc
+          mountPath: /usr/share/nginx/html            
         startupProbe: # Onde definimos a nossa probe de inicialização
           httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
             path: / # O caminho que iremos testar
@@ -57,3 +60,8 @@ spec:
           timeoutSeconds: 5 # O tempo que iremos esperar para considerar que a probe falhou
           successThreshold: 2 # O número de vezes que a probe precisa passar para considerar que o container está pronto
           failureThreshold: 3 # O número de vezes que a probe precisa falhar para considerar que o container não está pronto
+      volumes:
+      - name: my-pvc
+        persistentVolumeClaim:
+          claimName: my-pvc          
+

@@ -2,7 +2,7 @@ FROM nginx:latest
 
 LABEL description="Web App by Silvestrini"
 
-ARG DOCKER_APP_DIR=/var/www/
+ARG DOCKER_APP_DIR=/usr/share/nginx/html
 
 ARG PORT_BUILD=80
 

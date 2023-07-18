@@ -369,6 +369,7 @@ kubectl delete node <node_name>
 # get logs
 kubectl logs my-nginx
 kubectl logs -f my-nginx
+kubectl logs -n kube-system --all-containers=true etcd-control-plane01
 ```
 
 ## Containers
@@ -661,6 +662,19 @@ Some Types of PV
   * GlusterFS
   * Cloud Providers(EBS,Google Cloud Persistent Disk,Azure Disk Storage)
 
+#### Type of Storage(hostPath)
+
+* hostPath
+* nfs
+* iscsi
+* csi
+* local
+* fc
+
+### PVC - Persistent Volume Claim
+
+![PVC](/images/pvc.png)
+
 ### Commands - Volumes
 
 ```bash
@@ -681,6 +695,15 @@ kubectl describe pv my-pv
 
 # list pvc
 kubectl get pvc -o wide
+
+# delete pvc 
+kubectl delete pvc my-pvc
+
+# describe pvc
+kubectl describe pvc my-pvc
+
+# get events
+kubectl get events my-pvc.1772cda2d4c7069b
 ```
 
 ## Contributing
