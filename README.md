@@ -685,11 +685,21 @@ kubectl describe pvc my-pvc
 kubectl get events my-pvc.1772cda2d4c7069b
 ```
 
-## StatefullSet
+## StatefulSet
 
-<a name="statefullset"></a>
+<a name="statefulset"></a>
 
-![StatefullSet](images/statefullset.png)
+![StatefulSet](images/statefulset.png)
+
+### Commands - StatefulSet
+
+```bash
+# list statefulsets
+kubectl get statefulsets
+
+# describe statefulsets
+kubectl describe  statefulsets.apps  nginx 
+``````
 
 ## Services
 
