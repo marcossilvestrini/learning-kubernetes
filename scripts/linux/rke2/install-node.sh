@@ -76,7 +76,7 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
     
     # copy the kubeconfig file to share
     cp /etc/rancher/rke2/rke2.yaml configs/kubectl
-    sed -i "s/https:\/\/127.0.0.1:6443/https:\/\/rancher.skynet.com.br:6443/g" configs/kubectl/rke2.yaml 
+    sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" configs/kubectl/rke2.yaml 
 
 else
     echo "ADD NODE $(hostname -f) IN CLUSTER"       
