@@ -415,6 +415,14 @@ in the cluster) and configuration data needed to run the container(s) within the
 ### Commands - Pods
 
 ```sh
+# create pods without manifest
+kubectl run nginx --image nginx
+kubectl run -it --rm debug --image=busybox --restart=Never -- sh
+
+# create pod with manifest
+kubectl apply -f pod-template.yaml
+kubectl create -f pod.yaml
+
 # list pods
 kubectl get pods
 
@@ -423,8 +431,7 @@ kubectl get pods --all-namespaces
 kubectl get pods -A
 kubectl get pods -A -o wide
 
-# list pods in inspec node
-
+# list pods in specific node
 kubectl get pods --all-namespaces -o wide --field-selector spec.nodeName=worker01
 
 # list pods in  kube-system namespace
@@ -441,13 +448,6 @@ kubectl get pods -o=jsonpath='{range .items[*]}{"\n"}{.metadata.name}{"\t"}{rang
 # describe details of pods
 kubectl describe pod nginx
 kubectl -n kube-system  describe pods kube-proxy-worker01
-
-# create pod with manifest
-kubectl apply -f pod-template.yaml
-kubectl create -f pod.yaml
-
-# execute pods
-kubectl run nginx --image nginx
 
 # delete pods
 kubectl delete pod nginx
@@ -606,8 +606,6 @@ A liveness probe can be used to check the responsiveness of an application or to
 any other check that indicates the container is still alive and healthy.\
 If the liveness probe fails, Kubernetes will attempt to restart the container to restore its functionality.
 
-
-
 ## Volumes
 
 ![Volumes](images/volumes01.png)
@@ -691,6 +689,27 @@ kubectl get events my-pvc.1772cda2d4c7069b
 
 ![StatefulSet](images/statefulset.png)
 
+StatefulSet is the workload API object used to manage stateful applications.
+
+Manages the deployment and scaling of a set of Pods, and provides guarantees about the ordering and uniqueness of these Pods.
+
+Like a Deployment, a StatefulSet manages Pods that are based on an identical container spec.\
+Unlike a Deployment, a StatefulSet maintains a sticky identity for each of its Pods.\
+
+These pods are created from the same spec, but are not interchangeable: each has a persistent identifier that it maintains across any rescheduling.
+
+If you want to use storage volumes to provide persistence for your workload,\
+you can use a StatefulSet as part of the solution. Although individual Pods in\
+a StatefulSet are susceptible to failure, the persistent Pod identifiers make\
+it easier to match existing volumes to the new Pods that replace any that have failed.
+
+### DNS for pods in StatefulSet
+
+```sh
+<pod-name>.<service-name>.<namespace>.svc.cluster.local
+# Example: nginx-0.nginx.default.svc.cluster.local 
+```
+
 ### Commands - StatefulSet
 
 ```bash
@@ -699,6 +718,19 @@ kubectl get statefulsets
 
 # describe statefulsets
 kubectl describe  statefulsets.apps  nginx 
+
+# delete statefulset
+kubectl delete statefulset nginx
+
+# test network service
+## create container for test
+kubectl run -it --rm --image=busybox --restart=Never -- sh
+
+## test nslookup
+nslookup  nginx-0.nginx.default.svc.cluster.local
+
+## test web page
+
 ``````
 
 ## Services

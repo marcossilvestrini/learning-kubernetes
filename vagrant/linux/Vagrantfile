@@ -58,6 +58,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../../replicaset", "/home/vagrant/daemonset"
   config.vm.synced_folder "../../volumes", "/home/vagrant/volumes"
   config.vm.synced_folder "../../services", "/home/vagrant/services"
+  config.vm.synced_folder "../../statefulset", "/home/vagrant/statefulset"
   config.vm.synced_folder "../../apps", "/home/vagrant/apps"
     
   ## PROVIDER
