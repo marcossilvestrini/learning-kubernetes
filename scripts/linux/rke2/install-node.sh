@@ -40,6 +40,9 @@ systemctl start rpcbind
 systemctl start nfs-server
 exportfs -arv 
 
+echo "Install Helm...."
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
 #  RKE2 Docs
 
 # https://docs.rke2.io/install/quickstart
@@ -159,15 +162,19 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     source .bashrc    
 fi
 
-# Deploy Local Path Storage Class Provisioner
-if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then    
+# Deployment storage,dashboard and others pods
+if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then       
+
     echo "Deploy Rancher Local Path Provisioner..."
     kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
 
     # Set default Storage Class    
+    echo "Set default Storage Class for NFS..."
     kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
 
-    # Set Default Storage Class   
+    # Deployment dashboard    
+    kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+    
 fi
 
 # Check the health of the deployment by running a status command:

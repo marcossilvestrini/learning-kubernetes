@@ -16,6 +16,9 @@ export PATH
 # RAND_COW=$(($RANDOM % $(ls /usr/share/cowsay/cows/*.cow | wc -l)))
 # cowsay -f ${COWS[$RAND_COW]} $(fortune -s)
 
+# Workdir
+cd /home/vagrant || exit 1
+
 # Set PS1
 export PS1="\[\e[31m\][\[\e[m\]\[\e[38;5;172m\]\u\[\e[m\]@\[\e[38;5;153m\]\h\[\e[m\] \[\e[38;5;214m\]\W\[\e[m\]\[\e[31m\]]\[\e[m\]\\$"
 
@@ -45,8 +48,8 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     command -v kubecolor >/dev/null 2>&1 && alias kubectl="kubecolor" && alias k=kubectl
     complete -F __start_kubectl k    
         
-    if [[ "$NODE_MASTER" == "$NODE_NAME" ]]; then
+    if [[ "$NODE_MASTER" == "$NODE_NAME" ]]; then        
         cp /etc/rancher/rke2/rke2.yaml configs/kubectl
-        sed -i "s/https:\/\/127.0.0.1:6443/https:\/\/rancher.skynet.com.br:6443/g" configs/kubectl/rke2.yaml
+        sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" configs/kubectl/rke2.yaml
     fi
 fi

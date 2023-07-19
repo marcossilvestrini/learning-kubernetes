@@ -11,6 +11,9 @@ if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]; then
 fi
 export PATH
 
+# Workdir
+cd /home/vagrant || exit 1
+
 # # Fun Cowsay
 # COWS=(/usr/share/cowsay/cows/*)
 # RAND_COW=$(($RANDOM % $(ls /usr/share/cowsay/cows/*.cow | wc -l)))

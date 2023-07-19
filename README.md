@@ -778,6 +778,7 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 * [Up RKE2 Cluster HA](https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1)
 * [Kubernetes Architecture](https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/)
 * [Rancher Local Path Provisioner](https://github.com/rancher/local-path-provisioner)
+* [Kubernetes Dashboard](https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

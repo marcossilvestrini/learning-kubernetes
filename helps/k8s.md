@@ -65,3 +65,16 @@ Run on Master
 * create pods with deployment
   * create containers with your images
   * create probes for check health containers
+
+
+## Access Kubernetes Dashboard
+
+* Create ssh tunel
+
+```sh
+ssh -L localhost:8001:127.0.0.1:8001 root@192.168.0.140
+```
+
+* Deploy dashboard
+
+https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard
