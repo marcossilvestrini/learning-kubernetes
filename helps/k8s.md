@@ -72,9 +72,15 @@ Run on Master
 * Create ssh tunel
 
 ```sh
-ssh -L localhost:8001:127.0.0.1:8001 root@192.168.0.140
+ssh -o StrictHostKeyChecking=no -L localhost:8001:127.0.0.1:8001 root@192.168.0.140
 ```
 
 * Deploy dashboard
 
 https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard
+
+* Create dashboard token
+
+```sh  
+kubectl create token admin-user -n kubernetes-dashboard
+```
