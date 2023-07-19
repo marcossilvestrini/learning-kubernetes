@@ -174,6 +174,9 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
 
     # Deployment dashboard    
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+    # Create access token for dashboard
+    kubectl create token admin-user -n kubernetes-dashboard > security/dashboard-token
     
 fi
 
