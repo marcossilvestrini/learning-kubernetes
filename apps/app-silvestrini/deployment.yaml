@@ -82,7 +82,7 @@ spec:
             memory: "128Mi"
         ports:
           - containerPort: 80
-            hostPort: 8001
+            hostPort: 9001
         volumeMounts:
         - name: my-pvc
           mountPath: /usr/share/nginx/html            

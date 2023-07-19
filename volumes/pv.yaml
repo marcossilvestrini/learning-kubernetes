@@ -9,7 +9,7 @@ spec: # Especificações do nosso PV
     storage: 1Gi # 1 Gigabyte de armazenamento
   accessModes: # Modos de acesso ao PV
     #- ReadWriteOnce # Modo de acesso ReadWriteOnce, ou seja, o PV pode ser montado como leitura e escrita por um único nó
-    - ReadWriteMany # Modo de acesso ReadWriteOnce, ou seja, o PV pode ser montado como leitura e escrita por vários nó
+    - ReadWriteMany
   persistentVolumeReclaimPolicy: Retain # Política de reivindicação do PV, ou seja, o PV não será excluído quando o PVC for excluído
   hostPath: # Tipo de armazenamento que vamos utilizar, no caso um hostPath
     path: "/mnt/data" # Caminho do hostPath, do nosso nó, onde o PV será criado
