@@ -46,7 +46,7 @@ spec:
   - metadata:
       name: www # Nome do volume, assim teremos o volume www-0, www-1 e www-2
     spec:
-      accessModes: [ "ReadWriteMany" ]
+      accessModes: [ "ReadWriteOnce" ]
       storageClassName: "nfs"
       resources:
         requests:

@@ -730,7 +730,7 @@ kubectl run -it --rm --image=busybox --restart=Never -- sh
 nslookup  nginx-0.nginx.default.svc.cluster.local
 
 ## test web page
-
+wget -O- http://nginx-0.nginx.default.svc.cluster.local
 ``````
 
 ## Services
