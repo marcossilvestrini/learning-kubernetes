@@ -92,11 +92,12 @@ if [ -d "$HOME/.ssh" ]; then
 fi
 mkdir -p "$HOME/.ssh"
 chmod 700 "$HOME/.ssh"
-cp -f security/rancher-key-ecdsa "$HOME/.ssh"
-chmod 600 "$HOME/.ssh/rancher-key-ecdsa"
-cp -f security/rancher-key-ecdsa.pub "$HOME/.ssh"
-chmod 644 "$HOME/.ssh/rancher-key-ecdsa.pub"
-cp -f security/authorized_keys "$HOME/.ssh"
+cp -f security/kubernetes-key-ecdsa "$HOME/.ssh"
+chmod 600 "$HOME/.ssh/kubernetes-key-ecdsa"
+cp -f security/kubernetes-key-ecdsa.pub "$HOME/.ssh"
+chmod 644 "$HOME/.ssh/kubernetes-key-ecdsa.pub"
+cat "$HOME/.ssh/kubernetes-key-ecdsa.pub" > "$HOME/.ssh/authorized_keys"
+#cp -f security/authorized_keys "$HOME/.ssh"
 chmod 600 "$HOME/.ssh/authorized_keys"
 
 # Set GnuGP
