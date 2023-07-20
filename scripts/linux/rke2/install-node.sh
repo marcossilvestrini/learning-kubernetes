@@ -54,7 +54,7 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 cp configs/rke2/rke2-canal.conf /etc/NetworkManager/conf.d 
 chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
 systemctl reload NetworkManager
-#systemctl stop NetworkManager
+
 
 # Create etcd user
 useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U

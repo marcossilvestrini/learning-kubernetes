@@ -845,7 +845,6 @@ After creating the LoadBalancer service, Kubernetes provisions a load balancer i
 
 ![Services Types](/images/service-types.png)
 
-
 Reference: <https://www.baeldung.com/ops/kubernetes-service-types>
 
 ### Commands - Services
