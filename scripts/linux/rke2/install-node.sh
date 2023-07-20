@@ -29,7 +29,8 @@ fi
 
 # Configure NFS
 echo "Set NFS for PV provision..."
-mkdir /mnt/nfs
+mkdir -p {/mnt/nfs,/mnt/nfs/app-silvestrini}
+chown -R vagrant:vagrant /mnt/nfs
 dnf install nfs-utils
 systemctl enable rpcbind
 systemctl enable nfs-server
