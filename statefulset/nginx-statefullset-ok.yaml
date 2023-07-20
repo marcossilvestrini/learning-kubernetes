@@ -67,6 +67,23 @@ spec: # Especificações do nosso PV
   storageClassName: nfs # Nome da classe de armazenamento que será utilizadakubectl get pv
 ---
 
+# Headless Service
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    app: nginx
+spec:
+  ports:
+  - port: 80
+    name: web
+  clusterIP: None # Como estamos criando um Headless Service, não queremos que ele tenha um IP, então definimos o clusterIP como None
+  selector:
+    app: nginx
+---
+
 apiVersion: apps/v1
 kind: StatefulSet # Tipo do recurso que estamos criando, no caso, um StatefulSet
 metadata:
