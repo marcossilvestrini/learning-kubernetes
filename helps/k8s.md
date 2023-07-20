@@ -88,3 +88,9 @@ kubectl create token admin-user -n kubernetes-dashboard
 * Access dashboard
 
 <http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default>
+
+## Deploy app
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/marcossilvestrini/learning-kubernetes/main/apps/app-silvestrini/deployment.yaml
+```
