@@ -56,6 +56,7 @@ chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
 systemctl reload NetworkManager
 
 
+
 # Create etcd user
 useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
 
