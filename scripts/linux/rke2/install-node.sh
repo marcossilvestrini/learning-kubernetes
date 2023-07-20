@@ -56,7 +56,6 @@ chmod 644 /etc/NetworkManager/conf.d/rke2-canal.conf
 systemctl reload NetworkManager
 
 
-
 # Create etcd user
 useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
 
@@ -175,6 +174,9 @@ if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
 
     # Deployment dashboard    
     kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+    # Create user for dashboard
+    kubectl apply -f configs/rke2/dashboard-admin.yaml
 
     # Create access token for dashboard
     kubectl create token admin-user -n kubernetes-dashboard > security/dashboard-token
