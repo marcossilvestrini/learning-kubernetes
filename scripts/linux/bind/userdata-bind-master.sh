@@ -50,7 +50,7 @@ dnssec-signzone -P -o skynet.com.br /var/named/skynet.zone /var/named/Kskynet.co
 ## chroot jail (Running BIND9 in a chroot cage)
 /usr/libexec/setup-named-chroot.sh /var/named/chroot on
 
-## Start service
+## Start jail service
 systemctl restart named-chroot
 systemctl enable named-chroot
 
@@ -61,3 +61,7 @@ named-checkzone skynet.com.br /var/named/skynet.zone.signed
 ## Reload named.conf
 sudo rndc reconfig
 sudo rndc reload
+
+## disable insecure service
+systemctl stop named
+systemctl disable named
