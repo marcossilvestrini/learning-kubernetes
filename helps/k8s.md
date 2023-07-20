@@ -84,3 +84,7 @@ https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard
 ```sh  
 kubectl create token admin-user -n kubernetes-dashboard
 ```
+
+* Access dashboard
+
+<http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/#/workloads?namespace=default>

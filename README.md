@@ -101,8 +101,7 @@ ssh-keygen -q -t ecdsa -b 521 -N '' -f ~/.ssh/id_ecdsa <<<y >/dev/null 2>&1
 cp ~/.ssh/id_ecdsa.pub security/
 
 # generate ssh key pair for rancher
-ssh-keygen -q -t ecdsa -b 521 -N '' -f security/rancher-key-ecdsa <<<y >/dev/null 2>&1
-cat security/rancher-key-ecdsa.pub >security/authorized_keys
+ssh-keygen -q -t ecdsa -b 521 -N '' -f security/kubernetes-key-ecdsa <<<y >/dev/null 2>&1
 ```
 
 #### Set network
@@ -521,11 +520,11 @@ kubectl delete deployment nginx-deployment
 
 ## ReplicaSet
 
+![ReplicaSet](images/replicaset.jpg)
+
 A ReplicaSet's purpose is to maintain a stable set of replica Pods running\
 at any given time. As such, it is often used to guarantee the availability of\
 a specified number of identical Pods.
-
-![ReplicaSet](images/replicaset.jpg)
 
 ### Commands - ReplicaSet
 
@@ -545,12 +544,12 @@ kubectl delete replicaset nginx-deployment
 
 ## Daemonset
 
+![Daemonset](images/daemonset.png)
+
 A DaemonSet ensures that all (or some) Nodes run a copy of a Pod.\
 As nodes are added to the cluster, Pods are added to them.\
 As nodes are removed from the cluster, those Pods are garbage collected.\
 Deleting a DaemonSet will clean up the Pods it created.
-
-![Daemonset](images/daemonset.png)
 
 ### Commands - Daemonset
 
@@ -570,12 +569,12 @@ kubectl delete daemonset node-exporter
 
 ## Probes
 
+![Probes](images/probes.jpg)
+
 Kubernetes probes are health checks that are used to monitor the health of applications and services in a Kubernetes cluster.\
 Kubernetes probes are typically implemented using the Kubernetes API, which allows them to query the application or service for information.\
 This information can then be used to determine the application's or service's health.\
 Kubernetes probes can also be used to detect changes in the application or\ service and send a notification to the Kubernetes control plane, which can\ then take corrective action.
-
-![Probes](images/probes.jpg)
 
 ### Types of Probes
 
@@ -731,7 +730,7 @@ nslookup  nginx-0.nginx.default.svc.cluster.local
 
 ## test web page
 wget -O- http://nginx-0.nginx.default.svc.cluster.local
-``````
+```
 
 ## Services
 
@@ -741,9 +740,113 @@ wget -O- http://nginx-0.nginx.default.svc.cluster.local
 
 A Kubernetes service is a logical abstraction for a deployed group of pods in a cluster\
 (which all perform the same function).\
-Since pods are ephemeral, a service enables a group of pods, which provide pecific\
-functions (web services, image processing, etc.) to be assigned\
-a name and unique IP address (clusterIP).
+Since pods are ephemeral, a service enables a group of pods, which provide specific\
+functions (web services, image processing, etc.) to be assigned a name and unique IP\
+address (clusterIP).
+
+### Service Types in Kubernetes
+
+#### ClusterIP Services
+
+ClusterIP is the default service type in Kubernetes, and it provides internal connectivity between different components of our application. Kubernetes assigns a virtual IP address to a ClusterIP service that can solely be accessed from within the cluster during its creation. This IP address is stable and doesn’t change even if the pods behind the service are rescheduled or replaced.
+
+ClusterIP services are an excellent choice for internal communication between different components of our application that don’t need to be exposed to the outside world. For example, if we have a microservice that processes data and sends it to another microservice for further processing, we can use a ClusterIP service to connect them.
+
+To create a ClusterIP service in Kubernetes, we need to define it in a YAML file and apply it to the cluster. Here's an example of a simple ClusterIP service definition:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+spec:
+  selector:
+    app: backend
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+```
+
+In this example, we define a service named backend with a selector that targets pods labeled with app: backend. The service exposes port 80, which is the port used by clients to access the service, and forwards the traffic to the pods’ port 8080, which is where the backend application is running.
+
+#### NodePort Services
+
+NodePort services extend the functionality of ClusterIP services by enabling external connectivity to our application. When we create a NodePort service on any node within the cluster that meets the defined criteria, Kubernetes opens up a designated port that forwards traffic to the corresponding ClusterIP service running on the node.
+
+These services are ideal for applications that need to be accessible from outside the cluster, such as web applications or APIs. With NodePort services, we can access our application using the node’s IP address and the port number assigned to the service.
+
+Let's look at an example of a simple NodePort service definition:
+
+```yaml
+apiVersion: v1 
+kind: Service 
+metadata: 
+  name: frontend 
+spec: 
+  selector: 
+    app: frontend 
+  type: NodePort 
+  ports: 
+    - name: http 
+      port: 80 
+      targetPort: 8080
+```
+
+We define a service named frontend that targets pods labeled with app: frontend by setting a selector. The service exposes port 80 and forwards the traffic to the pods’ port 8080. We set the service type to NodePort, and Kubernetes exposes the service on a specific port on a qualifying node within the cluster.
+
+When we create a NodePort service, Kubernetes assigns a port number from a predefined range of 30000-32767. Additionally, we can specify a custom port number by adding the nodePort field to the service definition:
+
+```yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+spec:
+  selector:
+    app: frontend
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8080
+    nodePort: 30080
+```
+
+The nodePort field is specified as 30080, which tells Kubernetes to expose the service on port 30080 on every node in the cluster.
+
+#### LoadBalancer Services
+
+LoadBalancer services connect our applications externally, and production environments use them where high availability and scalability are critical. When we create a LoadBalancer service, Kubernetes provisions a load balancer in our cloud environment and forwards the traffic to the nodes running the service.
+
+LoadBalancer services are ideal for applications that need to handle high traffic volumes, such as web applications or APIs. With LoadBalancer services, we can access our application using a single IP address assigned to the load balancer.
+
+Here's an example of a simple LoadBalancer service definition:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    app: web
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+```
+
+We set the service type to LoadBalancer to instruct Kubernetes to provision a load balancer. Here, we define a service named web and specify a selector that targets pods labeled with app: web. Additionally, we expose port 80 and forward traffic to the pods’ port 8080.
+
+After creating the LoadBalancer service, Kubernetes provisions a load balancer in the cloud environment with a public IP address. We can use this IP address to access our application from outside the cluster.
+
+![Services Types](/images/service-types.png)
+
+
+Reference: <https://www.baeldung.com/ops/kubernetes-service-types>
 
 ### Commands - Services
 
@@ -754,6 +857,25 @@ kubectl get svc -o wide
 
 # list services in system namespace
 kubectl get svc -n kube-system
+
+# details of services 
+kubectl describe svc nginx
+kubectl describe svc -n kube-system
+
+# list endpoints
+kubectl get endpoints
+
+# create ClusterIP service
+kubectl expose deployment app-silvestrini --port=80 --target-port=8080
+
+# create NodePort service
+kubectl expose deployment app-silvestrini --type=NodePort --port=80 --target-port=8080
+
+# create loadbalance service
+kubectl expose deployment app-silvestrini --type=LoadBalancer --port=80 --target-port=8080
+
+#create external name service
+kubectl create service externalname app-silvestrini --external-name my-db.skynet.com.br
 
 # delete service
 kubectl delete service nginx
