@@ -56,3 +56,6 @@ helm upgrade -i rancher rancher-latest/rancher --create-namespace --namespace ca
 # ```
 # kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}{{ "\n" }}'
 # ```
+
+## uninstall rancer
+# helm uninstall rancher --namespace cattle-system
