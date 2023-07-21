@@ -887,6 +887,24 @@ kubectl delete service nginx
 
 ![Secrets](images/secrets.png)
 
+A Secret is an object that contains a small amount of sensitive data such as a password, a token, or a key. Such information might otherwise be put in a Pod specification or in a container image. Using a Secret means that you don't need to include confidential data in your application code.
+
+Because Secrets can be created independently of the Pods that use them, there is less risk of the Secret (and its data) being exposed during the workflow of creating, viewing, and editing Pods. Kubernetes, and applications that run in your cluster, can also take additional precautions with Secrets, such as avoiding writing secret data to nonvolatile storage.
+
+Secrets are similar to ConfigMaps but are specifically intended to hold confidential data.
+
+### Types of Secrets
+
+* Opaque Secrets - these are the simplest and most common secrets. They store arbitrary data such as API keys, passwords, and tokens. Opaque Secrets are encoded in base64 when stored in Kubernetes, but they are not encrypted. They can be used to store sensitive data but are not secure enough for highly sensitive information like database passwords.
+
+* kubernetes.io/service-account-token - used to store service account access tokens. These tokens are used to authenticate Pods with the Kubernetes API. They are automatically mounted in Pods that use service accounts.
+
+* kubernetes.io/dockercfg and kubernetes.io/dockerconfigjson - used to store Docker registry credentials. They are used to authenticate Pods with a Docker registry. They are mounted in Pods that use private container images.
+
+* kubernetes.io/tls, kubernetes.io/ssh-auth, and kubernetes.io/basic-auth - used to store TLS certificates, SSH keys, and basic authentication credentials, respectively. They are used to authenticate Pods with other services.
+
+* bootstrap.kubernetes.io/token - used to store cluster bootstrapping tokens. They are used to authenticate nodes with the Kubernetes control plane.
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
