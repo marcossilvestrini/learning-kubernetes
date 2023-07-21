@@ -37,7 +37,7 @@ https://github.com/rancher/rke2/issues/910
 <https://medium.com/@osmarrleao/deploy-rancher-on-rke-cluster-e7415c199ef2>
 <https://docs.expertflow.com/cx/rke2-deployment-in-high-availability-with-dns-195855071.html?selectedPageVersions=18&selectedPageVersions=19>
 
-## About RKE2load balance
+## About RKE2 load balance
 
 <https://www.mattgerega.com/2023/02/15/automated-rke2-cluster-management/>
 
@@ -48,7 +48,7 @@ kubectl get nodes -o wide | awk -v OFS='\t\t' '{print $1, $6, $7}'
 ## Delete node
 
 ```sh
-Run on Master
+# Run on Master
 # kubectl cordon <node-name>
 # kubectl drain <node-name> --force --ignore-daemonsets  --delete-emptydir-data
 # kubectl delete node <node-name>
@@ -65,7 +65,6 @@ Run on Master
 * create pods with deployment
   * create containers with your images
   * create probes for check health containers
-
 
 ## Access Kubernetes Dashboard
 
@@ -93,4 +92,11 @@ kubectl create token admin-user -n kubernetes-dashboard
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/marcossilvestrini/learning-kubernetes/main/apps/app-silvestrini/deployment.yaml
+```
+
+## Deploy loadbalancer metallb
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml
+
 ```

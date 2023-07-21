@@ -1,12 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: my-service
+  name: lb-app-silvestrini
 spec:
   type: LoadBalancer
   selector:
-    app: my-app
+    app: app-silvestrini
   ports:
     - protocol: TCP
       port: 80
-      targetPort: 8080
+      targetPort: 9001 
