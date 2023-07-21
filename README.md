@@ -883,6 +883,8 @@ kubectl delete service nginx
 <p align="right">(<a href="#services">back to services</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## Secrets
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
