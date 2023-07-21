@@ -10,7 +10,7 @@
     Requirments: none
     Description: Script for install and configure rke2  as node\control_palne for labs.
     Author: Marcos Silvestrini
-    Date: 27/06/2023
+    Date: 21/07/2023
 MULTILINE-COMMENT
 
 # Function for init procedures
@@ -198,11 +198,14 @@ function set-storage(){
     exportfs -arv
     
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-        echo "CONFIGURE STORAGE CLASS RANCHER LOCAL-PATH-STORAGE $(hostname -f)"
+        echo "CONFIGURE STORAGE $(hostname -f)"
         
-        # Create storage class
+        # Deploy local-path-storage provisioner
         kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
-        
+       
+        # Create Storage Class NFS
+        kubectl apply -f volumes/nfs-storageclass.yaml
+
         # Set default Storage Class
         echo "SET DEFAULT STORAGE CLASS FOR NFS..."
         kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'

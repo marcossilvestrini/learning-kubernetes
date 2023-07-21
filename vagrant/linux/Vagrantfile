@@ -132,13 +132,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-    load_balance.vm.provision "shell", name: "[Script userdata-ol9.sh]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+    load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
     # CONFIGURE NGINX LOAD BALANCE
-    load_balance.vm.provision "shell", name: "[Script generate-certificates.sh]", path: "../../scripts/linux/commons/generate-certificates.sh"
+    load_balance.vm.provision "shell", name: "[SCRIPT GENERATE-CERTIFICATES.SH]", path: "../../scripts/linux/commons/generate-certificates.sh"
 
     # CONFIGURE NGINX LOAD BALANCE
-    load_balance.vm.provision "shell", name: "[Script userdata-load-balance.sh]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
+    load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-LOAD-BALANCE.SH]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
 
   end
 
@@ -172,10 +172,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      node.vm.provision "shell", name: "[Script userdata-ol9.sh]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-     node.vm.provision "shell", name: "[Script install-node.sh]", path: "../../scripts/linux/rke2/install-rke2.sh"
+     node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
       
     end
 
@@ -211,10 +211,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      node.vm.provision "shell", name: "[Script userdata-ol9.sh]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
       
       # INSTAL RKE2 AGENT
-      node.vm.provision "shell", name: "[Script install-agent.sh]", path: "../../scripts/linux/rke2/install-rke2.sh"
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
       
     end    
 
