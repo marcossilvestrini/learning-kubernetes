@@ -885,6 +885,8 @@ kubectl delete service nginx
 
 ## Secrets
 
+![Secrets](images/secrets.png)
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
