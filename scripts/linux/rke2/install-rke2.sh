@@ -213,17 +213,19 @@ function set-storage(){
 }
 
 function set-security(){
-    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
+        kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+    fi
 }
 
 # Main
 init
 install-rke2
 set-network
-# set-rke2
-# set-tools
-# set-storage
-# set-security
+set-rke2
+set-tools
+set-storage./
+set-security
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses

@@ -179,7 +179,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-     # node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+     node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
       
     end
 
@@ -222,53 +222,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       
     end    
 
-  end 
-
-  # VM debian_client - Some serviec utils, thunderbird,jxplorer,google-chrome, firefox
-  # config.vm.define "debian-client01"  do |debian_client01|
-  #   debian_client01.vm.box = BOX_DEBIAN_NAME
-
-  #   # VARIABLE HOSTNAME
-  #   VM_DEBIAN_CLIENT01= "debian-client01"
-
-  #   # HOSTNAME
-  #   debian_client01.vm.hostname =VM_DEBIAN_CLIENT01
-
-  #   # NETWORK
-  #   debian_client01.vm.network "public_network", mac: "080027f3096a" ,ip: "192.168.0.150",mode: "bridge",bridge: [
-  #     "Intel(R) I211 Gigabit Network Connection",
-  #     "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
-  #   ]
-  #   #debian_client01.vm.network "private_network",type: "dhcp",ip: "172.36.12.1",mac: "080027f3096b"
-
-  #   # MOUNTS
-  #   debian_client01.vm.synced_folder ".", "/vagrant", disabled: true
-  #   debian_client01.vm.synced_folder "../../security/", "/home/vagrant/security"
-  #   debian_client01.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
-  #   debian_client01.vm.synced_folder "../../scripts/linux", "/home/vagrant/scripts"    
-  #   debian_client01.vm.synced_folder "../../test/linux/", "/home/vagrant/test"
-
-  #   #PROVIDER
-  #   debian_client01.vm.provider "virtualbox" do |vb|
-  #     vb.linked_clone = true
-  #     vb.name =VM_DEBIAN_CLIENT01
-  #     vb.memory = 2048
-  #     vb.cpus = 1
-  #     vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
-  #   end
-
-  #   # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-ubuntu.sh"
-
-  #   # INSTALL DOCKER
-  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/userdata-docker.sh"
-
-  #   # CREATE DOCKER IMAGE FOR TESTING
-  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/create-docker-image.sh"
-
-  #   # CHECK DOCKER IMAGE
-  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/check-docker-image.sh"
-
-  # end
-
+  end
 end
