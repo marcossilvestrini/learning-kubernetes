@@ -20,11 +20,11 @@ First...Install packages, configure host,etc
 ## Install latest VBoxGuestAdditions
 
 ```sh
-wget http://download.virtualbox.org/virtualbox/7.0.8/VBoxGuestAdditions_7.0.8.iso
+wget http://download.virtualbox.org/virtualbox/7.0.10/VBoxGuestAdditions_7.0.10.iso
 sudo mkdir /media/VBoxGuestAdditions
-sudo mount -o loop,ro VBoxGuestAdditions_7.0.8.iso /media/VBoxGuestAdditions
+sudo mount -o loop,ro VBoxGuestAdditions_7.0.10.iso /media/VBoxGuestAdditions
 sudo sh /media/VBoxGuestAdditions/VBoxLinuxAdditions.run
-rm VBoxGuestAdditions_7.0.8.iso
+rm VBoxGuestAdditions_7.0.10.iso
 sudo umount /media/VBoxGuestAdditions
 sudo rmdir /media/VBoxGuestAdditions
 ```

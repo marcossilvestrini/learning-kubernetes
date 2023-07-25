@@ -161,7 +161,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.hostname = PLANES[i]
             
       # NETWORK
-      node.vm.network "public_network", mac: "080027f3067#{i}", ip: "192.168.0.14#{i}", netmask: "255.255.255.0", mode: "bridge",bridge:[
+      node.vm.network "public_network", nic_type: "virtio", mac: "080027f3067#{i}", ip: "192.168.0.14#{i}", netmask: "255.255.255.0", mode: "bridge",bridge:[
         "Intel(R) I211 Gigabit Network Connection",
         "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
       ]
@@ -179,7 +179,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-     node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+     # node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
       
     end
 
@@ -201,7 +201,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.hostname = WORKERS[j]
             
       # NETWORK      
-      node.vm.network "public_network", mac: "080022f3067#{j}", ip: "192.168.0.14#{iprange}", netmask: "255.255.255.0", mode: "bridge",bridge:[
+      node.vm.network "public_network",nic_type: "virtio", mac: "080022f3067#{j}", ip: "192.168.0.14#{iprange}", netmask: "255.255.255.0", mode: "bridge",bridge:[
         "Intel(R) I211 Gigabit Network Connection",
         "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
       ]

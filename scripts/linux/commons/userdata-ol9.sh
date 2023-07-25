@@ -16,35 +16,35 @@ cd /home/vagrant || exit
 usermod --password $(echo vagrant | openssl passwd -1 -stdin) vagrant
 usermod --password $(echo vagrant | openssl passwd -1 -stdin) root
 
-# Enable Epel repo
-dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
+# # Enable Epel repo
+# dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
 
 # Install packages
 dnf update -y
-dnf install -y \
-bash-completion \
-vim \
-curl \
-git \
-dos2unix \
-sshpass \
-htop \
-lsof \
-tree \
-net-tools \
-bind-utils \
-telnet \
-traceroute \
-sysstat \
-NetworkManager-initscripts-updown \
-python3-pip \
-zip \
-lvm2 \
-nfs-utils \
-cryptsetup  \
-iscsi-initiator-utils \
-ca-certificates \
-jq
+# dnf install -y \
+# bash-completion \
+# vim \
+# curl \
+# git \
+# dos2unix \
+# sshpass \
+# htop \
+# lsof \
+# tree \
+# net-tools \
+# bind-utils \
+# telnet \
+# traceroute \
+# sysstat \
+# NetworkManager-initscripts-updown \
+# python3-pip \
+# zip \
+# lvm2 \
+# nfs-utils \
+# cryptsetup  \
+# iscsi-initiator-utils \
+# ca-certificates \
+# jq
 
 # Set profile in /etc/profile
 cp -f configs/commons/profile-ol9 /etc/profile
@@ -103,11 +103,11 @@ chmod 600 "$HOME/.ssh/authorized_keys"
 # Set GnuGP
 echo vagrant | $(su -c "gpg -k" -s /bin/bash vagrant)
 
-# Install X11 Server
-dnf config-manager --set-enabled ol9_codeready_builder
-dnf update -y
-dnf install -y xorg-x11-server-Xorg.x86_64 xorg-x11-xauth.x86_64 \
-xorg-x11-server-utils.x86_64 xorg-x11-utils.x86_64
+# # Install X11 Server
+# dnf config-manager --set-enabled ol9_codeready_builder
+# dnf update -y
+# dnf install -y xorg-x11-server-Xorg.x86_64 xorg-x11-xauth.x86_64 \
+# xorg-x11-server-utils.x86_64 xorg-x11-utils.x86_64
 
 # Enable sadc collected system activity
 cp -f configs/commons/sysstat /etc/default/
@@ -138,4 +138,4 @@ systemctl start iscsid.service
 systemctl enable iscsid.service
 
 # # Clean updates
-dnf clean all
+# dnf clean all
