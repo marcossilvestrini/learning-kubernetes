@@ -36,9 +36,8 @@ kubectl create namespace cattle-system
 
 helm install rancher rancher-stable/rancher \
   --namespace cattle-system \
-  --set hostname=rancher.local \
+  --set hostname=rancher.skynet.com.br \
   --set bootstrapPassword=Rancher@123456
-
 
 ## Output after deploy rancher
 
