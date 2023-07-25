@@ -905,6 +905,16 @@ Secrets are similar to ConfigMaps but are specifically intended to hold confiden
 
 * bootstrap.kubernetes.io/token - used to store cluster bootstrapping tokens. They are used to authenticate nodes with the Kubernetes control plane.
 
+### Commands - Secrets
+
+```sh
+# get secrets
+kubectl get secrets -A
+
+# describe secrets
+kubectl describe secret -n cert-manager cert-manager-webhook-ca
+```
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
