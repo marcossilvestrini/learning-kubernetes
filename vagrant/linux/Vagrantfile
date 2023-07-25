@@ -33,13 +33,17 @@ end
 
 # GLOBAL BOX CONFIGURATIONS 
 BOX_OL_URL = "https://oracle.github.io/vagrant-projects/boxes"
-BOX_OL_NAME = "oraclelinux/9"
+#BOX_OL_NAME = "oraclelinux/9"
+BOX_OL_NAME = "silvestrini-ol9-1.0.0"
 BOX_DEBIAN_NAME = "debian/bullseye64"
 
 #DEFINE VM
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # GLOBAL CONFIGURATIONS
+
+  ## SSH CONFIG
+  #config.ssh.insert_key = false
   
   ## GUEST CONFIG
   config.vbguest.auto_update = false
@@ -55,7 +59,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../../pods", "/home/vagrant/pods"
   config.vm.synced_folder "../../deployment", "/home/vagrant/deployment"
   config.vm.synced_folder "../../replicaset", "/home/vagrant/replicaset"
-  config.vm.synced_folder "../../replicaset", "/home/vagrant/daemonset"
+  config.vm.synced_folder "../../daemonset", "/home/vagrant/daemonset"
   config.vm.synced_folder "../../volumes", "/home/vagrant/volumes"
   config.vm.synced_folder "../../services", "/home/vagrant/services"
   config.vm.synced_folder "../../statefulset", "/home/vagrant/statefulset"
@@ -70,7 +74,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # VM infra-server01 - DNS Bind, Postfix,Samba, NFS, Pure-FTP
   config.vm.define "infra-server01"  do |infra_server01|
     infra_server01.vm.box = BOX_OL_NAME
-    infra_server01.vm.box_url = "#{BOX_OL_URL}/#{BOX_OL_NAME}.json"
+    #infra_server01.vm.box_url = "#{BOX_OL_URL}/#{BOX_OL_NAME}.json"
 
     # VARIABLE HOSTNAME
     VM_INFRA_SERVER01= "infra-server01"
@@ -254,7 +258,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   #   end
 
   #   # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-debian.sh"
+  #   debian_client01.vm.provision "shell", path: "../../scripts/linux/commons/userdata-ubuntu.sh"
 
   #   # INSTALL DOCKER
   #   debian_client01.vm.provision "shell", path: "../../scripts/linux/docker/userdata-docker.sh"

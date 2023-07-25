@@ -4,7 +4,7 @@
     Requirments: none
     Description: Script for set environment for labs
     Author: Marcos Silvestrini
-    Date: 20/02/2023
+    Date: 24/07/2023
 MULTILINE-COMMENT
 
 # Set language/locale and encoding
@@ -42,7 +42,7 @@ cifs-utils \
 nmap
 
 # Set profile in /etc/profile
-cp -f configs/commons/profile-debian /etc/profile
+cp -f configs/commons/profile-ubuntu /etc/profile
 dos2unix /etc/profile
 
 # Set vim profile
@@ -51,7 +51,7 @@ dos2unix .vimrc
 chown vagrant:vagrant .vimrc
 
 # Set bash session
-cp -f configs/commons/.bashrc-debian .bashrc
+cp -f configs/commons/.bashrc-ubuntu .bashrc
 dos2unix .bashrc
 chown vagrant:vagrant .bashrc
 

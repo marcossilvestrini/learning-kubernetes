@@ -1,5 +1,13 @@
 # Vagrant Helps
 
+## Issue erro ssh after package box
+
+<https://github.com/hashicorp/vagrant/issues/5186>
+
+Adicionar esta linha na build do box e nos boxes que forem usar esta build:
+config.ssh.insert_key = false
+
+
 ## Create vagrant box
 
 <https://www.engineyard.com/blog/building-a-vagrant-box-from-start-to-finish/>

@@ -179,7 +179,7 @@ function set-tools(){
     
     # source .bashrc
     echo "SOURCE /HOME/VAGRANT/.BASHRC"
-    source .bashrc    
+    source /root/.bashrc    
 }
 
 function set-storage(){
@@ -212,6 +212,10 @@ function set-storage(){
     fi
 }
 
+function set-security(){
+    kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+}
+
 # Main
 init
 install-rke2
@@ -219,6 +223,7 @@ set-network
 set-rke2
 set-tools
 set-storage
+set-security
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses
