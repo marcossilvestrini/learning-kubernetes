@@ -65,4 +65,4 @@ security/dashboard-token
 security/.docker-secrets
 
 # argocd
-configs/linux/argocd/password
+security/argocd-password
