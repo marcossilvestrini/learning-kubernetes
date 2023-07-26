@@ -86,6 +86,9 @@ Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker0
 Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
 Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
 
+# Deplyment kubernetes applications
+vagrant ssh control-plane01  -c 'sudo ./scripts/rke2/deployments.sh'
+
 # Fix powershell error
 $Env:VAGRANT_PREFER_SYSTEM_BIN += 0
 
