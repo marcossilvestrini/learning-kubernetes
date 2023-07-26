@@ -333,6 +333,10 @@ vagrant up
     <p>
       <img src="images/kubernetes-wk-ports.jpg" alt="kubernetes works ports">
     </p>
+    <h3 id="ports-for-rancher-server-nodes-on-rke2"><a class="anchor" aria-hidden="true" tabindex="-1" href="#ports-for-rancher-server-nodes-on-rke2"><span class="octicon octicon-link"></span></a>Ports for Rancher Server Nodes on RKE2</h3>
+    <p>
+      <img src="images/rke2-ports.png" alt="RKE2 Ports">
+    </p>
     <h2 id="install-kubernetes"><a class="anchor" aria-hidden="true" tabindex="-1" href="#install-kubernetes"><span class="octicon octicon-link"></span></a>Install kubernetes</h2>
     <p><a name="install-kubernetes"></a></p>
     <h3 id="minikube"><a class="anchor" aria-hidden="true" tabindex="-1" href="#minikube"><span class="octicon octicon-link"></span></a>Minikube</h3>
@@ -1276,6 +1280,24 @@ kubectl delete service nginx
         <p>bootstrap.kubernetes.io/token - used to store cluster bootstrapping tokens. They are used to authenticate nodes with the Kubernetes control plane.</p>
       </li>
     </ul>
+    <h3 id="commands---secrets"><a class="anchor" aria-hidden="true" tabindex="-1" href="#commands---secrets"><span class="octicon octicon-link"></span></a>Commands - Secrets</h3>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># get secrets</span>
+</span><span class="code-line line-number" line="2">kubectl get secrets <span class="token parameter variable">-A</span>
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># describe secrets</span>
+</span><span class="code-line line-number" line="5">kubectl describe secret <span class="token parameter variable">-n</span> cert-manager cert-manager-webhook-ca
+</span><span class="code-line line-number" line="6">
+</span><span class="code-line line-number" line="7"><span class="token comment"># create opaque secret</span>
+</span><span class="code-line line-number" line="8">kubectl create secret generic silvestrini-secret --from-literal<span class="token operator">=</span>username<span class="token operator">=</span>silvestrini --from-literal<span class="token operator">=</span>password<span class="token operator">=</span>silvestrini
+</span></code><div onclick="copied(this)" data-code="# get secrets
+kubectl get secrets -A
+
+# describe secrets
+kubectl describe secret -n cert-manager cert-manager-webhook-ca
+
+# create opaque secret
+kubectl create secret generic silvestrini-secret --from-literal=username=silvestrini --from-literal=password=silvestrini
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h2 id="contributing"><a class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
     <p>
       Contributions are what make the open source community such an amazing place to

@@ -284,7 +284,16 @@ function deployments(){
             --repo https://github.com/argoproj/argocd-example-apps.git \
             --path helm-guestbook \
             --dest-server https://kubernetes.default.svc \
-            --dest-namespace default        
+            --dest-namespace default    
+
+        ### Create the example 3 - My app - app-silvestrini
+        cp -R apps/app-silvestrini/images /mnt/nfs/app-silvestrini
+        cp apps/app-silvestrini/index.html /mnt/nfs/app-silvestrini
+        argocd app create app-silvestrini \
+            --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+            --path apps/app-silvestrini \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace default            
     fi
 }
 
