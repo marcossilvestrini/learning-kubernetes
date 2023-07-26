@@ -88,33 +88,37 @@ function deployments(){
         kubectl apply  -f configs/argocd/ingress.yaml
         
         ## Get password
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > security/argocd-password
-        
-        ## Install CLI
-        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-        rm argocd-linux-amd64
-        
+        #kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > security/argocd-password
+        ARGOCD_PASS="$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)"
+                
         ## Login in server
         until argocd login argocd.skynet.com.br \
         --username admin \
         --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
         --insecure --grpc-web; do : ; done
+
+        ## Update password
+        argocd account update-password \
+        --current-password "$ARGOCD_PASS" \
+        --new-password "Argocd@123456"
         
         ## Register A Cluster To Deploy Apps To
         echo "y"|argocd cluster add default
         
-        ## Create An Application From A Git Repository
+        ## Deployment aplications
+
+        ### Create namespace
+        kubectl create namespace silvestrini
         
-        ### First we need to set the current namespace to argocd running the following command:
-        kubectl config set-context --current --namespace=argocd
+        ### set the current namespace to silvestrini
+        kubectl config set-context --current --namespace=silvestrini
         
         ### Create the example 1
         argocd app create guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
         --path guestbook \
         --dest-server https://kubernetes.default.svc \
-        --dest-namespace default
+        --dest-namespace silvestrini
 
         ### Create the example 2 - Helm Charts
         argocd app create helm-guestbook \
@@ -125,12 +129,12 @@ function deployments(){
 
         ### Create the example 3 - My app - app-silvestrini
         cp -R apps/app-silvestrini/images /mnt/nfs/app-silvestrini
-        cp apps/app-silvestrini/index.html /mnt/nfs/app-silvestrini
+        cp apps/app-silvestrini/index.html /mnt/nfs/app-silvestrini        
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \
             --dest-server https://kubernetes.default.svc \
-            --dest-namespace default            
+            --dest-namespace silvestrini            
     fi
 }
 

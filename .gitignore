@@ -63,6 +63,3 @@ security/dashboard-token
 
 # Docker
 security/.docker-secrets
-
-# argocd
-security/argocd-password
