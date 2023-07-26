@@ -137,29 +137,29 @@ function set-rke2(){
 }
 
 function set-tools(){
-    # Set kubeconfig - pre req for ArgoCD instalation    
-    if [[ "$NODE_MASTER" == "$NODE_NAME" ]]; then    
-            mkdir -p {/root/.kube/config,/home/vagrant/.kube/config}    
-            cp /etc/rancher/rke2/rke2.yaml /root/.kube/config/kubeconfig
-            cp /etc/rancher/rke2/rke2.yaml /home/vagrant/.kube/config/kubeconfig
-            sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /root/.kube/config/kubeconfig
-            sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /home/vagrant/.kube/config/kubeconfig
+    # Set kubeconfig - pre req for ArgoCD instalation
+    if [[ "$NODE_MASTER" == "$NODE_NAME" ]]; then
+        mkdir -p {/root/.kube/config,/home/vagrant/.kube/config}
+        cp /etc/rancher/rke2/rke2.yaml /root/.kube/config/kubeconfig
+        cp /etc/rancher/rke2/rke2.yaml /home/vagrant/.kube/config/kubeconfig
+        sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /root/.kube/config/kubeconfig
+        sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /home/vagrant/.kube/config/kubeconfig
     fi
-    if [[ "$NODE_NAME" == *"plane"* ]];then        
+    if [[ "$NODE_NAME" == *"plane"* ]];then
         # Install Helm
         echo "INSTALL HELM..."
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         
         # Copy kubectl binary to the local user bin folder
         echo "COPY KUBECTL BINARY TO THE LOCAL USER BIN FOLDER"
-        cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin             
+        cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
     else
         echo "INSTALL KUBECTL..."
         curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl
         chmod +x ./kubectl
         mv ./kubectl /usr/local/bin/kubectl
     fi
-
+    
     # Install kubecolor
     echo "DOWNLOAD KUBECOLOR"
     wget -q https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25_Linux_x86_64.tar.gz
@@ -186,7 +186,7 @@ function set-tools(){
     
     # source .bashrc
     echo "SOURCE /HOME/VAGRANT/.BASHRC"
-    source /root/.bashrc    
+    source /root/.bashrc
 }
 
 function set-storage(){
@@ -209,10 +209,10 @@ function set-storage(){
         
         # Deploy local-path-storage provisioner
         kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
-       
+        
         # Create Storage Class NFS
         kubectl apply -f volumes/nfs-storageclass.yaml
-
+        
         # Set default Storage Class
         echo "SET DEFAULT STORAGE CLASS FOR NFS..."
         kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
@@ -221,42 +221,70 @@ function set-storage(){
 
 function deployments(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-
+        
         # Deploy cert-manager
         kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
-
+        
         # Deploy rancher
-
+        
         ## Add the Rancher Stable Helm Repo
         helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
-
+        
         ## Create a namespace for Rancher
         kubectl create namespace cattle-system
-
+        
         ## Install Rancher using Helm
         helm install rancher rancher-stable/rancher \
         --namespace cattle-system \
         --set hostname=rancher.skynet.com.br \
         --set bootstrapPassword=Rancher@123456
-
+        
         # Deploy ArgoCD
+        
         ## Create a namespace
         kubectl create namespace argocd
-
+        
         ## Deployment
         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-
+        
         ## Ingress
         kubectl apply  -f configs/argocd/ingress.yaml
-
+        
         ## Get password
         kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > security/argocd-password
-
+        
         ## Install CLI
         curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
         install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
         rm argocd-linux-amd64
+        
+        ## Login in server
+        until argocd login argocd.skynet.com.br \
+        --username admin \
+        --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
+        --insecure --grpc-web; do : ; done
+        
+        ## Register A Cluster To Deploy Apps To
+        echo "y"|argocd cluster add default
+        
+        ## Create An Application From A Git Repository
+        
+        ### First we need to set the current namespace to argocd running the following command:
+        kubectl config set-context --current --namespace=argocd
+        
+        ### Create the example 1
+        argocd app create guestbook \
+        --repo https://github.com/argoproj/argocd-example-apps.git \
+        --path guestbook \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace default
 
+        ### Create the example 2 - Helm Charts
+        argocd app create helm-guestbook \
+            --repo https://github.com/argoproj/argocd-example-apps.git \
+            --path helm-guestbook \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace default        
     fi
 }
 

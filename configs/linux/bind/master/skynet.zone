@@ -25,8 +25,9 @@ win-silvestrini2            A       192.168.0.101   ;my notebook
 luizalabs                   A       192.168.0.102   ;luizalabs notebook
 mail                        A       192.168.0.130   ;mail
 ftp                         CNAME   infra-server01  ;ftp
-rancher                     CNAME   load-balance    ;rancher aplication
-argocd                      CNAME   load-balance    ;argocd aplication
+rancher                     CNAME   load-balance    ;rancher endpoint
+argocd                      CNAME   load-balance    ;argocd endpoint
+guestbook                   CNAME   load-balance    ;argocd aplication example
 app-silvestrini             CNAME   load-balance    ;app-silvestrini load balance
 
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
