@@ -86,8 +86,11 @@ Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker0
 Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
 Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
 
-# Deplyment kubernetes applications
+# Deployment kubernetes applications
 vagrant ssh control-plane01  -c 'sudo ./scripts/rke2/deployments.sh'
+
+# Copy kubeconfig to G:\
+Copy-Item -Force  .\configs\linux\kubectl\rke2.yaml G:\Projetos\learning-kubernetes\configs\linux\kubectl\
 
 # Fix powershell error
 $Env:VAGRANT_PREFER_SYSTEM_BIN += 0
