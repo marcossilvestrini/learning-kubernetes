@@ -137,15 +137,22 @@ function set-rke2(){
 }
 
 function set-tools(){
-    if [[ "$NODE_NAME" == *"plane"* ]];then
-        
+    # Set kubeconfig - pre req for ArgoCD instalation    
+    if [[ "$NODE_MASTER" == "$NODE_NAME" ]]; then    
+            mkdir -p {/root/.kube/config,/home/vagrant/.kube/config}    
+            cp /etc/rancher/rke2/rke2.yaml /root/.kube/config/kubeconfig
+            cp /etc/rancher/rke2/rke2.yaml /home/vagrant/.kube/config/kubeconfig
+            sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /root/.kube/config/kubeconfig
+            sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /home/vagrant/.kube/config/kubeconfig
+    fi
+    if [[ "$NODE_NAME" == *"plane"* ]];then        
         # Install Helm
         echo "INSTALL HELM..."
         curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         
         # Copy kubectl binary to the local user bin folder
         echo "COPY KUBECTL BINARY TO THE LOCAL USER BIN FOLDER"
-        cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin
+        cp /var/lib/rancher/rke2/bin/kubectl /usr/local/bin             
     else
         echo "INSTALL KUBECTL..."
         curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl
@@ -212,9 +219,41 @@ function set-storage(){
     fi
 }
 
-function set-security(){
+function deployments(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
+
+        # Deploy cert-manager
         kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.12.0/cert-manager.yaml
+
+        # Deploy rancher
+
+        ## Add the Rancher Stable Helm Repo
+        helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+
+        ## Create a namespace for Rancher
+        kubectl create namespace cattle-system
+
+        ## Install Rancher using Helm
+        helm install rancher rancher-stable/rancher \
+        --namespace cattle-system \
+        --set hostname=rancher.skynet.com.br \
+        --set bootstrapPassword=Rancher@123456
+
+        # Deploy ArgoCD
+        ## Create a namespace
+        kubectl create namespace argocd
+
+        ## Deployment
+        kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+        ## Ingress
+        kubectl apply  -f configs/argocd/ingress.yaml
+
+        ## Install CLI
+        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+        rm argocd-linux-amd64
+
     fi
 }
 
@@ -224,8 +263,8 @@ install-rke2
 set-network
 set-rke2
 set-tools
-set-storage./
-set-security
+set-storage
+deployments
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses

@@ -98,5 +98,16 @@ kubectl apply -f https://raw.githubusercontent.com/marcossilvestrini/learning-ku
 
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml
+```
 
+## Expose service with port-forward
+
+<https://www.middlewareinventory.com/blog/kubectl-port-forward/>
+
+```sh
+# expose argocd - ip 192.168.0.100---->local port 443--->remote port 8080[192.168.0.100:8080]
+kubectl port-forward svc/argocd-server -n argocd 8080:443 --address='192.168.0.100'
+
+# expose argocd - all ips--->local port 443--->remote port 8080[192.168.0.100:8080]
+kubectl port-forward svc/argocd-server -n argocd 8080:443 --address='0.0.0.0'
 ```

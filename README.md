@@ -186,6 +186,10 @@ Use this repository for get learning about kubernetes exam
 
 ![kubernetes works ports](images/kubernetes-wk-ports.jpg)
 
+### Ports for Rancher Server Nodes on RKE2
+
+![RKE2 Ports](images/rke2-ports.png)
+
 ## Install kubernetes
 
 <a name="install-kubernetes"></a>
