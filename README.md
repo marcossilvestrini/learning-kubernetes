@@ -917,6 +917,9 @@ kubectl get secrets -A
 
 # describe secrets
 kubectl describe secret -n cert-manager cert-manager-webhook-ca
+
+# create opaque secret
+kubectl create secret generic silvestrini-secret --from-literal=username=silvestrini --from-literal=password=silvestrini
 ```
 
 ## Contributing
