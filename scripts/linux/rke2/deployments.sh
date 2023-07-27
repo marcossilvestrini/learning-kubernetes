@@ -91,11 +91,6 @@ function deployments(){
         echo "CREATE ARGOCD INGRESS"
         kubectl apply  -f configs/argocd/ingress.yaml
         
-        ## Get password        
-        echo "GET ARGOCD INITIAL PASSWORD"
-        #kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > security/argocd-password
-        ARGO_PASS=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)
-
         ## Install CLI
         echo "INSTALL ARGOCD CLI"
         curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
@@ -103,12 +98,17 @@ function deployments(){
         rm argocd-linux-amd64
         
         ## Login in server
-        #--password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
-        echo "LOGIN IN ARGOCD"
-        until argocd login argocd.skynet.com.br \
-        --username admin \
-        --password "$ARGO_PASS" \
-        --insecure --grpc-web; do : ; done
+        echo "LOGIN IN ARGOCD"          
+        until            
+            argocd login argocd.skynet.com.br \
+            --username admin \
+            --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
+            --insecure --grpc-web;do : ;
+        done
+
+        ## Save password 
+        echo "GET ARGOCD INITIAL PASSWORD"            
+        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > security/argocd-password
         
         ## Register A Cluster To Deploy Apps To
         echo "REGISTER CLUSTER TO DEPLOY APPS IN ARGOCD"
@@ -162,4 +162,4 @@ function deployments(){
 # Main
 source .bashrc
 init
-deployments
+#deployments
