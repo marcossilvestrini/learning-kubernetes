@@ -32,10 +32,13 @@ unless Vagrant.has_plugin?("vagrant-vbguest")
 end
 
 # GLOBAL BOX CONFIGURATIONS 
-BOX_OL_URL = "https://oracle.github.io/vagrant-projects/boxes"
+#BOX_OL_URL = "https://oracle.github.io/vagrant-projects/boxes"
 #BOX_OL_NAME = "oraclelinux/9"
-BOX_OL_NAME = "silvestrini-ol9-1.0.0"
-BOX_DEBIAN_NAME = "debian/bullseye64"
+BOX_INFRA = "silvestrini-ol9-infra"
+BOX_LB="silvestrini-ol9-1.0.0"
+BOX_CP="silvestrini-ol9-rke2-cp"
+BOX_WK="silvestrini-ol9-rke2-wk"
+
 
 #DEFINE VM
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -73,8 +76,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # VM infra-server01 - DNS Bind, Postfix,Samba, NFS, Pure-FTP
   config.vm.define "infra-server01"  do |infra_server01|
-    infra_server01.vm.box = BOX_OL_NAME
-    #infra_server01.vm.box_url = "#{BOX_OL_URL}/#{BOX_OL_NAME}.json"
+    infra_server01.vm.box = BOX_INFRA    
 
     # VARIABLE HOSTNAME
     VM_INFRA_SERVER01= "infra-server01"
@@ -106,14 +108,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     infra_server01.vm.provision "shell", name: "[Script userdata-dhcp.sh]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
     # CONFIGURE PURE-FTP
-    infra_server01.vm.provision "shell", name: "[Script userdata-pureftp.sh]", path: "../../scripts/linux/pure-ftp/userdata-pureftp.sh"
+    #infra_server01.vm.provision "shell", name: "[Script userdata-pureftp.sh]", path: "../../scripts/linux/pure-ftp/userdata-pureftp.sh"
 
   end
 
   # VM load_balancer - racher.skynet.com.br
   config.vm.define "load-balance"  do |load_balance|
-   load_balance.vm.box = BOX_OL_NAME
-   load_balance.vm.box_url = "#{BOX_OL_URL}/#{BOX_OL_NAME}.json"
+   load_balance.vm.box = BOX_LB
+   
     
     # VARIABLE HOSTNAME
     VM_LOAD_BALANCE= "load-balance"
@@ -154,9 +156,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define PLANES[i] do |node|
       
       # BOX NAME
-       node.vm.box = BOX_OL_NAME
-       node.vm.box_url = "#{BOX_OL_URL}/#{BOX_OL_NAME}.json"
-      
+       node.vm.box = BOX_CP
+             
       # VARIABLE HOSTNAME      
       node.vm.hostname = PLANES[i]
             
@@ -194,8 +195,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define WORKERS[j] do |node|
       
       # BOX NAME
-       node.vm.box = BOX_OL_NAME
-       node.vm.box_url = "#{BOX_OL_URL}/#{BOX_OL_NAME}.json"
+       node.vm.box = BOX_WK
+       
       
       # VARIABLE HOSTNAME      
       node.vm.hostname = WORKERS[j]

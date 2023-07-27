@@ -44,9 +44,9 @@ function init(){
 }
 
 function install-rke2(){
-    # install server node
-    echo "INSTALL RKE2 AS CONTROL PLANE"
+    # install server node    
     if [[ "$NODE_NAME" == *"plane"* ]];then
+        echo "INSTALL RKE2 AS CONTROL PLANE"
         curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server sh -
     else
         # install server node
@@ -218,7 +218,6 @@ function set-storage(){
         kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
     fi
 }
-
 
 # Main
 init

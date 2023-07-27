@@ -3,8 +3,8 @@
   "tasks": [    
     {
       "label": "Git pull origin main",
-      "type": "shell",
-      "command": "git pull origin main",
+      "type": "shell",      
+      "command": "git pull --no-ff",      
       "windows": {
         "command": [
           "git pull origin main"
