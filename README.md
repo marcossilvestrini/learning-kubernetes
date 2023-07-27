@@ -50,7 +50,13 @@
     <li><a href="#containers">Containers</a></li>
     <li><a href="#pods">Pods</a></li>
     <li><a href="#deployment">Deployment</a></li>
+    <li><a href="#replicaset">Replicaset</a></li>
+    <li><a href="#daemonset">Daemonset</a></li>
+    <li><a href="#probes">Probes</a></li>
+    <li><a href="#volumes">Volumes</a></li>
+    <li><a href="#statefulset">Statefulset</a></li>
     <li><a href="#services">Services</a></li>
+    <li><a href="#secrets">Secrets</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="#acknowledgments">Acknowledgments</a></li>
@@ -190,6 +196,9 @@ Use this repository for get learning about kubernetes exam
 
 ![RKE2 Ports](images/rke2-ports.png)
 
+<p align="right">(<a href="#kubernetes-architecture">back to kubernetes-architecture</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Install kubernetes
 
 <a name="install-kubernetes"></a>
@@ -266,6 +275,9 @@ EOF
 kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
 ```
 
+<p align="right">(<a href="#install-kubernetes">back to install-kubernetes</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## RKE2
 
 <a name="rke2"></a>
@@ -316,6 +328,9 @@ journalctl -f -u rke2-server
 ```
 
 Reference: <https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf>
+
+<p align="right">(<a href="#rke2">back to rke2</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Kubectl
 
@@ -374,12 +389,14 @@ kubectl logs -f my-nginx
 kubectl logs -n kube-system --all-containers=true etcd-control-plane01
 ```
 
+<p align="right">(<a href="#kubectl">back to kubectl</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Containers
 
 <a name="containers"></a>
 
 ![Containers](images/docker.jpg)
-
 
 ### Commands - Containers
 
@@ -399,6 +416,9 @@ kubectl exec silvestrini -c infra -it sh
 # access container in specific namespace
 kubectl exec -it -n kube-system  kube-proxy-worker01 -c kube-proxy -- bash
 ```
+
+<p align="right">(<a href="#containers">back to containers</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Pods
 
@@ -465,6 +485,9 @@ kubectl expose pod my-nginx
 
 ![Pod Resources](images/resources.jpg)
 
+<p align="right">(<a href="#pods">back to pods</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Deployment
 
 <a name="deployment"></a>
@@ -519,10 +542,14 @@ kubectl rollout restart deployment nginx-deployment
 
 # delete deployment
 kubectl delete deployment nginx-deployment
-
 ```
 
+<p align="right">(<a href="#deployment">back to deployment</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## ReplicaSet
+
+<a name="replicaset"></a>
 
 ![ReplicaSet](images/replicaset.jpg)
 
@@ -543,8 +570,10 @@ kubectl describe replicaset nginx-replicaset
 kubectl apply -f replicaset.yaml
 
 # delete replicaset
-kubectl delete replicaset nginx-deployment
-```
+kubectl delete replicas
+
+<p align="right">(<a href="#replicaset">back to replicaset</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Daemonset
 
@@ -572,6 +601,8 @@ kubectl delete daemonset node-exporter
 ```
 
 ## Probes
+
+<a name="probes"></a>
 
 ![Probes](images/probes.jpg)
 
@@ -609,7 +640,12 @@ A liveness probe can be used to check the responsiveness of an application or to
 any other check that indicates the container is still alive and healthy.\
 If the liveness probe fails, Kubernetes will attempt to restart the container to restore its functionality.
 
+<p align="right">(<a href="#probes">back to probes</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Volumes
+
+<a name="volumes"></a>
 
 ![Volumes](images/volumes01.png)
 
@@ -686,6 +722,9 @@ kubectl describe pvc my-pvc
 kubectl get events my-pvc.1772cda2d4c7069b
 ```
 
+<p align="right">(<a href="#volumes">back to volumes</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## StatefulSet
 
 <a name="statefulset"></a>
@@ -735,6 +774,9 @@ nslookup  nginx-0.nginx.default.svc.cluster.local
 ## test web page
 wget -O- http://nginx-0.nginx.default.svc.cluster.local
 ```
+
+<p align="right">(<a href="#statefulset">back to statefulset</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Services
 
@@ -889,6 +931,8 @@ kubectl delete service nginx
 
 ## Secrets
 
+<a name="service"></a>
+
 ![Secrets](images/secrets.png)
 
 A Secret is an object that contains a small amount of sensitive data such as a password, a token, or a key. Such information might otherwise be put in a Pod specification or in a container image. Using a Secret means that you don't need to include confidential data in your application code.
@@ -921,6 +965,9 @@ kubectl describe secret -n cert-manager cert-manager-webhook-ca
 # create opaque secret
 kubectl create secret generic silvestrini-secret --from-literal=username=silvestrini --from-literal=password=silvestrini
 ```
+
+<p align="right">(<a href="#service">back to service</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Contributing
 
@@ -971,6 +1018,7 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 * [Kubernetes Workloads](https://www.suse.com/c/rancher_blog/introduction-to-kubernetes-workloads/)
 * [Rancher Local Path Provisioner](https://github.com/rancher/local-path-provisioner)
 * [Kubernetes Dashboard](https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard)
+* [Openlens Cluster Managment](https://github.com/MuhammedKalkan/OpenLens)
 * [Book Linuxips](https://livro.descomplicandokubernetes.com.br/pt/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
