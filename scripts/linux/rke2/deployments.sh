@@ -110,13 +110,7 @@ function deployments(){
             --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
             --insecure \
             --grpc-web
-        # until            
-        #     argocd login argocd.skynet.com.br \
-        #     --username admin \
-        #     --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
-        #     --insecure --grpc-web;do : ;
-        # done
-
+            
         ## Save password 
         echo "GET ARGOCD INITIAL PASSWORD"            
         kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d > security/argocd-password
