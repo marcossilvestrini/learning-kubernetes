@@ -98,13 +98,24 @@ function deployments(){
         rm argocd-linux-amd64
         
         ## Login in server
-        echo "LOGIN IN ARGOCD"          
-        until            
-            argocd login argocd.skynet.com.br \
+        echo "LOGIN IN ARGOCD"   
+        counter=0
+        until [ $counter -gt 30 ]
+        do
+            echo "Waiting for argocd stack to be initialized..."
+            sleep 1;((counter++))            
+        done   
+        echo "y" | argocd login argocd.skynet.com.br \
             --username admin \
             --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
-            --insecure --grpc-web;do : ;
-        done
+            --insecure \
+            --grpc-web
+        # until            
+        #     argocd login argocd.skynet.com.br \
+        #     --username admin \
+        #     --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
+        #     --insecure --grpc-web;do : ;
+        # done
 
         ## Save password 
         echo "GET ARGOCD INITIAL PASSWORD"            
@@ -162,4 +173,4 @@ function deployments(){
 # Main
 source .bashrc
 init
-#deployments
+deployments
