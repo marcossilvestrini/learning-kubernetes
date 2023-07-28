@@ -103,7 +103,7 @@ function deployments(){
         until [ $counter -gt 30 ]
         do
             echo "Waiting for argocd stack to be initialized..."
-            sleep 1;((counter++))            
+            sleep 1;clear;((counter++))            
         done   
         echo "y" | argocd login argocd.skynet.com.br \
             --username admin \
