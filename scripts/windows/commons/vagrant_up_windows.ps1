@@ -87,7 +87,7 @@ Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker0
 Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
 
 # Deployment kubernetes applications
-vagrant ssh control-plane01  -c 'sudo chmod +x scripts/rke2/deployments.sh; sudo ./scripts/rke2/deployments.sh'
+vagrant ssh control-plane01  -c 'sudo ./scripts/rke2/deployments.sh'
 
 # Copy kubeconfig to G:\
 Copy-Item -Force  .\configs\linux\kubectl\rke2.yaml G:\Projetos\learning-kubernetes\configs\linux\kubectl\
