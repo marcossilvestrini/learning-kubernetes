@@ -189,7 +189,21 @@ function set-tools(){
     source /root/.bashrc
 }
 
-function set-storage(){    
+function set-storage(){
+    # Configure NFS
+    echo "SET NFS FOR PV PROVISION..."
+    mkdir -p {/mnt/nfs,/mnt/nfs/app-silvestrini}
+    chown -R vagrant:vagrant /mnt/nfs
+    dnf install nfs-utils
+    systemctl enable rpcbind
+    systemctl enable nfs-server
+    cp configs/nfs/exports /etc
+    dos2unix /etc/exports
+    chmod 644 /etc/exports
+    systemctl start rpcbind
+    systemctl start nfs-server
+    exportfs -arv
+    
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         echo "CONFIGURE STORAGE $(hostname -f)"
         

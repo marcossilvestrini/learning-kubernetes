@@ -13,6 +13,10 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+# Require for create disks
+require 'fileutils'
+
+
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
@@ -31,6 +35,12 @@ unless Vagrant.has_plugin?("vagrant-vbguest")
   system('vagrant plugin install vagrant-vbguest')
 end
 
+# INSTALL PLUGIN DISKSIZE
+unless Vagrant.has_plugin?("vagrant-disksize")
+  puts 'Installing vagrant-disksize Plugin...'
+  system('vagrant plugin install vagrant-disksize')
+end
+
 # GLOBAL BOX CONFIGURATIONS 
 #BOX_OL_URL = "https://oracle.github.io/vagrant-projects/boxes"
 #BOX_OL_NAME = "oraclelinux/9"
@@ -39,6 +49,24 @@ BOX_LB="silvestrini-ol9-1.0.0"
 BOX_CP="silvestrini-ol9-rke2-cp"
 BOX_WK="silvestrini-ol9-rke2-wk"
 
+
+# DEFINE CONFIGS FOR ADICTIONAL DISKS
+
+## file operations needs to be relative to this file
+VAGRANT_STORAGE = "E:/Servers/Virtualbox/Storage/infra-server01"
+
+## directory that will contain VDI files
+VAGRANT_DISKS_DIRECTORY = "disks"
+
+## controller definition
+VAGRANT_CONTROLLER_NAME = "Virtual I/O Device SCSI controller"
+VAGRANT_CONTROLLER_TYPE = "virtio-scsi"
+
+## define disks
+#The format is filename, size (GB), port (see controller docs)
+local_disks = [
+  { :filename => "disk1", :size => 200, :port => 5 }  
+]
 
 #DEFINE VM
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -78,6 +106,45 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "infra-server01"  do |infra_server01|
     infra_server01.vm.box = BOX_INFRA    
 
+    # STORAGE
+      
+    ## SECONDARY DISK /dev/sdb
+    disks_directory = File.join(VAGRANT_STORAGE, VAGRANT_DISKS_DIRECTORY)
+
+    ## create disks before "up" action
+    config.trigger.before :up do |trigger|
+      trigger.name = "Create disks"
+        trigger.ruby do
+          unless File.directory?(disks_directory)
+            FileUtils.mkdir_p(disks_directory)
+          end
+          local_disks.each do |local_disk|
+          local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
+          unless File.exist?(local_disk_filename)
+            puts "Creating \"#{local_disk[:filename]}\" disk"
+            system("vboxmanage createmedium --filename #{local_disk_filename} --size #{local_disk[:size] * 1024} --format VDI")
+          end
+        end
+      end
+    end
+
+    ## create storage controller on first run
+    unless File.directory?(disks_directory)
+      config.vm.provider "virtualbox" do |storage_provider|
+        storage_provider.customize ["storagectl", :id, "--name", VAGRANT_CONTROLLER_NAME, "--add", VAGRANT_CONTROLLER_TYPE, '--hostiocache', 'off']
+      end
+    end
+
+    ## attach storage devices
+    config.vm.provider "virtualbox" do |storage_provider|
+      local_disks.each do |local_disk|
+        local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
+        unless File.exist?(local_disk_filename)
+          storage_provider.customize ['storageattach', :id, '--storagectl', VAGRANT_CONTROLLER_NAME, '--port', local_disk[:port], '--device', 0, '--type', 'hdd', '--medium', local_disk_filename]
+        end
+      end
+    end
+
     # VARIABLE HOSTNAME
     VM_INFRA_SERVER01= "infra-server01"
 
@@ -99,17 +166,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
 
     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-    infra_server01.vm.provision "shell", name: "[Script userdata-ol9.sh]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+    infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
     # SET DNS BIND
-    infra_server01.vm.provision "shell", name: "[Script userdata-bind-master.sh]", path: "../../scripts/linux/bind/userdata-bind-master.sh"
+    infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-BIND-MASTER.SH]", path: "../../scripts/linux/bind/userdata-bind-master.sh"
 
     # SET ISC DHCP
-    infra_server01.vm.provision "shell", name: "[Script userdata-dhcp.sh]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
+    #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
-    # CONFIGURE PURE-FTP
-    #infra_server01.vm.provision "shell", name: "[Script userdata-pureftp.sh]", path: "../../scripts/linux/pure-ftp/userdata-pureftp.sh"
+    # CONFIGURE NFS
+    infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage.sh"
 
+    # cleanup after "destroy" action
+    config.trigger.after :destroy do |trigger|
+      trigger.name = "Cleanup operation"
+        trigger.ruby do        
+          # the following loop is now obsolete as these files will be removed automatically as machine dependency
+          local_disks.each do |local_disk|
+          local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
+          if File.exist?(local_disk_filename)
+            puts "Deleting \"#{local_disk[:filename]}\" disk"
+          system("vboxmanage closemedium disk #{local_disk_filename} --delete")
+          end
+        end
+        if File.exist?(disks_directory)
+          FileUtils.rmdir(disks_directory)
+        end
+      end
+    end
   end
 
   # VM load_balancer - racher.skynet.com.br
