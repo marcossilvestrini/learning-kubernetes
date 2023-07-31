@@ -27,7 +27,7 @@ mail                        A       192.168.0.130   ;mail
 ftp                         CNAME   infra-server01  ;ftp
 rancher                     CNAME   load-balance    ;rancher endpoint
 argocd                      CNAME   load-balance    ;argocd endpoint
-guestbook                   CNAME   load-balance    ;argocd aplication example
+gitlab                      CNAME   load-balance    ;gitlab endpoint
 app-silvestrini             CNAME   load-balance    ;app-silvestrini load balance
 
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
