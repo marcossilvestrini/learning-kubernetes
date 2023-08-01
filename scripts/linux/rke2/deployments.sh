@@ -86,10 +86,12 @@ function deployments(){
         
         ## Install CLI
         echo "INSTALL ARGOCD CLI"
-        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-        rm argocd-linux-amd64
-        
+        if ! command -v argocd &> /dev/null
+        then
+            curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+            install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+            rm argocd-linux-amd64                
+        fi
         ## Login in server
         echo "LOGIN IN ARGOCD"   
         counter=0
@@ -136,9 +138,7 @@ function deployments(){
             --dest-server https://kubernetes.default.svc \
             --dest-namespace silvestrini    
 
-        ### Create the example 3 - My app - app-silvestrini
-        cp -R apps/app-silvestrini/images /var/nfs/app-silvestrini
-        cp apps/app-silvestrini/index.html /var/nfs/app-silvestrini
+        ### Create the example 3 - My app - app-silvestrini        
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \
