@@ -12,6 +12,6 @@ spec: # Especificações do nosso PV
   persistentVolumeReclaimPolicy: Retain # Política de reivindicação do PV, ou seja, o PV não será excluído quando o PVC for excluído
   nfs: # Tipo de armazenamento que vamos utilizar, no caso o NFS
     server: 192.168.0.140 # Endereço do servidor NFS
-    path: "/mnt/nfs" # Compartilhamento do servidor NFS
+    path: "/var/nfs" # Compartilhamento do servidor NFS
   storageClassName: nfs # Nome da classe de armazenamento que será utilizadakubectl get pv
   

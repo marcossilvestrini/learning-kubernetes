@@ -95,7 +95,7 @@ function deployments(){
         ## Login in server
         echo "LOGIN IN ARGOCD"   
         counter=0
-        until [ $counter -gt 60 ]
+        until [ $counter -gt 90 ]
         do
             echo "Waiting for argocd stack to be initialized..."
             sleep 1;clear;((counter++))            
