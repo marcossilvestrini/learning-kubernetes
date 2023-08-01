@@ -966,7 +966,7 @@ kubectl describe secret -n cert-manager cert-manager-webhook-ca
 kubectl create secret generic silvestrini-secret --from-literal=username=silvestrini --from-literal=password=silvestrini
 
 # create tls secret
-kubectl create secret tls meu-servico-web-tls-secret --cert=certificado.crt --key=chave-privada.key
+kubectl create secret tls my-service-web-tls-secret --cert=cert.crt --key=chave-privada.key
 ```
 
 <p align="right">(<a href="#secrets">back to secrets</a>)</p>
