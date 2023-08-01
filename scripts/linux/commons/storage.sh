@@ -93,5 +93,5 @@ systemctl start nfs-server
 exportfs -arv
 
 # Create the example 3 - My app - app-silvestrini
-cp -R apps/app-silvestrini/images /var/nfs/app-silvestrini
+cp -R apps/app-silvestrini/images/ /var/nfs/app-silvestrini
 cp apps/app-silvestrini/index.html /var/nfs/app-silvestrini
