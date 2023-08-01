@@ -94,16 +94,19 @@ function deployments(){
         fi
         ## Login in server
         echo "LOGIN IN ARGOCD"   
-        counter=0
-        until [ $counter -gt 90 ]
-        do
-            echo "Waiting for argocd stack to be initialized..."
-            sleep 1;clear;((counter++))            
-        done   
-        echo "y" | argocd login argocd.skynet.com.br \
-            --username admin \
-            --password $(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo) \
-            --insecure \
+        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+        while [ "$STATUS" != 200 ]
+        do 
+            clear
+            echo "Waiting for argocd stack to be initialized..."                        
+            STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+            echo "$STATUS"
+            sleep 1s            
+        done                 
+        PASS=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo)        
+        echo "y" | argocd --insecure login  argocd.skynet.com.br \
+            --username=admin \
+            --password="$PASS" \
             --grpc-web
             
         ## Save password 
@@ -112,7 +115,7 @@ function deployments(){
         
         ## Register A Cluster To Deploy Apps To
         echo "REGISTER CLUSTER TO DEPLOY APPS IN ARGOCD"
-        echo "y"|argocd cluster add default
+        echo "y"|argocd --insecure cluster add default
         
         ## Deploy apps from git repository
         echo "DEPLOY APPS IN ARGOCD FROM GIT REPOSITORY"
@@ -124,12 +127,13 @@ function deployments(){
         kubectl config set-context --current --namespace=silvestrini
         
         ### Create the example 1
-        argocd app create guestbook \
+        sleep 20        
+        argocd --insecure app create guestbook \
             --repo https://github.com/argoproj/argocd-example-apps.git \
             --path guestbook \
             --dest-server https://kubernetes.default.svc \
-            --dest-namespace silvestrini \
-            --insecure
+            --dest-namespace silvestrini
+            
 
         ### Create the example 2 - Helm Charts
         argocd app create helm-guestbook \
