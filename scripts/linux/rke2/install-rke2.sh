@@ -197,7 +197,7 @@ function set-storage(){
         kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.24/deploy/local-path-storage.yaml
         
         # Create Storage Class NFS
-        kubectl apply -f volumes/nfs-storageclass.yaml
+        kubectl apply -f kubernetes/volumes/nfs-storageclass.yaml
         
         # Set default Storage Class
         echo "SET DEFAULT STORAGE CLASS FOR NFS..."

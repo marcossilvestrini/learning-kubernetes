@@ -25,8 +25,7 @@ function init(){
     # Variables
     DISTRO=$(cat /etc/*release | grep -ws NAME=)
     NODE_MASTER="control-plane01"
-    NODE_NAME=$(hostname)
-    IP_NODE=$(hostname -i)
+    NODE_NAME=$(hostname)    
     
     # Check if distribution is RPM-->Oracle Linux Server
     if [[ "$DISTRO" == *"Oracle"* ]]; then
@@ -34,13 +33,7 @@ function init(){
         echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
     else
         echo "THIS SCRIPT IS AVAILABLE ONLY ORACLE LINUX SERVER DISTRIBUTIONS!!!";exit 1;
-    fi
-    
-    # Get token
-    if [[ "$NODE_NAME" == *"worker"* ]]; then
-        echo "GET CLUSTER TOKEN..."
-        TOKEN_NODE=$(cat configs/rke2/token-first-node)
-    fi
+    fi   
 }
 
 function deployments(){    
@@ -144,8 +137,8 @@ function deployments(){
             --dest-namespace silvestrini    
 
         ### Create the example 3 - My app - app-silvestrini
-        cp -R apps/app-silvestrini/images /mnt/nfs/app-silvestrini
-        cp apps/app-silvestrini/index.html /mnt/nfs/app-silvestrini
+        cp -R apps/app-silvestrini/images /var/nfs/app-silvestrini
+        cp apps/app-silvestrini/index.html /var/nfs/app-silvestrini
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \

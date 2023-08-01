@@ -63,10 +63,13 @@ VAGRANT_CONTROLLER_NAME = "Virtual I/O Device SCSI controller"
 VAGRANT_CONTROLLER_TYPE = "virtio-scsi"
 
 ## define disks
-#The format is filename, size (GB), port (see controller docs)
+## The format is filename, size (GB), port (see controller docs)
 local_disks = [
   { :filename => "disk1", :size => 200, :port => 5 }  
 ]
+
+## SECONDARY DISK /dev/sdb
+disks_directory = File.join(VAGRANT_STORAGE, VAGRANT_DISKS_DIRECTORY)
 
 #DEFINE VM
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -87,13 +90,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../../security/", "/home/vagrant/security"
   config.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
   config.vm.synced_folder "../../scripts/linux/", "/home/vagrant/scripts"  
-  config.vm.synced_folder "../../pods", "/home/vagrant/pods"
-  config.vm.synced_folder "../../deployment", "/home/vagrant/deployment"
-  config.vm.synced_folder "../../replicaset", "/home/vagrant/replicaset"
-  config.vm.synced_folder "../../daemonset", "/home/vagrant/daemonset"
-  config.vm.synced_folder "../../volumes", "/home/vagrant/volumes"
-  config.vm.synced_folder "../../services", "/home/vagrant/services"
-  config.vm.synced_folder "../../statefulset", "/home/vagrant/statefulset"
+  config.vm.synced_folder "../../kubernetes", "/home/vagrant/kubernetes"  
   config.vm.synced_folder "../../apps", "/home/vagrant/apps"
     
   ## PROVIDER
@@ -106,13 +103,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "infra-server01"  do |infra_server01|
     infra_server01.vm.box = BOX_INFRA    
 
-    # STORAGE
-      
-    ## SECONDARY DISK /dev/sdb
-    disks_directory = File.join(VAGRANT_STORAGE, VAGRANT_DISKS_DIRECTORY)
+    # STORAGE    
 
     ## create disks before "up" action
-    config.trigger.before :up do |trigger|
+    infra_server01.trigger.before :up do |trigger|
       trigger.name = "Create disks"
         trigger.ruby do
           unless File.directory?(disks_directory)
@@ -130,13 +124,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     ## create storage controller on first run
     unless File.directory?(disks_directory)
-      config.vm.provider "virtualbox" do |storage_provider|
+      infra_server01.vm.provider "virtualbox" do |storage_provider|
         storage_provider.customize ["storagectl", :id, "--name", VAGRANT_CONTROLLER_NAME, "--add", VAGRANT_CONTROLLER_TYPE, '--hostiocache', 'off']
       end
     end
 
     ## attach storage devices
-    config.vm.provider "virtualbox" do |storage_provider|
+    infra_server01.vm.provider "virtualbox" do |storage_provider|
       local_disks.each do |local_disk|
         local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
         unless File.exist?(local_disk_filename)
@@ -174,11 +168,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SET ISC DHCP
     #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
-    # CONFIGURE NFS
+    # infra-server01URE NFS
     infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage.sh"
 
     # cleanup after "destroy" action
-    config.trigger.after :destroy do |trigger|
+    infra_server01.trigger.after :destroy do |trigger|
       trigger.name = "Cleanup operation"
         trigger.ruby do        
           # the following loop is now obsolete as these files will be removed automatically as machine dependency

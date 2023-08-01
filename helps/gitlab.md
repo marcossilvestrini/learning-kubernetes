@@ -1,5 +1,9 @@
 # Helps Gitlab
 
+## Deploy kubernetes operator
+
+<https://docs.gitlab.com/operator/installation.html>
+
 ## Deploy gitlab with helm
 
 kubectl create namespace gitlab
