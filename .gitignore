@@ -8,7 +8,7 @@
 **/authorized_keys
 **/*.pub
 **/*.ppk
-**/*private*
+**/*private.key*
 **/.ssh/id_*
 **/.ssh/*_id_*
 **/.ssh/known_hosts

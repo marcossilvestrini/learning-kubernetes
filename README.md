@@ -974,6 +974,34 @@ kubectl create secret tls my-service-web-tls-secret --cert=cert.crt --key=privat
 <p align="right">(<a href="#secrets">back to secrets</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+
+## ConfigMaps
+
+<a name="configmap"></a>
+
+![ConfigMap](/images/configmap.png)
+
+A ConfigMap is an API object used to store non-confidential data in key-value pairs.\
+Pods can consume ConfigMaps as environment variables, command-line arguments, or as configuration files in a volume.
+
+A ConfigMap allows you to decouple environment-specific configuration from your container images, so that your applications are easily portable.
+
+### Commands - ConfigMaps
+
+```sh
+# create configmap
+kubectl create configmap nginx-config --from-file=kubernetes/configmaps/nginx.conf
+
+# get configmaps
+kubectl get configmaps
+
+# describe configmaps
+kubectl describe configmaps nginx-config
+```
+
+<p align="right">(<a href="#configmap">back to configmap</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 ## Contributing
 
 Contributions are what make the open source community such an amazing place to
