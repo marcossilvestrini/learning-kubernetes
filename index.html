@@ -1352,6 +1352,32 @@ kubectl create secret generic silvestrini-secret --from-literal=username=silvest
 kubectl create secret tls my-service-web-tls-secret --cert=cert.crt --key=private-key.key
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre><p align="right">(<a href="#secrets">back to secrets</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+    <h2 id="configmaps"><a class="anchor" aria-hidden="true" tabindex="-1" href="#configmaps"><span class="octicon octicon-link"></span></a>ConfigMaps</h2>
+    <p><a name="configmap"></a></p>
+    <p>
+      <img src="/images/configmap.png" alt="ConfigMap">
+    </p>
+    <p>A ConfigMap is an API object used to store non-confidential data in key-value pairs.<br>Pods can consume ConfigMaps as environment variables, command-line arguments, or as configuration files in a volume.</p>
+    <p>A ConfigMap allows you to decouple environment-specific configuration from your container images, so that your applications are easily portable.</p>
+    <h3 id="commands---configmaps"><a class="anchor" aria-hidden="true" tabindex="-1" href="#commands---configmaps"><span class="octicon octicon-link"></span></a>Commands - ConfigMaps</h3>
+    <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># create configmap</span>
+</span><span class="code-line line-number" line="2">kubectl create configmap nginx-config --from-file<span class="token operator">=</span>kubernetes/configmaps/nginx.conf
+</span><span class="code-line line-number" line="3">
+</span><span class="code-line line-number" line="4"><span class="token comment"># get configmaps</span>
+</span><span class="code-line line-number" line="5">kubectl get configmaps
+</span><span class="code-line line-number" line="6">
+</span><span class="code-line line-number" line="7"><span class="token comment"># describe configmaps</span>
+</span><span class="code-line line-number" line="8">kubectl describe configmaps nginx-config
+</span></code><div onclick="copied(this)" data-code="# create configmap
+kubectl create configmap nginx-config --from-file=kubernetes/configmaps/nginx.conf
+
+# get configmaps
+kubectl get configmaps
+
+# describe configmaps
+kubectl describe configmaps nginx-config
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre><p align="right">(<a href="#configmap">back to configmap</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
     <h2 id="contributing"><a class="anchor" aria-hidden="true" tabindex="-1" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
     <p>
       Contributions are what make the open source community such an amazing place to
