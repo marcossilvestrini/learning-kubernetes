@@ -33,3 +33,7 @@ echo -n "foobarbeercool" | base64
 # decode string
 echo -n 'Z2lyb3BvcHM=' | base64 -d
 ```
+
+## TMUX
+
+https://tmuxcheatsheet.com/
