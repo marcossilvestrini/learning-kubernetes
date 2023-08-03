@@ -111,3 +111,10 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443 --address='192.168.0.1
 # expose argocd - all ips--->local port 443--->remote port 8080[192.168.0.100:8080]
 kubectl port-forward svc/argocd-server -n argocd 8080:443 --address='0.0.0.0'
 ```
+
+## Logging
+
+```sh
+# get logs of all pods cilium
+stern -n kube-system cilium --max-log-requests 100 -t --since 10m 
+```
