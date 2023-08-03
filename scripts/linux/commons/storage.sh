@@ -79,7 +79,7 @@ chmod 644 /etc/fstab
 systemctl daemon-reload
 
 # Mount NFS Storage 
-mkdir -p {/var/nfs,/var/nfs/app-silvestrini}
+mkdir -p {/var/nfs,/var/nfs/app-silvestrini,/var/nfs/app-silvestrini/images}
 chown -R vagrant:vagrant /var/nfs
 umount /var/nfs 2>&1
 mount /var/nfs
@@ -93,5 +93,5 @@ systemctl start nfs-server
 exportfs -arv
 
 # Create the example 3 - My app - app-silvestrini
-cp -R apps/app-silvestrini/images/ /var/nfs/app-silvestrini
+cp -R apps/app-silvestrini/images/* /var/nfs/app-silvestrini/images
 cp apps/app-silvestrini/index.html /var/nfs/app-silvestrini

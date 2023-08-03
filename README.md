@@ -1053,6 +1053,7 @@ Project Link: [https://github.com/marcossilvestrini/learning-kubernetes](https:/
 * [Kubernetes Dashboard](https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard)
 * [Openlens Cluster Managment](https://github.com/MuhammedKalkan/OpenLens)
 * [Book Linuxips](https://livro.descomplicandokubernetes.com.br/pt/)
+* [Kubernetes Services](https://cast.ai/blog/kubernetes-load-balancer-expert-guide-with-examples/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
