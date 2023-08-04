@@ -189,7 +189,7 @@ function deployments() {
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/kube-prometheus \
             --dest-server https://kubernetes.default.svc \
-            --dest-namespace silvestrini \
+            --dest-namespace kube-prometheus \
             --insecure
         
         ### Sync apps
