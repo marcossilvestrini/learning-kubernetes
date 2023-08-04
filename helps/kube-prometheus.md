@@ -8,6 +8,7 @@
 ## Deploy Prometheus monitoring stack to Kubernetes with a single Helm Chart
 
 <https://k21academy.com/docker-kubernetes/prometheus-grafana-monitoring/>
+https://spacelift.io/blog/prometheus-kubernetes
 
 ## Add repo
 
