@@ -180,6 +180,16 @@ function deployments() {
             --dest-server https://kubernetes.default.svc \
             --dest-namespace silvestrini \
             --insecure
+
+        ### Create the example 3 - kube-prometheus stack
+        kubectl create namespace prometheus
+        kubectl config set-context --current --namespace=prometheus
+        argocd app create prometheus \
+            --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+            --path apps/kube-prometheus \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace prometheus  \
+            --insecure
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
         argocd --insecure app sync app-silvestrini guestbook helm-guestbook
