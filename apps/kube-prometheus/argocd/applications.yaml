@@ -24,7 +24,7 @@ spec:
           valueFiles:
             - '../charts/values.yaml'            
         repoURL: https://gitlab.luizalabs.com/magalu-cloud-iaas/infrastructure/solutions/rancher-monitoring.git        
-        path: 'charts'
+        path: '../charts'
         targetRevision: HEAD
       destination:
         server: '{{server}}'
