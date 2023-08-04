@@ -1,0 +1,154 @@
+# Reference https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+
+kube-prometheus-stack:
+  alertmanager:
+    enabled: true
+    config:
+      global:
+        resolve_timeout: 5m
+        slack_api_url: "https://hooks.slack.com/services/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"
+      route:
+        group_by: ["alertname"]
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 12h
+        receiver: "general-monitoring"
+        routes:
+          - receiver: "critical-monitoring"
+            matchers:
+              - severity=~"critical|high"
+          - receiver: "warning-monitoring"
+            matchers:
+              - severity="warning"
+      receivers:
+        - name: "critical-monitoring"
+          slack_configs:
+            - channel: "#	silvestrini-kube-prometheus"
+              send_resolved: true
+              title: '{{ template "slack.title" . }}'
+              text: '{{ template "slack.text" . }}'
+        - name: "warning-monitoring"
+          slack_configs:
+            - channel: "#	silvestrini-kube-prometheus"
+              send_resolved: true
+              title: '{{ template "slack.title" . }}'
+              text: '{{ template "slack.text" . }}'
+        - name: "general-monitoring"
+          slack_configs:
+            - channel: "#	silvestrini-kube-prometheus"
+              send_resolved: true
+              title: '{{ template "slack.title" . }}'
+              text: '{{ template "slack.text" . }}'
+      templates:
+        - "/etc/alertmanager/config/*.tmpl"
+
+    templateFiles:
+      #
+      ## An example template:
+      template_1.tmpl: |-
+        {{ define "slack.title" }}
+        {{- if ne .Status "firing" -}}
+        :white_check_mark:
+        {{- else if eq .CommonLabels.severity "critical" -}}
+        :fire:
+        {{- else if eq .CommonLabels.severity "high" -}}
+        :rotating_light:
+        {{- else if eq .CommonLabels.severity "warning" -}}
+        :warning:
+        {{- end -}}
+        {{ .Status | toUpper -}}{{- if eq .Status "firing" }}:{{ .Alerts.Firing | len -}}{{- end }} - {{ .CommonLabels.alertname -}}
+        {{- end -}}
+
+        {{ define "slack.text" }}
+        {{ range .Alerts }}
+        {{ if gt (len .Annotations) 0 }}
+        *Sumário*: {{ .Annotations.summary}}
+        *Descrição*: {{ .Annotations.description }}
+        *Runbook*: {{ .Annotations.runbook_url }}
+        *Detalhes*:
+        {{ range .Labels.SortedPairs }}• {{ .Name }}: `{{ .Value }}`
+        {{ end }}
+        {{ end }}
+        {{ end }}
+        {{ end }}
+
+  kubeScheduler:
+    enabled: false
+
+  kubeControllerManager:
+    enabled: false
+
+  grafana:
+    enabled: false
+
+  defaultRules:
+    create: true
+    rules:
+      kubeProxy: false
+
+  prometheus-node-exporter:
+    nodeSelector:
+      node-role.kubernetes.io/control-plane: "true"
+    tolerations:
+      - effect: NoSchedule
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+  prometheus:
+    service:
+      annotations:
+        service.beta.kubernetes.io/openstack-internal-load-balancer: "true"
+      type: LoadBalancer
+    thanosService:
+      clusterIP: ""
+      enabled: true
+    thanosServiceMonitor:
+      enabled: true
+    thanosServiceExternal:
+      annotations:
+        service.beta.kubernetes.io/openstack-internal-load-balancer: "true"
+      enabled: true
+    prometheusSpec:
+      additionalAlertManagerConfigs:
+        - scheme: https
+          static_configs:
+            - targets:
+                - "alertmanager-central.mgl1.k8s.mgc.mglu.io:443"
+      thanos:
+        image: quay.io/thanos/thanos:v0.30.1
+      externalLabels:
+        cluster: default
+      podMetadata:
+        labels:
+          app: thanos-sidecar
+          cilium-block-storage-kong: project
+          cilium-dbaas-kong: project
+          cilium-jussana-kong: project
+          cilium-mke-kong: project
+          cilium-object-shared-kong: project
+          cilium-object-storage-kong: project
+          cilium-porepyana-kong: project
+          cilium-virtual-machine-kong: project
+          cilium-vpc-api-product-kong: project
+      ruleSelectorNilUsesHelmValues: false
+      serviceMonitorSelectorNilUsesHelmValues: false
+      podMonitorSelectorNilUsesHelmValues: false
+      scrapeInterval: 30s
+      retention: 30d
+      retentionSize: 80GB
+      resources:
+        limits:
+          cpu: 4
+          memory: 8Gi
+        requests:
+          cpu: 1
+          memory: 2Gi
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: csi-cinder-nvme
+            accessModes: ["ReadWriteOnce"]
+            resources:
+              requests:
+                storage: 100Gi
+            volumeMode: Filesystem
