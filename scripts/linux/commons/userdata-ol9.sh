@@ -40,10 +40,8 @@ dnf update -y
 # python3-pip \
 # zip \
 # lvm2 \
-# nfs-utils \
 # cryptsetup  \
 # iscsi-initiator-utils \
-# ca-certificates \
 # jq
 
 # Set profile in /etc/profile
