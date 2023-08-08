@@ -20,11 +20,15 @@ spec:
           - ServerSideApply=true
       project: "default"
       source:
-        helm:          
+        helm:
+          # ignoreMissingValueFiles: true faz com que ignore values não encontrados,
+          # a exemplo situações onde não queremos ter um values.yaml customizados
+          ignoreMissingValueFiles: true
           valueFiles:
-            - '../charts/values.yaml'            
-        repoURL: https://gitlab.luizalabs.com/magalu-cloud-iaas/infrastructure/solutions/rancher-monitoring.git        
-        path: '../charts'
+            - values.yaml
+            - '../{{name}}/values.yaml' # procura values.yaml customizados
+        repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
+        path: 'kube-prometheus/applicationset/default'
         targetRevision: HEAD
       destination:
         server: '{{server}}'
