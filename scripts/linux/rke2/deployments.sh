@@ -37,6 +37,7 @@ function init() {
     fi
 }
 
+# Functio for deployments 
 function deployments() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
 
