@@ -21,7 +21,3 @@ wordpress/
 ```sh
 # create a chart
 helm create mychart
-
-# package a chart
-helm package mychart
-```
