@@ -160,7 +160,7 @@ function deployments() {
         kubectl config set-context --current --namespace=silvestrini
 
         ### Create the example 1
-        sleep 20
+        sleep 60
         argocd --insecure app create guestbook \
             --repo https://github.com/argoproj/argocd-example-apps.git \
             --path guestbook \

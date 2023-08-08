@@ -300,7 +300,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
 
       if WORKERS[j] == "worker03"
-        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYEMNT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
+        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
         end
       
     end    
