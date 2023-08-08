@@ -200,8 +200,8 @@ function set-storage(){
         kubectl apply -f kubernetes/volumes/nfs-storageclass.yaml
         
         # Set default Storage Class
-        echo "SET DEFAULT STORAGE CLASS FOR NFS..."
-        kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
+        #echo "SET DEFAULT STORAGE CLASS FOR NFS..."
+        #kubectl patch storageclass nfs -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'
     fi
 }
 
