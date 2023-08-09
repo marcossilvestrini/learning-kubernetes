@@ -131,7 +131,7 @@ function deployments() {
             echo "Waiting for argocd stack to be initialized..."
             STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
             echo "$STATUS"
-            sleep 1s
+            sleep 1
         done
         PASS=$(
             kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
