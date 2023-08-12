@@ -20,7 +20,7 @@ usermod --password $(echo vagrant | openssl passwd -1 -stdin) root
 # dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm -y
 
 # Install packages
-dnf update -y
+# dnf update -y
 # dnf install -y \
 # bash-completion \
 # vim \
@@ -66,15 +66,15 @@ cp configs/commons/sysctl.conf /etc
 dos2unix /etc/sysctl.conf
 systemctl daemon-reload
 
-# SSH,FIREWALLD AND SELINUX
-if [ -f "/etc/ssh/sshd_config.d/50-redhat.conf" ]; then
-    rm /etc/ssh/sshd_config.d/50-redhat.conf
-fi
+# # SSH,FIREWALLD AND SELINUX
+# if [ -f "/etc/ssh/sshd_config.d/50-redhat.conf" ]; then
+#     rm /etc/ssh/sshd_config.d/50-redhat.conf
+# fi
 cp -f configs/commons/01-sshd-custom.conf /etc/ssh/sshd_config.d
-dos2unix /etc/ssh/sshd_config.d
-systemctl restart sshd
-echo vagrant | $(su -c "ssh-keygen -q -t ecdsa -b 521 -N '' -f .ssh/id_ecdsa <<<y >/dev/null 2>&1" -s /bin/bash vagrant)
-systemctl restart sshd
+dos2unix /etc/ssh/sshd_config.d/01-sshd-custom.conf
+chmod 644 /etc/ssh/sshd_config.d/01-sshd-custom.conf
+# echo vagrant | $(su -c "ssh-keygen -q -t ecdsa -b 521 -N '' -f .ssh/id_ecdsa <<<y >/dev/null 2>&1" -s /bin/bash vagrant)
+ systemctl restart sshd
 systemctl stop firewalld
 systemctl disable firewalld
 setenforce Permissive
@@ -82,7 +82,7 @@ systemctl start nftables
 systemctl enable nftables
 
 ## set your public key here
-cat security/id_ecdsa.pub >>.ssh/authorized_keys
+# cat security/id_ecdsa.pub >>.ssh/authorized_keys
 
 ## set ssh for root user. This is required for setu RKE2 nodes and workers
 if [ -d "$HOME/.ssh" ]; then
@@ -99,7 +99,7 @@ cat "$HOME/.ssh/kubernetes-key-ecdsa.pub" > "$HOME/.ssh/authorized_keys"
 chmod 600 "$HOME/.ssh/authorized_keys"
 
 # Set GnuGP
-echo vagrant | $(su -c "gpg -k" -s /bin/bash vagrant)
+# echo vagrant | $(su -c "gpg -k" -s /bin/bash vagrant)
 
 # # Install X11 Server
 # dnf config-manager --set-enabled ol9_codeready_builder
@@ -107,11 +107,11 @@ echo vagrant | $(su -c "gpg -k" -s /bin/bash vagrant)
 # dnf install -y xorg-x11-server-Xorg.x86_64 xorg-x11-xauth.x86_64 \
 # xorg-x11-server-utils.x86_64 xorg-x11-utils.x86_64
 
-# Enable sadc collected system activity
-cp -f configs/commons/sysstat /etc/default/
-dos2unix /etc/default/sysstat
-systemctl start sysstat sysstat-collect.timer sysstat-summary.timer
-systemctl enable sysstat sysstat-collect.timer sysstat-summary.timer
+# # Enable sadc collected system activity
+# cp -f configs/commons/sysstat /etc/default/
+# dos2unix /etc/default/sysstat
+# systemctl start sysstat sysstat-collect.timer sysstat-summary.timer
+# systemctl enable sysstat sysstat-collect.timer sysstat-summary.timer
 
 # Set Default DNS Server
 
@@ -130,10 +130,9 @@ cp configs/commons/resolv.conf.manually-configured /etc
 dos2unix  /etc/resolv.conf.manually-configured
 ln -s /etc/resolv.conf.manually-configured /etc/resolv.conf
 
-
-# Set iscsid
-systemctl start iscsid.service
-systemctl enable iscsid.service
+# # Set iscsid
+# systemctl start iscsid.service
+# systemctl enable iscsid.service
 
 # # Clean updates
 # dnf clean all

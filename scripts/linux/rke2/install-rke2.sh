@@ -47,11 +47,11 @@ function install-rke2(){
     # install server node    
     if [[ "$NODE_NAME" == *"plane"* ]];then
         echo "INSTALL RKE2 AS CONTROL PLANE"
-        curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server sh -
+        #curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE=server sh -
     else
         # install server node
         echo "INSTALL RKE2 AS WORKER"
-        curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
+        #curl -sfL https://get.rke2.io | INSTALL_RKE2_TYPE="agent" sh -
     fi
 }
 
@@ -146,9 +146,9 @@ function set-tools(){
         sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" /home/vagrant/.kube/config/kubeconfig
     fi
     if [[ "$NODE_NAME" == *"plane"* ]];then
-        # Install Helm
-        echo "INSTALL HELM..."
-        curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        # # Install Helm
+        # echo "INSTALL HELM..."
+        # curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
         
         # Copy kubectl binary to the local user bin folder
         echo "COPY KUBECTL BINARY TO THE LOCAL USER BIN FOLDER"
@@ -160,17 +160,17 @@ function set-tools(){
         mv ./kubectl /usr/local/bin/kubectl
     fi
     
-    # Install kubecolor
-    echo "DOWNLOAD KUBECOLOR"
-    wget -q https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25_Linux_x86_64.tar.gz
-    echo "EXTRACT KUBECOLOR FILES"
-    tar xvfz kubecolor_0.0.25_Linux_x86_64.tar.gz
-    echo "MOVE KUBECOLOR BINARY TO THE LOCAL USER BIN FOLDER"
-    mv  kubecolor /usr/local/bin
-    echo "SET PERMISSIONS FOR KUBECOLOR"
-    chmod +x /usr/local/bin/kubecolor
-    echo "REMOVE KUBECOLOR TRASH FILES"
-    rm kubecolor_0.0.25_Linux_x86_64.tar.gz LICENSE  README.md
+    # # Install kubecolor
+    # echo "DOWNLOAD KUBECOLOR"
+    # wget -q https://github.com/hidetatz/kubecolor/releases/download/v0.0.25/kubecolor_0.0.25_Linux_x86_64.tar.gz
+    # echo "EXTRACT KUBECOLOR FILES"
+    # tar xvfz kubecolor_0.0.25_Linux_x86_64.tar.gz
+    # echo "MOVE KUBECOLOR BINARY TO THE LOCAL USER BIN FOLDER"
+    # mv  kubecolor /usr/local/bin
+    # echo "SET PERMISSIONS FOR KUBECOLOR"
+    # chmod +x /usr/local/bin/kubecolor
+    # echo "REMOVE KUBECOLOR TRASH FILES"
+    # rm kubecolor_0.0.25_Linux_x86_64.tar.gz LICENSE  README.md
     
     # Set bash session
     echo "SET .BASHRC FOR USER VAGRANT [CONFIGS/COMMONS/.BASHRC-OL9-KUBERNETES --> /HOME/VAGRANT/.BASHRC]"

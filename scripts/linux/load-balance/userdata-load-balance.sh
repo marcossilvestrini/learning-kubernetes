@@ -11,9 +11,9 @@ export LANG=C
 
 cd /home/vagrant || exit
 
-# Install Nginx
-dnf install -y nginx-mod-stream
-dnf install -y nginx
+# # Install Nginx
+# dnf install -y nginx-mod-stream
+# dnf install -y nginx
 
 # Tunning Nginx
 

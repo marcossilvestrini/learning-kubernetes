@@ -44,8 +44,8 @@ end
 # GLOBAL BOX CONFIGURATIONS 
 #BOX_OL_URL = "https://oracle.github.io/vagrant-projects/boxes"
 #BOX_OL_NAME = "oraclelinux/9"
-BOX_INFRA = "silvestrini-ol9-infra"
-BOX_LB="silvestrini-ol9-1.0.0"
+BOX_DNS = "silvestrini-ol9-dns"
+BOX_LB="silvestrini-ol9-lb"
 BOX_CP="silvestrini-ol9-rke2-cp"
 BOX_WK="silvestrini-ol9-rke2-wk"
 
@@ -101,7 +101,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # VM infra-server01 - DNS Bind, Postfix,Samba, NFS, Pure-FTP
   config.vm.define "infra-server01"  do |infra_server01|
-    infra_server01.vm.box = BOX_INFRA    
+    infra_server01.vm.box = BOX_DNS    
 
     # STORAGE    
 
