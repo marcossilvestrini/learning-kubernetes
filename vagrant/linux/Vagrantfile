@@ -49,24 +49,23 @@ BOX_LB="silvestrini-ol9-lb"
 BOX_CP="silvestrini-ol9-rke2-cp"
 BOX_WK="silvestrini-ol9-rke2-wk"
 
-
 # DEFINE CONFIGS FOR ADICTIONAL DISKS
-
-## file operations needs to be relative to this file
-VAGRANT_STORAGE = "E:/Servers/Virtualbox/Storage/infra-server01"
-
-## directory that will contain VDI files
-VAGRANT_DISKS_DIRECTORY = "disks"
 
 ## controller definition
 VAGRANT_CONTROLLER_NAME = "Virtual I/O Device SCSI controller"
 VAGRANT_CONTROLLER_TYPE = "virtio-scsi"
 
+## directory that will contain VDI files
+VAGRANT_DISKS_DIRECTORY = "disks"
+
 ## define disks
 ## The format is filename, size (GB), port (see controller docs)
 local_disks = [
-  { :filename => "disk1", :size => 200, :port => 5 }  
+  { :filename => "disk1", :size => 100, :port => 5 }  
 ]
+
+## file operations needs to be relative to this file
+VAGRANT_STORAGE = "E:/Servers/Virtualbox/Storage/infra-server01"
 
 ## SECONDARY DISK /dev/sdb
 disks_directory = File.join(VAGRANT_STORAGE, VAGRANT_DISKS_DIRECTORY)
@@ -268,16 +267,60 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   WORKERS = ["worker01","worker02","worker03"]
   M = 2
   iprange = 3
-
+  
   (0..M).each do |j|
     config.vm.define WORKERS[j] do |node|
       
       # BOX NAME
-       node.vm.box = BOX_WK
-       
+      node.vm.box = BOX_WK       
       
-      # VARIABLE HOSTNAME      
+      ## VARIABLE HOSTNAME      
       node.vm.hostname = WORKERS[j]
+
+      # STORAGE
+      
+      ## DEFINE NUMBER OF DISKS
+      disks = [
+        { :filename => "disk1", :size => 100, :port => 5 }  
+      ]
+
+      ## DEFINE PATH FOR SECONDARY DISK
+      STORAGE = "E:/Servers/Virtualbox/Storage/#{WORKERS[j]}"            
+      disks_dir = File.join(STORAGE, VAGRANT_DISKS_DIRECTORY)      
+      ## CREATE DISKS BEFORE "UP" ACTION
+      node.trigger.before :up do |trigger|
+        trigger.name = "Create disks"
+        trigger.ruby do
+          unless File.directory?(disks_dir)
+            FileUtils.mkdir_p(disks_dir)
+          end
+          disks.each do |disk|
+            disk_filename = File.join(disks_dir, "#{disk[:filename]}.vdi")
+            unless File.exist?(disk_filename)
+              puts "Creating \"#{disk[:filename]}\" disk"
+              system("vboxmanage createmedium --filename #{disk_filename} --size #{disk[:size] * 1024} --format VDI")
+            end
+          end
+        end
+      end
+      # END TRIGGER UP
+
+      ## CREATE STORAGE CONTROLLER ON FIRST RUN
+      unless File.directory?(disks_dir)
+        node.vm.provider "virtualbox" do |storage_provider|
+          storage_provider.customize ["storagectl", :id, "--name", VAGRANT_CONTROLLER_NAME, "--add", VAGRANT_CONTROLLER_TYPE, '--hostiocache', 'off']
+        end
+      end
+
+      ## attach storage devices
+      node.vm.provider "virtualbox" do |storage_provider|
+        disks.each do |disk|
+          disk_filename = File.join(disks_dir, "#{disk[:filename]}.vdi")
+          unless File.exist?(disk_filename)
+            storage_provider.customize ['storageattach', :id, '--storagectl', VAGRANT_CONTROLLER_NAME, '--port', disk[:port], '--device', 0, '--type', 'hdd', '--medium', disk_filename]
+          end
+        end
+      end
             
       # NETWORK      
       node.vm.network "public_network",nic_type: "virtio", mac: "080022f3067#{j}", ip: "192.168.0.14#{iprange}", netmask: "255.255.255.0", mode: "bridge",bridge:[
@@ -286,7 +329,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ]
       iprange += 1
 
-       #PROVIDER
+      #PROVIDER
       node.vm.provider "virtualbox" do |vb|        
         vb.name =  WORKERS[j]
         vb.memory = 8192
@@ -294,16 +337,33 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+      # node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
       
-      # INSTAL RKE2 AGENT
-      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+      # # INSTAL RKE2 AGENT
+      # node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
 
-      if WORKERS[j] == "worker03"
-        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
+      # if WORKERS[j] == "worker03"
+      #   node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
+      # end 
+      
+      # CLEANUP AFTER "DESTROY" ACTION
+      node.trigger.after :destroy do |trigger|
+        trigger.name = "Cleanup operation"
+        trigger.ruby do        
+          # the following loop is now obsolete as these files will be removed automatically as machine dependency
+          disks.each do |disk|
+            disk_filename = File.join(disks_dir, "#{disk[:filename]}.vdi")
+            if File.exist?(disk_filename)
+              puts "Deleting \"#{disk[:filename]}\" disk"
+              system("vboxmanage closemedium disk #{disk_filename} --delete")
+            end
+          end
+          if File.exist?(disks_dir)
+            FileUtils.rmdir(disks_dir)
+          end
         end
-      
-    end    
-
+      end
+      # END TRIGGER DESTROY
+    end
   end
 end

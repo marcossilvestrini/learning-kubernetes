@@ -37,12 +37,7 @@ function init() {
         exit 1
     fi
 
-    echo "INSTALL KUBECTL..."
-    #curl -LO https://storage.googleapis.com/kubernetes-release/release/"$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)"/bin/linux/amd64/kubectl
-    #chmod +x ./kubectl
-    #mv ./kubectl /usr/local/bin/kubectl
-    curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-    install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+    echo "SET PATH FOR KUBECTL..."        
     export PATH=$PATH:/usr/local/bin
     # Get token
     if [[ "$NODE_NAME" == *"worker"* ]]; then
