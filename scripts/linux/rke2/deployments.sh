@@ -90,11 +90,13 @@ function deployments() {
         # Deploy longhorn
 
         ## install helm chart longhorn
-        helm install longhorn longhorn/longhorn \
+        helm repo add longhorn https://charts.longhorn.io
+        helm repo update 
+        helm upgrade --install longhorn longhorn/longhorn \
             --namespace longhorn-system \
             --create-namespace \
             --values configs/longhorn/values.yaml
-
+        
         ## create secret
         kubectl -n longhorn-system create secret generic basic-auth --from-file=auth
 
