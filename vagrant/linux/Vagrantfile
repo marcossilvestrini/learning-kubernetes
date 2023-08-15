@@ -337,14 +337,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-      # node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
       
-      # # INSTAL RKE2 AGENT
-      # node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+      # INSTAL RKE2 AGENT
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
 
-      # if WORKERS[j] == "worker03"
-      #   node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
-      # end 
+      if WORKERS[j] == "worker03"
+        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
+      end 
       
       # CLEANUP AFTER "DESTROY" ACTION
       node.trigger.after :destroy do |trigger|

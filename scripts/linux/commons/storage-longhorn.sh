@@ -12,14 +12,7 @@ export LANG=C
 
 cd /home/vagrant || exit
 
-echo "SET NFS FOR PV PROVISION..."
-
-# Install packages
-dnf install nfs-utils
-
-# Enable NFS services
-systemctl enable rpcbind
-systemctl enable nfs-server
+echo "SET STORAGE FOR LONGHORN..."
 
 # Set Storage (device /dev/sdX)
 CHECK_SDA=$(lsblk |grep  sda1)
