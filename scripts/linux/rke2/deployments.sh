@@ -161,18 +161,20 @@ function deployments() {
 
         ### Create the example 1
         sleep 60
-        argocd --insecure app create guestbook \
+        argocd app create guestbook \
             --repo https://github.com/argoproj/argocd-example-apps.git \
             --path guestbook \
             --dest-server https://kubernetes.default.svc \
-            --dest-namespace silvestrini
+            --dest-namespace silvestrini \
+            --insecure
 
         ### Create the example 2 - Helm Charts
         argocd app create helm-guestbook \
             --repo https://github.com/argoproj/argocd-example-apps.git \
             --path helm-guestbook \
             --dest-server https://kubernetes.default.svc \
-            --dest-namespace silvestrini
+            --dest-namespace silvestrini \
+            --insecure
 
         ### Create the example 3 - My app - app-silvestrini
         argocd app create app-silvestrini \
@@ -182,16 +184,16 @@ function deployments() {
             --dest-namespace silvestrini \
             --insecure
 
-        # ### Create the example 3 - kube-prometheus stack
-        # helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-        # helm repo update
-        # helm install kube-prometheus prometheus-community/kube-prometheus-stack
-        argocd app create kube-prometheus \
-            --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-            --path apps/kube-prometheus \
-            --dest-server https://kubernetes.default.svc \
-            --dest-namespace kube-prometheus \
-            --insecure
+        ### Create the example 3 - kube-prometheus stack
+        #helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        #helm repo update
+        #helm install kube-prometheus prometheus-community/kube-prometheus-stack
+        # argocd app create kube-prometheus \
+        #     --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        #     --path apps/kube-prometheus \
+        #     --dest-server https://kubernetes.default.svc \
+        #     --dest-namespace kube-prometheus \
+        #     --insecure
         
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"

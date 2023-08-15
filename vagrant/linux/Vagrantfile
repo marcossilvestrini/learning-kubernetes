@@ -167,8 +167,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SET ISC DHCP
     #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
-    # infra-server01URE NFS
-    infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage.sh"
+    # CONFIGURE STORAGE NFS
+    infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage-nfs.sh"
 
     # cleanup after "destroy" action
     infra_server01.trigger.after :destroy do |trigger|
@@ -339,6 +339,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
       
+      # CONFIGURE STORAGE
+      node.vm.provision "shell", name: "[SCRIPT STORAGE-LONGHORN.SH]", path: "../../scripts/linux/commons/storage-longhorn.sh"
+
       # INSTAL RKE2 AGENT
       node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
 
