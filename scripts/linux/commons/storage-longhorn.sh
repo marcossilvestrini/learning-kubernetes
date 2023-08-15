@@ -34,7 +34,7 @@ vgcreate vg_k8s "$DISK"
 lvcreate -l +100%FREE -n lv_k8s vg_k8s
 
 # format lv with filesystem xfs
-mkfs.ext4 -f /dev/mapper/vg_k8s-lv_k8s
+mkfs.ext4 -L k8s-storage /dev/mapper/vg_k8s-lv_k8s
 
 # Mount Share in /etc/fstab
 #-rw-r--r-- 1 root root 652 Mar 24 10:25 /etc/fstab
@@ -76,3 +76,6 @@ mkdir -p /var/k8s/storage
 chown -R vagrant:vagrant /var/k8s/storage
 umount /var/k8s/storage 2>&1
 mount /var/k8s/storage
+
+# Create auth for secret \ ingress for access UI
+USER=longhorn; PASSWORD=longhorn@123456; echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" >> security/auth

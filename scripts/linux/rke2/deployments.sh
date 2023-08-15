@@ -87,8 +87,23 @@ function deployments() {
             echo "Error!!! MetalLB deployment failed!!!"
         fi
 
+        # Deploy longhorn
+
+        ## install helm chart longhorn
+        helm install longhorn longhorn/longhorn \
+            --namespace longhorn-system \
+            --create-namespace \
+            --values configs/longhorn/values.yaml
+
+        ## create secret
+        kubectl -n longhorn-system create secret generic basic-auth --from-file=auth
+
+        ## create ingress
+        kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
+
         # Deploy rancher
         echo "DEPLOY RANCHER STACK"
+
         ## Add the Rancher Stable Helm Repo
         helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
 

@@ -20,6 +20,3 @@ home_vagrant_scripts /home/vagrant/scripts vboxsf uid=1000,gid=1000,_netdev 0 0
 home_vagrant_kubernetes /home/vagrant/kubernetes vboxsf uid=1000,gid=1000,_netdev 0 0
 home_vagrant_apps /home/vagrant/apps vboxsf uid=1000,gid=1000,_netdev 0 0
 #VAGRANT-END
-#K8S STORAGE -BEGIN
-/dev/mapper/vg_k8s-lv_k8s    /var/k8s/storage ext4     defaults        0 0
-#K8S STORAGE -END
