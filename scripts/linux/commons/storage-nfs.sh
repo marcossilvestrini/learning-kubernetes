@@ -48,13 +48,13 @@ mkfs.xfs -f /dev/mapper/vg_k8s-lv_k8s
 VM=$(hostname)
 
 ## Copy original template for fstab
-if [ ! -f "configs/fstab_${VM}_backup" ]; then
-    cp /etc/fstab "configs/fstab_${VM}_backup"
+if [ ! -f "configs/commons/fstab_${VM}_backup" ]; then
+    cp /etc/fstab "configs/commons/fstab_${VM}_backup"
 fi
 
 ## Check fstab uuid
 UUID_SERVER=$(echo $(cat /etc/fstab | grep "UUID=" | head -n 1) | cut -d' ' -f1)
-UUID_LOCAL=$(echo $(cat "configs/fstab_${VM}_backup" | grep "UUID=" | head -n 1) | cut -d' ' -f1)
+UUID_LOCAL=$(echo $(cat "configs/commons/fstab_${VM}_backup" | grep "UUID=" | head -n 1) | cut -d' ' -f1)
 
 if [ "$UUID_SERVER" = "$UUID_LOCAL" ]; then
     echo "UUIDS its ok for deploy"
@@ -63,17 +63,17 @@ if [ "$UUID_SERVER" = "$UUID_LOCAL" ]; then
 else
     echo "ERROR!!! UUIDS not equals."
     echo "We will Copy a nem /etc/fstab for deploy,relax guy!!!"
-    rm "configs/fstab_${VM}_backup"
-    cp /etc/fstab "configs/fstab_${VM}_backup"
+    rm "configs/commons/fstab_${VM}_backup"
+    cp /etc/fstab "configs/commons/fstab_${VM}_backup"
 fi
 
 ## Generate fstab with samba\cifs shares
-if [ -f "configs/fstab"  ];then
-    rm "configs/fstab"
+if [ -f "configs/commons/fstab"  ];then
+    rm "configs/commons/fstab"
 fi
-cp "configs/fstab_${VM}_backup" configs/fstab
-cat configs/commons/template-fstab >> configs/fstab
-cp configs/fstab /etc/fstab
+cp "configs/commons/fstab_${VM}_backup" configs/commons/fstab
+cat configs/commons/commons/template-fstab >> configs/commons/fstab
+cp configs/commons/fstab /etc/fstab
 dos2unix /etc/fstab
 chmod 644 /etc/fstab  
 systemctl daemon-reload
@@ -85,7 +85,7 @@ umount /var/nfs 2>&1
 mount /var/nfs
 
 # Configure NFS
-cp configs/nfs/exports /etc
+cp configs/commons/nfs/exports /etc
 dos2unix /etc/exports
 chmod 644 /etc/exports
 systemctl start rpcbind
