@@ -76,6 +76,3 @@ mkdir -p /var/k8s/storage
 chown -R vagrant:vagrant /var/k8s/storage
 umount /var/k8s/storage 2>&1
 mount /var/k8s/storage
-
-# Create auth for secret \ ingress for access UI
-USER=longhorn; PASSWORD=longhorn@123456; echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" > security/auth

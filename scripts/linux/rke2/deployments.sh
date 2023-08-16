@@ -88,6 +88,8 @@ function deployments() {
         fi
 
         # Deploy longhorn
+        # Create auth for secret \ ingress for access UI
+        USER=longhorn; PASSWORD=longhorn@123456; echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" > security/auth
 
         ## install helm chart longhorn
         helm repo add longhorn https://charts.longhorn.io
@@ -98,7 +100,7 @@ function deployments() {
             --values configs/longhorn/values.yaml
         
         ## create secret
-        kubectl -n longhorn-system create secret generic basic-auth --from-file=auth
+        kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
         ## create ingress
         kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml

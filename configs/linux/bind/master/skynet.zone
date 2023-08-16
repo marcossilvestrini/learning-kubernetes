@@ -28,6 +28,7 @@ ftp                         CNAME   infra-server01  ;ftp
 rancher                     CNAME   load-balance    ;rancher endpoint
 argocd                      CNAME   load-balance    ;argocd endpoint
 gitlab                      CNAME   load-balance    ;gitlab endpoint
+longhorn                    CNAME   load-balance    ;longhorn endpoint
 app-silvestrini             CNAME   load-balance    ;app-silvestrini load balance
 
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
