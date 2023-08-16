@@ -31,7 +31,7 @@ gitlab                      CNAME   load-balance    ;gitlab endpoint
 longhorn                    CNAME   load-balance    ;longhorn endpoint
 alertmanager                CNAME   load-balance    ;alertmanager endpoint
 prometheus                  CNAME   load-balance    ;prometheus endpoint
-grafana                     CNAME   load-balance    ;grafana endpoint
+grafana                     CNAME   load-balance    ;grafana endpoint:wq
 app-silvestrini             CNAME   load-balance    ;app-silvestrini load balance
 
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
