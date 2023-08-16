@@ -10,7 +10,7 @@ kube-prometheus-stack:
         - secretName: alertmanager-tls
           hosts:
           - alertmanager.skynet.com.br
-    alertmanagerspec:
+    alertmanagerspec:    
       volumeClaimTemplate:
         spec:
           storageClassName: longhorn
@@ -25,9 +25,15 @@ kube-prometheus-stack:
           hosts:
           - prometheus.skynet.com.br
     prometheusspec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: longhorn
+      storageSpec:
+        volumeClaimTemplate:
+          spec:
+            storageClassName: longhorn
+            accessModes: ["ReadWriteOnce"]
+            resources:
+                requests:
+                  storage: 10Gi
+
 
   grafana:
     ingress:
