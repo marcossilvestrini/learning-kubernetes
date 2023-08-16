@@ -25,15 +25,9 @@ kube-prometheus-stack:
           hosts:
           - prometheus.skynet.com.br
     prometheusspec:
-      storageSpec:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: longhorn
-            accessModes: ["ReadWriteOnce"]
-            resources:
-                requests:
-                  storage: 10Gi
-
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn          
 
   grafana:
     ingress:
