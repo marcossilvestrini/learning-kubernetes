@@ -117,4 +117,7 @@ kubectl port-forward svc/argocd-server -n argocd 8080:443 --address='0.0.0.0'
 ```sh
 # get logs of all pods cilium
 stern -n kube-system cilium --max-log-requests 100 -t --since 10m 
+
+# debug tree process
+strace -cf -p  <PID>
 ```

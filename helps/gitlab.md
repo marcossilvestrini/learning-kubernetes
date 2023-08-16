@@ -26,9 +26,9 @@ helm upgrade --install gitlab gitlab/gitlab \
   --set certmanager.installCRDs=false \
   --namespace gitlab \
   --timeout 600s \
-  --set global.hosts.domain=gitlab.local \
+  --set global.hosts.domain=gitlab.skynet.com.br \
   --set global.edition=ce \
-  --set global.hosts.externalIP=209.127.140.10 \
+  --set global.hosts.externalIP=192.168.0.131 \
   --set certmanager-issuer.email=marcos.silvestrini@gmail.com \
   --set postgresql.image.tag=13.6.0 \
   --set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
