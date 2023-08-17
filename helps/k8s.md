@@ -1,24 +1,23 @@
 # Helps Kubernetes
 
-## Install RKE2
+## RKE2
+
+### Install RKE2
 
 <https://ranchergovernment.com/blog/article-simple-rke2-longhorn-and-rancher-install>
 
-## Install RKE2 HA with DNS Round Robin
+### Install RKE2 HA with DNS Round Robin
 
 <https://medium.com/@osmarrleao/deploy-rancher-on-rke-cluster-e7415c199ef2>
 <https://docs.expertflow.com/cx/rke2-deployment-in-high-availability-with-dns-195855071.html?selectedPageVersions=18&selectedPageVersions=19>
 
-## About RKE2 load balance
+### About RKE2 load balance
 
 <https://www.mattgerega.com/2023/02/15/automated-rke2-cluster-management/>
 
-## Install kubectl autocomplete windows
+### Fix RKE2 error get ip of not mapped in dns
 
-kubectl completion powershell | Out-String | Invoke-Expression
-
-## Fix RKE2 error get ip of not mapped in dns
-
+```sh
 systemctl stop rke2-server.service
 systemctl stop NetworkManager
 ip route add default  via 192.168.0.1 dev eth1
@@ -27,16 +26,28 @@ ip route add default  via 192.168.0.1 dev eth1
 rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml
 systemctl start rke2-server.service
 set linux for disable
+``````
 
-## Fix error server is not ready: Node password rejected
+### Fix error server is not ready: Node password rejected
 
 Erro:\
 Jul 17 09:09:33 worker02 rke2[36806]: time="2023-07-17T09:09:33-03:00" level=info msg="Waiting to retrieve agent configuration; server is not ready:\
 Node password rejected, duplicate hostname or contents of '/etc/rancher/node/password' may not match server node-passwd entry,\
 try enabling a unique node name with the --with-node-id flag"
 
-Solution:\
+Solution:
+
+```sh
 kubectl -n kube-system delete secrets <agent-node-name>.node-password.rke2
+``````
+
+## Kubectl
+
+## Install kubectl autocomplete windows
+
+```sh
+kubectl completion powershell | Out-String | Invoke-Expression
+``````
 
 ## HAProxy
 
@@ -44,8 +55,6 @@ kubectl -n kube-system delete secrets <agent-node-name>.node-password.rke2
 
 Set ips for RKe2
 https://github.com/rancher/rke2/issues/910
-
-
 
 ## Get node internal ip
 
@@ -55,22 +64,10 @@ kubectl get nodes -o wide | awk -v OFS='\t\t' '{print $1, $6, $7}'
 
 ```sh
 # Run on Master
-# kubectl cordon <node-name>
-# kubectl drain <node-name> --force --ignore-daemonsets  --delete-emptydir-data
-# kubectl delete node <node-name>
+kubectl cordon <node-name>
+kubectl drain <node-name> --force --ignore-daemonsets  --delete-emptydir-data
+kubectl delete node <node-name>
 ```
-
-## Deploy Full App
-
-* build a docker image for app
-* push image to register
-* create a storage class
-* create pv
-* create pvc
-* create service
-* create pods with deployment
-  * create containers with your images
-  * create probes for check health containers
 
 ## Access Kubernetes Dashboard
 
@@ -128,6 +125,36 @@ stern -n kube-system cilium --max-log-requests 100 -t --since 10m
 strace -cf -p  <PID>
 ```
 
-## Check status deployments\pods
+## Check status deployments\pods as ok
 
 kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
+
+## etcd 
+
+<https://etcd.io/>
+
+### etcd defrag
+
+```sh
+kubectl exec $(kubectl get pods --selector=component=etcd -A -o name | head -n 1) \
+-n kube-system \
+-- etcdctl defrag \
+--cluster \
+--cacert /var/lib/rancher/rke2/server/tls/etcd/server-ca.crt \
+--key /var/lib/rancher/rke2/server/tls/etcd/server-client.key \
+--cert /var/lib/rancher/rke2/server/tls/etcd/server-client.crt
+```
+
+## Deployments
+
+## Deploy Full App
+
+* build a docker image for app
+* push image to register
+* create a storage class
+* create pv
+* create pvc
+* create service
+* create pods with deployment
+  * create containers with your images
+  * create probes for check health containers

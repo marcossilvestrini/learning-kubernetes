@@ -13,7 +13,9 @@
 
 # LEARNING KUBERNETES
 
-![kubernetes](images/kubernetes.jpg)
+![kubernetes Arch](images/kubernetes.jpg)
+
+![Kubernetes Cluster](/images/k8s-cluster.png)
 
 <p align="center">
 <strong>Explore the docs »</strong></a><br />
