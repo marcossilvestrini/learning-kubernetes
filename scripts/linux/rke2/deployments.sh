@@ -250,7 +250,7 @@ function deployments() {
         #      --dest-server https://kubernetes.default.svc \
         #      --dest-namespace kube-prometheus \
         #      --insecure
-
+        #kubectl replace -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
         argocd --insecure app sync app-silvestrini guestbook helm-guestbook
