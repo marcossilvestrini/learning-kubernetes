@@ -36,7 +36,7 @@ spec:
             hostPort: 9001
         volumeDevices:
         - devicePath: /var/lib/longhorn/app-silvestrini
-          name: pvc-app-silvestrini        
+          name: block-app-silvestrini        
         startupProbe: # Onde definimos a nossa probe de inicialização
           httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
             path: / # O caminho que iremos testar
