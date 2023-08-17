@@ -88,6 +88,8 @@ function deployments() {
         fi
 
         # Deploy longhorn
+        # Create auth for secret \ ingress for access UI
+        USER=longhorn; PASSWORD=longhorn@123456; echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" > security/auth
 
         ## install helm chart longhorn
         helm repo add longhorn https://charts.longhorn.io
@@ -98,7 +100,7 @@ function deployments() {
             --values configs/longhorn/values.yaml
         
         ## create secret
-        kubectl -n longhorn-system create secret generic basic-auth --from-file=auth
+        kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
         ## create ingress
         kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
@@ -202,15 +204,17 @@ function deployments() {
             --insecure
 
         ### Create the example 3 - kube-prometheus stack
+        kubectl create ns kube-prometheus
+        kubectl config set-context --current --namespace=kube-prometheus
         #helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
         #helm repo update
         #helm install kube-prometheus prometheus-community/kube-prometheus-stack
         # argocd app create kube-prometheus \
-        #     --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-        #     --path apps/kube-prometheus \
-        #     --dest-server https://kubernetes.default.svc \
-        #     --dest-namespace kube-prometheus \
-        #     --insecure
+        #      --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        #      --path apps/kube-prometheus \
+        #      --dest-server https://kubernetes.default.svc \
+        #      --dest-namespace kube-prometheus \
+        #      --insecure
         
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"

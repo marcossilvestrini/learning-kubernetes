@@ -4,6 +4,7 @@
 
 <https://github.com/prometheus-operator/kube-prometheus>
 <https://artifacthub.io/packages/helm/prometheus-community/kube-prometheus-stack>
+<https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml>
 
 ## Deploy Prometheus monitoring stack to Kubernetes with a single Helm Chart
 
@@ -88,3 +89,7 @@ helm install node-exporter prometheus-community/prometheus-node-exporter
 ## Access node-exporter
 
 kubectl port-forward --namespace silvestrini $POD_NAME 9100
+
+## Examples Deployment
+
+https://support.tools/post/how-to-install-kube-prometheus-stack/<>>
