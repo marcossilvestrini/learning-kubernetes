@@ -204,8 +204,8 @@ function deployments() {
             --insecure
 
         ### Create the example 3 - kube-prometheus stack
-        kubectl create ns kube-prometheus
-        kubectl config set-context --current --namespace=kube-prometheus
+        #kubectl create ns kube-prometheus
+        #kubectl config set-context --current --namespace=kube-prometheus
         #helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
         #helm repo update
         #helm install kube-prometheus prometheus-community/kube-prometheus-stack
