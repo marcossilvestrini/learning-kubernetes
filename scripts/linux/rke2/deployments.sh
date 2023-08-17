@@ -37,10 +37,8 @@ function init() {
     fi
 }
 
-# Functio for deployments 
-function deployments() {
+function cert-manager() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-
         # Deploy cert-manager
         echo "DEPLOY CERT-MANAGER STACK"
         ## Add the Helm repository
@@ -55,72 +53,102 @@ function deployments() {
             --namespace cert-manager \
             --create-namespace \
             --version v1.12.0 \
-            --set installCRDs=true
+            --set installCRDs=true        
+        kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=300s
+    fi
+}
 
-        # Deploy metallb        
+function metalLB() {
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
+        echo "DEPLOY METALLB STACK"
+        # Deploy metallb
         kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml
-        ok=0
-        time_out=0
+        #ok=0
+        #time_out=0
         echo "Check MetalLB deployment..."
-        while [[ $ok == 0 ]]; do            
-            pods_lb=$(kubectl -n metallb-system get pod | grep speaker | awk '{ print $3}')
-            for item in "${pods_lb[@]}"; do
-                if [[ "$item" != *"Running"* ]]; then
-                    ok=0
-                    break
-                else
-                    ok=1
-                fi
-            done
-            ((time_out++))
-            sleep 1s
-            if [[ $time_out -gt 100 ]]; then
-                break
-            fi
-        done
+        kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=300s
+        # while [[ $ok == 0 ]]; do
+        #     pods_lb=$(kubectl -n metallb-system get pod | grep speaker | awk '{ print $3}')
+        #     for item in "${pods_lb[@]}"; do
+        #         if [[ "$item" != *"Running"* ]]; then
+        #             ok=0
+        #             break
+        #         else
+        #             ok=1
+        #         fi
+        #     done
+        #     ((time_out++))
+        #     sleep 1s
+        #     if [[ $time_out -gt 100 ]]; then
+        #         break
+        #     fi
+        # done
         echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
-        sleep 90
-        if [[ $ok == 1 ]]; then
-            kubectl -n metallb-system apply -f configs/rke2/metallb.yaml
-            echo "MetalLB deployment has complete with success!!!"
-        else
-            echo "Error!!! MetalLB deployment failed!!!"
-        fi
+        sleep 30
+        kubectl -n metallb-system apply -f configs/rke2/metallb.yaml
+        echo "MetalLB deployment has complete with success!!!"
+        # if [[ $ok == 1 ]]; then
+        #     kubectl -n metallb-system apply -f configs/rke2/metallb.yaml
+        #     echo "MetalLB deployment has complete with success!!!"
+        # else
+        #     echo "Error!!! MetalLB deployment failed!!!"
+        # fi
+    fi
+}
 
+function longhorn(){
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy longhorn
-        # Create auth for secret \ ingress for access UI
-        USER=longhorn; PASSWORD=longhorn@123456; echo "${USER}:$(openssl passwd -stdin -apr1 <<< ${PASSWORD})" > security/auth
+        echo "DEPLOY LONGHORN STACK"
+        ## Create auth for secret \ ingress for access UI
+        USER=longhorn
+        PASSWORD=longhorn@123456
+        echo "${USER}:$(openssl passwd -stdin -apr1 <<<${PASSWORD})" >security/auth
 
         ## install helm chart longhorn
         helm repo add longhorn https://charts.longhorn.io
-        helm repo update 
+        helm repo update
         helm upgrade --install longhorn longhorn/longhorn \
             --namespace longhorn-system \
             --create-namespace \
             --values configs/longhorn/values.yaml
+        sleep 10s
+        kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
+         # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
         
         ## create secret
-        kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
+        #kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
         ## create ingress
         kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
+    fi
+}
 
+function rancher(){
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy rancher
         echo "DEPLOY RANCHER STACK"
 
         ## Add the Rancher Stable Helm Repo
         helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+        helm repo update
 
         ## Create a namespace for Rancher
         kubectl create namespace cattle-system
 
         ## Install Rancher using Helm
-        helm install rancher rancher-stable/rancher \
+        helm upgrade -i rancher rancher-stable/rancher \
             --namespace cattle-system \
             --set hostname=rancher.skynet.com.br \
             --set bootstrapPassword=Rancher@123456
+        kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=300s
+    fi
+    
+}
 
-        # Deploy ArgoCD
+function argocd(){
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
+         # Deploy ArgoCD
         echo "DEPLOY ARGOCD STACK"
 
         ## Create a namespace
@@ -130,6 +158,7 @@ function deployments() {
         ## Deployment
         echo "DEPLOY ARGOCD PODS"
         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+        kubectl wait --for condition=containersready -n argocd pod --all --timeout=300s
 
         ## Ingress
         echo "CREATE ARGOCD INGRESS"
@@ -142,6 +171,12 @@ function deployments() {
             install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
             rm argocd-linux-amd64
         fi
+    fi
+}
+
+# Functio for deployments
+function deployments() {
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then               
         ## Login in server
         echo "LOGIN IN ARGOCD"
         STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
@@ -204,8 +239,8 @@ function deployments() {
             --insecure
 
         ### Create the example 3 - kube-prometheus stack
-        kubectl create ns kube-prometheus
-        kubectl config set-context --current --namespace=kube-prometheus
+        #kubectl create ns kube-prometheus
+        #kubectl config set-context --current --namespace=kube-prometheus
         #helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
         #helm repo update
         #helm install kube-prometheus prometheus-community/kube-prometheus-stack
@@ -215,7 +250,7 @@ function deployments() {
         #      --dest-server https://kubernetes.default.svc \
         #      --dest-namespace kube-prometheus \
         #      --insecure
-        
+
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
         argocd --insecure app sync app-silvestrini guestbook helm-guestbook
@@ -231,4 +266,9 @@ function deployments() {
 # Main
 source .bashrc
 init
+#cert-manager
+#metalLB
+#longhorn
+#rancher
+#argocd
 deployments
