@@ -1,5 +1,18 @@
 # Helps Kubernetes
 
+## Install RKE2
+
+<https://ranchergovernment.com/blog/article-simple-rke2-longhorn-and-rancher-install>
+
+## Install RKE2 HA with DNS Round Robin
+
+<https://medium.com/@osmarrleao/deploy-rancher-on-rke-cluster-e7415c199ef2>
+<https://docs.expertflow.com/cx/rke2-deployment-in-high-availability-with-dns-195855071.html?selectedPageVersions=18&selectedPageVersions=19>
+
+## About RKE2 load balance
+
+<https://www.mattgerega.com/2023/02/15/automated-rke2-cluster-management/>
+
 ## Install kubectl autocomplete windows
 
 kubectl completion powershell | Out-String | Invoke-Expression
@@ -32,14 +45,7 @@ kubectl -n kube-system delete secrets <agent-node-name>.node-password.rke2
 Set ips for RKe2
 https://github.com/rancher/rke2/issues/910
 
-## Install RKE2 HA with DNS Round Robin
 
-<https://medium.com/@osmarrleao/deploy-rancher-on-rke-cluster-e7415c199ef2>
-<https://docs.expertflow.com/cx/rke2-deployment-in-high-availability-with-dns-195855071.html?selectedPageVersions=18&selectedPageVersions=19>
-
-## About RKE2 load balance
-
-<https://www.mattgerega.com/2023/02/15/automated-rke2-cluster-management/>
 
 ## Get node internal ip
 
@@ -121,3 +127,7 @@ stern -n kube-system cilium --max-log-requests 100 -t --since 10m
 # debug tree process
 strace -cf -p  <PID>
 ```
+
+## Check status deployments\pods
+
+kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
