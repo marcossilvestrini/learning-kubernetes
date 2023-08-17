@@ -222,7 +222,7 @@ install-rke2
 set-network
 set-rke2
 set-tools
-set-storage
+#set-storage
 
 # Check the health of the deployment by running a status command:
 #kubectl get componentstatuses
