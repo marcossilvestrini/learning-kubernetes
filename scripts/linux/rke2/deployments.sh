@@ -57,6 +57,7 @@ function cert-manager() {
     fi
 }
 
+
 function metalLB() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         echo "DEPLOY METALLB STACK"
@@ -106,31 +107,21 @@ function longhorn(){
         ## install helm chart longhorn
         helm repo add longhorn https://charts.longhorn.io
         helm repo update
-        helm upgrade -i longhorn longhorn/longhorn \
-        -n longhorn-system \
-        --create-namespace \
-        --set ingress.enabled=true \
-        --set ingress.host=longhorn.skynet.com.br \
-        --set default.storageMinimalAvailablePercentage=25 \
-        --set default.defaultDataPath=/var/k8s/storage \
-        --set default.storageOverProvisioningPercentage=200  > /dev/null 2>&1
+        helm upgrade --install longhorn longhorn/longhorn \
+            --namespace longhorn-system \
+            --create-namespace \
+            --values configs/longhorn/values.yaml
         sleep 10s
         kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
          # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
         
-        # helm upgrade --install longhorn longhorn/longhorn \
-        #     --namespace longhorn-system \
-        #     --create-namespace \
-        #     --values configs/longhorn/values.yaml
-
         ## create secret
         #kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
         ## create ingress
-        # kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
+        kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
     fi
 }
-
 
 function rancher(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
