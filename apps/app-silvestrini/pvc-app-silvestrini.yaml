@@ -9,7 +9,7 @@ spec: # especificação do PVC
   resources: # recursos do PVC
     requests: # solicitação de recursos
       storage: 1Gi # tamanho do volume que ele vai solicitar
-  storageClassName: longhorn-dynamic # nome da classe de armazenamento que será utilizada
+  storageClassName: longhorn # nome da classe de armazenamento que será utilizada
   selector: # seletor de labels
     matchLabels: # labels que serão utilizadas para selecionar o PV
-      storage: longhorn-dynamic # label que será utilizada para selecionar o PV
+      storage: longhorn # label que será utilizada para selecionar o PV

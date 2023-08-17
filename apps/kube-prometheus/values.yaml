@@ -13,7 +13,7 @@ kube-prometheus-stack:
     alertmanagerspec:    
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn-dynamic
+          storageClassName: longhorn
     
   prometheus:  
     ingress:
@@ -27,7 +27,7 @@ kube-prometheus-stack:
     prometheusspec:
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn-dynamic          
+          storageClassName: longhorn          
 
   grafana:
     ingress:
@@ -41,4 +41,4 @@ kube-prometheus-stack:
     grafanaspec:
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn-dynamic
+          storageClassName: longhorn

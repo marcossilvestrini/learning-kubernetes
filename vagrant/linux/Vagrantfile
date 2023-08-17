@@ -168,7 +168,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
     # CONFIGURE STORAGE NFS
-    infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage-nfs.sh"
+    #infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage-nfs.sh"
 
     # cleanup after "destroy" action
     infra_server01.trigger.after :destroy do |trigger|
