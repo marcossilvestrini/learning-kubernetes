@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: kube-prometheus-rancher
-  namespace: argocd-central
+  namespace: kube-prometheus
 spec:
   generators:
   - clusters:
@@ -28,7 +28,7 @@ spec:
             - values.yaml
             - '../{{name}}/values.yaml' # procura values.yaml customizados
         repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
-        path: 'kube-prometheus/applicationset/default'
+        path: 'apps/kube-prometheus/applicationset/default'
         targetRevision: HEAD
       destination:
         server: '{{server}}'

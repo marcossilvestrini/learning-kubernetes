@@ -1,9 +1,8 @@
 kind: StorageClass
 apiVersion: storage.k8s.io/v1
 metadata:
-  name: longhorn-dynamic
-#provisioner: driver.longhorn.io
-provisioner: flex-volume-longhorn
+  name: longhorn
+provisioner: driver.longhorn.io
 allowVolumeExpansion: true
 reclaimPolicy: Delete
 volumeBindingMode: Immediate
