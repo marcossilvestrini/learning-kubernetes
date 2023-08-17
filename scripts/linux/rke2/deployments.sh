@@ -53,10 +53,10 @@ function cert-manager() {
             --namespace cert-manager \
             --create-namespace \
             --version v1.12.0 \
-            --set installCRDs=true
+            --set installCRDs=true        
+        kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=300s
     fi
 }
-
 
 function metalLB() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
@@ -66,7 +66,7 @@ function metalLB() {
         #ok=0
         #time_out=0
         echo "Check MetalLB deployment..."
-        kubectl wait --for condition=containersready -n metallb-system pod --all
+        kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=300s
         # while [[ $ok == 0 ]]; do
         #     pods_lb=$(kubectl -n metallb-system get pod | grep speaker | awk '{ print $3}')
         #     for item in "${pods_lb[@]}"; do
@@ -98,8 +98,9 @@ function metalLB() {
 
 function longhorn(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-         # Deploy longhorn
-        # Create auth for secret \ ingress for access UI
+        # Deploy longhorn
+        echo "DEPLOY LONGHORN STACK"
+        ## Create auth for secret \ ingress for access UI
         USER=longhorn
         PASSWORD=longhorn@123456
         echo "${USER}:$(openssl passwd -stdin -apr1 <<<${PASSWORD})" >security/auth
@@ -130,16 +131,19 @@ function rancher(){
 
         ## Add the Rancher Stable Helm Repo
         helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+        helm repo update
 
         ## Create a namespace for Rancher
         kubectl create namespace cattle-system
 
         ## Install Rancher using Helm
-        helm install rancher rancher-stable/rancher \
+        helm upgrade -i rancher rancher-stable/rancher \
             --namespace cattle-system \
             --set hostname=rancher.skynet.com.br \
             --set bootstrapPassword=Rancher@123456
+        kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=300s
     fi
+    
 }
 
 function argocd(){
@@ -154,6 +158,7 @@ function argocd(){
         ## Deployment
         echo "DEPLOY ARGOCD PODS"
         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+        kubectl wait --for condition=containersready -n argocd pod --all --timeout=300s
 
         ## Ingress
         echo "CREATE ARGOCD INGRESS"
@@ -261,6 +266,9 @@ function deployments() {
 # Main
 source .bashrc
 init
-metalLB
-longhorn
-#deployments
+#cert-manager
+#metalLB
+#longhorn
+#rancher
+#argocd
+deployments
