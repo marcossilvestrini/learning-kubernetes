@@ -5,7 +5,7 @@ metadata: # metadados do recurso
   name: pvc-app-silvestrini # nome do PVC
   namespace: silvestrini
   labels:
-    app-silvestrini
+    app: app-silvestrini
 spec: # especificação do PVC
   accessModes: # modo de acesso ao volume
     - ReadWriteOnce # modo de acesso RWO, ou seja, somente leitura e escrita por um nó
