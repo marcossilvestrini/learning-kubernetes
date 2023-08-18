@@ -53,7 +53,8 @@ function cert-manager() {
             --namespace cert-manager \
             --create-namespace \
             --version v1.12.0 \
-            --set installCRDs=true        
+            --set installCRDs=true       
+        sleep 10s 
         kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=300s
     fi
 }
@@ -66,6 +67,7 @@ function metalLB() {
         #ok=0
         #time_out=0
         echo "Check MetalLB deployment..."
+        sleep 10s
         kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=300s
         # while [[ $ok == 0 ]]; do
         #     pods_lb=$(kubectl -n metallb-system get pod | grep speaker | awk '{ print $3}')
@@ -141,7 +143,8 @@ function rancher(){
             --namespace cattle-system \
             --set hostname=rancher.skynet.com.br \
             --set bootstrapPassword=Rancher@123456
-        kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=300s
+        sleep 10s        
+        #kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=60s
     fi
     
 }
@@ -158,6 +161,7 @@ function argocd(){
         ## Deployment
         echo "DEPLOY ARGOCD PODS"
         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+        sleep 10s
         kubectl wait --for condition=containersready -n argocd pod --all --timeout=300s
 
         ## Ingress
@@ -239,11 +243,11 @@ function deployments() {
             --insecure
 
         ### Create the example 3 - kube-prometheus stack
-        #kubectl create ns kube-prometheus
+        kubectl create ns kube-prometheus
         #kubectl config set-context --current --namespace=kube-prometheus
-        #helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-        #helm repo update
-        #helm install kube-prometheus prometheus-community/kube-prometheus-stack
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        helm repo update
+        helm upgrade -i -n kube-prometheus kube-prometheus prometheus-community/kube-prometheus-stack
         # argocd app create kube-prometheus \
         #      --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         #      --path apps/kube-prometheus \
@@ -251,6 +255,7 @@ function deployments() {
         #      --dest-namespace kube-prometheus \
         #      --insecure
         #kubectl replace -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+        
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
         argocd --insecure app sync app-silvestrini guestbook helm-guestbook
@@ -266,9 +271,9 @@ function deployments() {
 # Main
 source .bashrc
 init
-#cert-manager
-#metalLB
-#longhorn
-#rancher
-#argocd
+cert-manager
+metalLB
+longhorn
+rancher
+argocd
 deployments
