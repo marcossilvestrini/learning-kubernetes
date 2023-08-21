@@ -271,9 +271,4 @@ function deploy-apps() {
 # Main
 source .bashrc
 init
-cert-manager
-metalLB
-longhorn
-rancher
-argocd
 deployments
