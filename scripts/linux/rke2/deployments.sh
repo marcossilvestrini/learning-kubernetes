@@ -270,10 +270,10 @@ function deployments() {
 
 # Main
 source .bashrc
-init
-cert-manager
-metalLB
-longhorn
-rancher
-argocd
-deployments
+# init
+# cert-manager
+# metalLB
+# longhorn
+# rancher
+# argocd
+# deployments
