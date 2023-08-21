@@ -179,7 +179,7 @@ function argocd(){
 }
 
 # Functio for deployments
-function deployments() {
+function deploy-apps() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then               
         ## Login in server
         echo "LOGIN IN ARGOCD"
@@ -270,10 +270,10 @@ function deployments() {
 
 # Main
 source .bashrc
-# init
-# cert-manager
-# metalLB
-# longhorn
-# rancher
-# argocd
-# deployments
+init
+cert-manager
+metalLB
+longhorn
+rancher
+argocd
+deployments
