@@ -8,7 +8,7 @@ metadata: # metadados do recurso
     app: app-silvestrini
 spec: # especificação do PVC
   accessModes: # modo de acesso ao volume
-    - ReadWriteOnce # modo de acesso RWO, ou seja, somente leitura e escrita por um nó  
+    - ReadWriteMany # modo de acesso RWO, ou seja, somente leitura e escrita por um nó  
   storageClassName: longhorn
   resources: # recursos do PVC
     requests: # solicitação de recursos
