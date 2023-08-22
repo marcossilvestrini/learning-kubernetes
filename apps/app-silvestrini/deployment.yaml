@@ -18,7 +18,8 @@ spec:
         app: app-silvestrini
     spec:
       containers:
-      - image: mrsilvestrini/app-silvestrini:v1.0.0
+      #- image: mrsilvestrini/app-silvestrini:v1.0.0
+      - image: nginx
         name: app-silvestrini
         resources:
           limits:
