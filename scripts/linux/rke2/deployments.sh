@@ -26,6 +26,8 @@ function init() {
     DISTRO=$(cat /etc/*release | grep -ws NAME=)
     NODE_MASTER="control-plane01"
     NODE_NAME=$(hostname)
+    ARGOCD_USER="skynet"
+    ARGOCD_PASS="Skynet@123456"
 
     # Check if distribution is RPM-->Oracle Linux Server
     if [[ "$DISTRO" == *"Oracle"* ]]; then
@@ -37,7 +39,7 @@ function init() {
     fi
 }
 
-function cert-manager() {
+function deploy-cert-manager() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy cert-manager
         echo "DEPLOY CERT-MANAGER STACK"
@@ -59,7 +61,7 @@ function cert-manager() {
     fi
 }
 
-function metalLB() {
+function deploy-metalLB() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         echo "DEPLOY METALLB STACK"
         # Deploy metallb
@@ -98,7 +100,7 @@ function metalLB() {
     fi
 }
 
-function longhorn(){
+function deploy-longhorn(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy longhorn
         echo "DEPLOY LONGHORN STACK"
@@ -126,7 +128,7 @@ function longhorn(){
     fi
 }
 
-function rancher(){
+function deploy-rancher(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy rancher
         echo "DEPLOY RANCHER STACK"
@@ -149,7 +151,7 @@ function rancher(){
     
 }
 
-function argocd(){
+function deploy-argocd(){
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
          # Deploy ArgoCD
         echo "DEPLOY ARGOCD STACK"
@@ -175,6 +177,25 @@ function argocd(){
             install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
             rm argocd-linux-amd64
         fi
+
+        ## Save password
+        echo "GET ARGOCD INITIAL PASSWORD"
+        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password
+
+        ## Create argocd user        
+        echo "CREATE NEW ARGOCD USER FOR DEPLOYMENT"
+        PASS=$(
+            kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+            echo
+        )
+        echo "y" | argocd --insecure login argocd.skynet.com.br \
+            --username=admin \
+            --password="$PASS" \
+            --grpc-web
+        kubectl delete -f configs/argocd/argocd-cm.yml
+        kubectl apply -f configs/argocd/argocd-cm.yml
+        argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"
+        
     fi
 }
 
@@ -198,11 +219,7 @@ function deploy-apps() {
         echo "y" | argocd --insecure login argocd.skynet.com.br \
             --username=admin \
             --password="$PASS" \
-            --grpc-web
-
-        ## Save password
-        echo "GET ARGOCD INITIAL PASSWORD"
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password
+            --grpc-web         
 
         ## Register A Cluster To Deploy Apps To
         echo "REGISTER CLUSTER TO DEPLOY APPS IN ARGOCD"
@@ -272,8 +289,8 @@ function deploy-apps() {
 source .bashrc
 init
 cert-manager
-metalLB
-longhorn
-rancher
-argocd
+deploy-metalLB
+deploy-longhorn
+deploy-rancher
+deploy-argocd
 deploy-apps
