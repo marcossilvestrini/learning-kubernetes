@@ -36,7 +36,7 @@ spec:
             hostPort: 9001
         volumeMounts:
           - name:  pvc-app-silvestrini
-            mountPath:  /usr/share/nginx/html
+            mountPath: /usr/share/nginx/html
         # startupProbe: # Onde definimos a nossa probe de inicialização
         #   httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
         #     path: / # O caminho que iremos testar
