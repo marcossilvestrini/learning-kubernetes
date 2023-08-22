@@ -73,7 +73,10 @@ setx VAGRANT_HOME "$vagrantHome" >$null
 Copy-Item -Force "$baseProject\index.html" -Destination "$baseProject\apps\app-silvestrini"
 Copy-Item -Force -Recurse "$baseProject\images" -Destination "$baseProject\apps\app-silvestrini"
 
-# # Up kubernetes stack
+# Fix linux scripts
+
+
+# Up kubernetes stack
 $kubernetes = "$baseVagrantfile"
 Set-Location $kubernetes
 vagrant up
