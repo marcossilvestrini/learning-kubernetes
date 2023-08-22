@@ -6,9 +6,9 @@ metadata: # metadados do recurso
   namespace: silvestrini
   labels:
     app: app-silvestrini
-spec: # especificação do PVC
-  accessModes: # modo de acesso ao volume
-    - ReadWriteMany # modo de acesso RWO, ou seja, somente leitura e escrita por um nó  
+spec: 
+  accessModes: 
+    - ReadWriteMany
   storageClassName: longhorn
   resources: # recursos do PVC
     requests: # solicitação de recursos
