@@ -9,10 +9,10 @@ global:
       enabled: false
       # Tolerate Linux node taint
       tolerations:
-      - key: "cattle.io/os"
-        value: "linux"
-        effect: "NoSchedule"
-        operator: "Equal"
+        - key: "cattle.io/os"
+          value: "linux"
+          effect: "NoSchedule"
+          operator: "Equal"
       # Select Linux nodes
       nodeSelector:
         kubernetes.io/os: "linux"

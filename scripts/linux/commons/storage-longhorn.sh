@@ -76,3 +76,8 @@ mkdir -p /var/k8s/storage
 chown -R vagrant:vagrant /var/k8s/storage
 umount /var/k8s/storage 2>&1
 mount /var/k8s/storage
+
+# Create  structure for app-silvestrini
+mkdir -p /var/k8s/storage/app-silvestrini
+cp -R apps/app-silvestrini/images /var/k8s/storage/app-silvestrini
+cp  apps/app-silvestrini/index.html /var/k8s/storage/app-silvestrini
