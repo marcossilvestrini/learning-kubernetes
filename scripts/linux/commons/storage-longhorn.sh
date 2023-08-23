@@ -2,7 +2,7 @@
 
 <<'MULTILINE-COMMENT'
     Requirments: none
-    Description: Script for set Storage NFS for Kubernetes clusters
+    Description: Script for set Storage Longhorn for Kubernetes clusters
     Author: Marcos Silvestrini
     Date: 31/02/2023
 MULTILINE-COMMENT

@@ -166,6 +166,9 @@ function deploy-argocd(){
         sleep 10s
         echo "Waiting for deployment argocd to complete..."
         kubectl wait --for condition=containersready -n argocd pod --all --timeout=300s
+        ## Ingress
+        echo "CREATE ARGOCD INGRESS"
+        kubectl apply -f configs/argocd/ingress.yaml
         STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
         while [ "$STATUS" != 200 ]; do
             clear
@@ -174,9 +177,7 @@ function deploy-argocd(){
             echo "$STATUS"
             sleep 1
         done
-        ## Ingress
-        echo "CREATE ARGOCD INGRESS"
-        kubectl apply -f configs/argocd/ingress.yaml
+        
 
         ## Install CLI
         echo "INSTALL ARGOCD CLI"
