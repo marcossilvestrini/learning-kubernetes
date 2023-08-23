@@ -164,8 +164,16 @@ function deploy-argocd(){
         echo "DEPLOY ARGOCD PODS"
         kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
         sleep 10s
+        echo "Waiting for deployment argocd to complete..."
         kubectl wait --for condition=containersready -n argocd pod --all --timeout=300s
-
+        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+        while [ "$STATUS" != 200 ]; do
+            clear
+            echo "Waiting for argocd stack to be initialized..."
+            STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+            echo "$STATUS"
+            sleep 1
+        done
         ## Ingress
         echo "CREATE ARGOCD INGRESS"
         kubectl apply -f configs/argocd/ingress.yaml
@@ -204,14 +212,7 @@ function deploy-apps() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then               
         ## Login in server
         echo "LOGIN IN ARGOCD"
-        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
-        while [ "$STATUS" != 200 ]; do
-            clear
-            echo "Waiting for argocd stack to be initialized..."
-            STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
-            echo "$STATUS"
-            sleep 1
-        done
+
         PASS=$(
             kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
             echo
