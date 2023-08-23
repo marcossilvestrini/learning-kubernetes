@@ -61,7 +61,7 @@ VAGRANT_DISKS_DIRECTORY = "disks"
 ## define disks
 ## The format is filename, size (GB), port (see controller docs)
 local_disks = [
-  { :filename => "disk1", :size => 200, :port => 5 }  
+  { :filename => "disk1", :size => 100, :port => 5 }  
 ]
 
 ## file operations needs to be relative to this file
@@ -281,7 +281,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       
       ## DEFINE NUMBER OF DISKS
       disks = [
-        { :filename => "disk1", :size => 100, :port => 5 }  
+        { :filename => "disk1", :size => 300, :port => 5 }  
       ]
 
       ## DEFINE PATH FOR SECONDARY DISK

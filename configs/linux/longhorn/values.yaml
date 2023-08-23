@@ -114,8 +114,8 @@ defaultSettings:
   defaultDataLocality: ~
   replicaSoftAntiAffinity: ~
   replicaAutoBalance: ~
-  storageOverProvisioningPercentage: ~
-  storageMinimalAvailablePercentage: ~
+  storageOverProvisioningPercentage: 100%
+  storageMinimalAvailablePercentage: 10%
   upgradeChecker: ~
   defaultReplicaCount: ~
   defaultLonghornStaticStorageClass: ~
