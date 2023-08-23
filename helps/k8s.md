@@ -69,6 +69,24 @@ kubectl drain <node-name> --force --ignore-daemonsets  --delete-emptydir-data
 kubectl delete node <node-name>
 ```
 
+## Namespaces
+
+### show you what resources remain in the namespace
+
+```sh
+kubectl api-resources --verbs=list --namespaced -o name \
+  | xargs -n 1 kubectl get --show-kind --ignore-not-found -n <namespace>
+```
+
+### Delete namespace in state Terminating
+
+```sh
+kubectl get namespace "stucked-namespace" -o json \
+  | tr -d "\n" | sed "s/\"finalizers\": \[[^]]\+\]/\"finalizers\": []/" \
+  | kubectl replace --raw /api/v1/namespaces/stucked-namespace/finalize -f -
+
+```
+
 ## Access Kubernetes Dashboard
 
 * Create ssh tunel
@@ -129,7 +147,7 @@ strace -cf -p  <PID>
 
 kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
 
-## etcd 
+## etcd
 
 <https://etcd.io/>
 
