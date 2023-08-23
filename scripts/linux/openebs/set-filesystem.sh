@@ -23,7 +23,6 @@ echo "SET STORAGE FOR OPENEBS..."
 
 # Variables
 WORK_DIR="$HOME/openebs"
-DISK_OPENEBS="/dev/vdb"
 PARTITION_NUMBER=1
 VG_NAME="vg_openebs"
 LV_NAME="lv_openebs"
@@ -44,13 +43,35 @@ else
 fi
 
 # Set Storage (device /dev/vdb)
-echo "Check $DISK_OPENEBS is present..."
-CHECK_VDB=$(lsblk | grep vdb1)
-if [[ $CHECK_VDB == "" ]]; then
-    echo "Disk $DISK_OPENEBS for OpenEBS Storage found."
-else
-    echo "Disk $DISK_OPENEBS for OpenEBS Storage not found. This is required!!!"
+
+## Find free disk for OpenEBS
+echo "Find disk free for OpenEBS..."
+
+### Get a list of all disks except vda
+disks=$(lsblk -o NAME -n | grep -E "^vd[^a]")
+
+### Iterate through each disk
+for disk in $disks; do
+    echo "Check disk: /dev/$disk"
+    # Check if the disk is mounted
+    if mount | grep -q "/dev/$disk"; then
+        echo "  Disk is in use by another aplication!!! Skipping"
+    else
+        echo "  Disk not Not Mounted. This is disk for OpenEBS Storage"
+        DISK_OPENEBS="/dev/$disk"
+        break
+    fi
+    echo
+done
+
+# Check if the partition is mounted
+echo "Check if the partition "/dev/mapper/$VG_NAME-$LV_NAME" is mounted"
+if mount | grep -q "/dev/mapper/$VG_NAME-$LV_NAME"; then
+    echo "    Status: Mounted"
+    echo "    Mount Point: $(mount | grep "/dev/mapper/$VG_NAME-$LV_NAME" | awk '{print $3}')"
     exit 1
+else
+    echo "    Status: Not Mounted"
 fi
 
 # Partition disk with LVM
@@ -110,8 +131,3 @@ systemctl daemon-reload
 echo "Mount OpenEBS Filesystem $FS_MOUNT--->$FS_FOLDER"
 umount $FS_FOLDER >/dev/null 2>&1
 mount $FS_FOLDER
-
-# # Create  structure for app-silvestrini
-# mkdir -p /var/k8s/storage/app-silvestrini
-# cp -R apps/app-silvestrini/images /var/k8s/storage/app-silvestrini
-# cp  apps/app-silvestrini/index.html /var/k8s/storage/app-silvestrini
