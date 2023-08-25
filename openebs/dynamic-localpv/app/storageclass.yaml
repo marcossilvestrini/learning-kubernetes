@@ -22,6 +22,5 @@ volumeBindingMode: WaitForFirstConsumer
 # - matchLabelExpressions:
 #   - key: kubernetes.io/hostname
 #     values:
-#     - worker01
-#     - worker02
-#     - worker03
+#     - worker-1
+#     - worker-2

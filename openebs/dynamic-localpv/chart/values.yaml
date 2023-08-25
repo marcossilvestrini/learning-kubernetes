@@ -126,7 +126,7 @@ hostpathClass:
   isDefaultClass: false
   # Path on the host where local volumes of this storage class are mounted under.
   # NOTE: If not specified, this defaults to the value of localpv.basePath.
-  basePath: "/var/k8s/storage"
+  basePath: ""
   # Custom node affinity label(s) for example "openebs.io/node-affinity-value"
   # that will be used instead of hostnames
   # This helps in cases where the hostname changes when the node is removed and

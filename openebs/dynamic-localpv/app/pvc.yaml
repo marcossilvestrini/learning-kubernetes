@@ -1,14 +1,11 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: openebs-localpv-vol
-  namespace: openebs-localpv-test
-  labels:
-    app: ubuntu-localpv
+  name: localpv-vol
 spec:
   #Change this name if you are using a custom StorageClass
   storageClassName: custom-hostpath
-  accessModes: ["ReadWriteOnce"]
+  accessModes: ["ReadWriteOnce"]  
   resources:
     requests:
       #Set capacity here
