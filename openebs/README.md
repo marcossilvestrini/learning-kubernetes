@@ -89,11 +89,56 @@ volumeBindingMode: WaitForFirstConsumer
 #     - worker-2
 ```
 
+Create a PVC with the StorageClass.
+
+```yaml
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: localpv-vol
+spec:
+  #Change this name if you are using a custom StorageClass
+  storageClassName: openebs-hostpath
+  accessModes: ["ReadWriteOnce"]
+  resources:
+    requests:
+      #Set capacity here
+      storage: 5Gi
+```
+
+Mount the volume
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+spec:
+  containers:
+  - command:
+       - sh
+       - -c
+       - 'date >> /mnt/data/date.txt; hostname >> /mnt/data/hostname.txt; sync; sleep 5; sync; tail -f /dev/null;'
+    image: busybox
+    name: busybox
+    volumeMounts:
+    - mountPath: /mnt/data
+      name: demo-vol
+  volumes:
+  - name: demo-vol
+    persistentVolumeClaim:
+      claimName: localpv-vol
+```
 
 ## Authors and acknowledgment
 
-<https://openebs.io/docs>
-<https://mayastor.gitbook.io/introduction/>
-<https://openebs.io/docs/user-guides/installation>
-<https://github.com/openebs/charts/tree/d-master/charts/openebs>
-<https://magazine.atlassian.net/wiki/spaces/CLOUD/pages/3273752846/Storage+Relat+rio+de+Performance>
+[Official Docs](https://openebs.io/docs)
+[User Guide Instalation](<https://openebs.io/docs/user-guides/installation>)
+[Install Guide Dynamic Localpv Provisioner](https://openebs.github.io/dynamic-localpv-provisioner/)
+[Mayastor Introduction](<https://mayastor.gitbook.io/introduction/>)
+[Doc Performance Test](<https://magazine.atlassian.net/wiki/spaces/CLOUD/pages/3273752846/Storage+Relat+rio+de)+Performance>)
+[Workload for Performance Test](<https://github.com/yasker/kbench>)
+
+## License
+
+ MIT License

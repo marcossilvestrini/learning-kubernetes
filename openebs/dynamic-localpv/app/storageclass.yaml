@@ -1,0 +1,27 @@
+#This is a custom StorageClass template
+# Uncomment config options as desired
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: custom-hostpath
+  annotations:
+    #Use this annotation to set this StorageClass by default
+    # storageclass.kubernetes.io/is-default-class: true
+    openebs.io/cas-type: local
+    cas.openebs.io/config: |
+      - name: StorageType
+        value: "hostpath"     
+      - name: BasePath
+        value: "/var/k8s/storage"
+provisioner: openebs.io/local
+reclaimPolicy: Delete
+#It is necessary to have volumeBindingMode as WaitForFirstConsumer
+volumeBindingMode: WaitForFirstConsumer
+#Match labels in allowedTopologies to select nodes for volume provisioning
+# allowedTopologies:
+# - matchLabelExpressions:
+#   - key: kubernetes.io/hostname
+#     values:
+#     - worker01
+#     - worker02
+#     - worker03
