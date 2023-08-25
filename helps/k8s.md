@@ -26,7 +26,7 @@ ip route add default  via 192.168.0.1 dev eth1
 rm  /var/lib/rancher/rke2/agent/pod-manifests/etcd.yaml
 systemctl start rke2-server.service
 set linux for disable
-``````
+```
 
 ### Fix error server is not ready: Node password rejected
 
@@ -39,7 +39,7 @@ Solution:
 
 ```sh
 kubectl -n kube-system delete secrets <agent-node-name>.node-password.rke2
-``````
+```
 
 ## Kubectl
 
@@ -47,13 +47,14 @@ kubectl -n kube-system delete secrets <agent-node-name>.node-password.rke2
 
 ```sh
 kubectl completion powershell | Out-String | Invoke-Expression
-``````
+```
 
 ## HAProxy
 
 <https://www.suse.com/support/kb/doc/?id=000020175>
 
-Set ips for RKe2
+## Set ips for RKe2
+
 https://github.com/rancher/rke2/issues/910
 
 ## Get node internal ip
