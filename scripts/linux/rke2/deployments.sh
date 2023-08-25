@@ -254,6 +254,8 @@ function deploy-apps() {
             --insecure
 
         ### Create the example 3 - My app - app-silvestrini
+        kubectl apply -f configs/app-silvestrini/service.yaml
+        kubectl apply -f configs/app-silvestrini/ingress.yaml
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \

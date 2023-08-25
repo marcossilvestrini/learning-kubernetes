@@ -8,6 +8,5 @@ spec:
     app: app-silvestrini # Neste caso, os Pods com o label app=my-app
   ports:
     - protocol: TCP
-      port: 80 # Porta do Service
-      targetPort: 9001 # Porta dos Pods
+      port: 80 # Porta do Service      
       
