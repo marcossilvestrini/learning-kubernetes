@@ -26,5 +26,4 @@ spec:
               name: https
   tls:
   - hosts:
-    - app-silvestrini.skynet.com.br
-    secretName: argocd-secret # do not change, this is provided by Argo CD
+    - app-silvestrini.skynet.com.br    
