@@ -91,7 +91,6 @@ Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker0
 
 # Deployment kubernetes applications
 #vagrant ssh control-plane01  -c 'sudo ./scripts/rke2/deployments.sh'
-#vagrant ssh control-plane01  -c 'dos2unix /home/vagrant/scripts/rke2/deployments.sh;chmod +x /home/vagrant/scripts/rke2/deployments.sh;. /home/vagrant/scripts/rke2/deployments.sh'
 
 # Copy kubeconfig to G:\
 Copy-Item -Force  "$baseProject\configs\linux\kubectl\rke2.yaml" "G:\Projetos\learning-kubernetes\configs\linux\kubectl"
