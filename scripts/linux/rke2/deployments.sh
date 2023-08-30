@@ -55,8 +55,8 @@ function deploy-cert-manager() {
             --namespace cert-manager \
             --create-namespace \
             --version v1.12.0 \
-            --set installCRDs=true       
-        sleep 10s 
+            --set installCRDs=true
+        sleep 10s
         kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=300s
     fi
 }
@@ -100,7 +100,7 @@ function deploy-metalLB() {
     fi
 }
 
-function deploy-longhorn(){
+function deploy-longhorn() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy longhorn
         echo "DEPLOY LONGHORN STACK"
@@ -118,8 +118,8 @@ function deploy-longhorn(){
             --values configs/longhorn/values.yaml
         sleep 10s
         kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
-         # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
-        
+        # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
+
         ## create secret
         #kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
@@ -128,7 +128,7 @@ function deploy-longhorn(){
     fi
 }
 
-function deploy-rancher(){
+function deploy-rancher() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         # Deploy rancher
         echo "DEPLOY RANCHER STACK"
@@ -145,15 +145,15 @@ function deploy-rancher(){
             --namespace cattle-system \
             --set hostname=rancher.skynet.com.br \
             --set bootstrapPassword=Rancher@123456
-        sleep 10s        
+        sleep 10s
         #kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=60s
     fi
-    
+
 }
 
-function deploy-argocd(){
+function deploy-argocd() {
     if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
-         # Deploy ArgoCD
+        # Deploy ArgoCD
         echo "DEPLOY ARGOCD STACK"
 
         ## Create a namespace
@@ -177,7 +177,6 @@ function deploy-argocd(){
             echo "$STATUS"
             sleep 1
         done
-        
 
         ## Install CLI
         echo "INSTALL ARGOCD CLI"
@@ -191,7 +190,7 @@ function deploy-argocd(){
         echo "GET ARGOCD INITIAL PASSWORD"
         kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password
 
-        ## Create argocd user        
+        ## Create argocd user
         echo "CREATE NEW ARGOCD USER FOR DEPLOYMENT"
         PASS=$(
             kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
@@ -204,13 +203,13 @@ function deploy-argocd(){
         kubectl delete -f configs/argocd/argocd-cm.yml
         kubectl apply -f configs/argocd/argocd-cm.yml
         argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"
-        
+
     fi
 }
 
 # Functio for deployments
 function deploy-apps() {
-    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then               
+    if [[ "$NODE_MASTER" == *"$NODE_NAME"* ]]; then
         ## Login in server
         echo "LOGIN IN ARGOCD"
 
@@ -221,7 +220,7 @@ function deploy-apps() {
         echo "y" | argocd --insecure login argocd.skynet.com.br \
             --username=admin \
             --password="$PASS" \
-            --grpc-web         
+            --grpc-web
 
         ## Register A Cluster To Deploy Apps To
         echo "REGISTER CLUSTER TO DEPLOY APPS IN ARGOCD"
@@ -253,7 +252,7 @@ function deploy-apps() {
             --dest-namespace silvestrini \
             --insecure
 
-        ### Create the example 3 - My app - app-silvestrini        
+        ### Create the example 3 - My app - app-silvestrini
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \
@@ -268,22 +267,42 @@ function deploy-apps() {
         # helm repo update
         # helm upgrade -i -n kube-prometheus kube-prometheus prometheus-community/kube-prometheus-stack
         argocd app create kube-prometheus \
-             --repo https://github.com/prometheus-community/helm-charts.git \
-             --path charts/kube-prometheus-stack/ \
-             --dest-server https://kubernetes.default.svc \
-             --dest-namespace kube-prometheus \
-             --insecure
+            --repo https://github.com/prometheus-community/helm-charts.git \
+            --path charts/kube-prometheus-stack/ \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace kube-prometheus \
+            --insecure
         kubectl apply -f apps/kube-prometheus/ingress.yaml
-        
+
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
-        argocd app sync --insecure --server-side kube-prometheus app-silvestrini guestbook helm-guestbook 
+        argocd app sync --insecure --server-side kube-prometheus app-silvestrini guestbook helm-guestbook
+
+        # Gitlab
+        kubectl create namespace gitlab
+        helm repo add gitlab https://charts.gitlab.io/
+        helm repo update
+        helm upgrade --install gitlab gitlab/gitlab \
+            --set certmanager.installCRDs=false \
+            --namespace gitlab \
+            --timeout 600s \
+            --set global.hosts.domain=skynet.com.br \
+            --set global.edition=ce \
+            --set certmanager-issuer.email=marcos.silvestrini@gmail.com \
+            --set postgresql.image.tag=13.6.0 \
+            --set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
+            --set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
+            --set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce \
+            --set gitlab.unicorn.workhorse.image=registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
+        ## Save password
+        kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode > security/gitlab
 
         # ### Update password
         # argocd account update-password \
         #     --current-password "$ARGO_PASS" \
         #     --new-password "Argocd@123456" \
         #     --insecure
+
     fi
 }
 
