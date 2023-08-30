@@ -1,18 +1,18 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: ingress-app-silvestrini
-  namespace: silvestrini
+  name: ingress-prometheus-grafana
+  namespace: kube-prometheus
 spec:
   rules:
-  - host: app-silvestrini.skynet.com.br
+  - host: grafana.skynet.com.br
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: app-silvestrini
+            name: kube-prometheus-grafana
             port:
               number: 80           
   ingressClassName: nginx

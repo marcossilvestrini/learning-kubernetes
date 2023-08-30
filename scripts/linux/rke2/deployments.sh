@@ -253,9 +253,7 @@ function deploy-apps() {
             --dest-namespace silvestrini \
             --insecure
 
-        ### Create the example 3 - My app - app-silvestrini
-        #kubectl apply -f configs/app-silvestrini/service.yaml
-        #kubectl apply -f configs/app-silvestrini/ingress.yaml
+        ### Create the example 3 - My app - app-silvestrini        
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \
@@ -275,7 +273,7 @@ function deploy-apps() {
              --dest-server https://kubernetes.default.svc \
              --dest-namespace kube-prometheus \
              --insecure
-        # kubectl replace -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+        kubectl apply -f apps/kube-prometheus/ingress.yaml
         
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
