@@ -94,6 +94,9 @@ Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker0
 
 # Copy kubeconfig to G:\
 Copy-Item -Force  "$baseProject\configs\linux\kubectl\rke2.yaml" "G:\Projetos\learning-kubernetes\configs\linux\kubectl"
+
+# Copy security to G:\
+Copy-Item -Force  "$baseProject\security\*" "G:\Projetos\learning-kubernetes\security"
                  
 
 # Fix powershell error
