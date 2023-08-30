@@ -254,8 +254,8 @@ function deploy-apps() {
             --insecure
 
         ### Create the example 3 - My app - app-silvestrini
-        kubectl apply -f configs/app-silvestrini/service.yaml
-        kubectl apply -f configs/app-silvestrini/ingress.yaml
+        #kubectl apply -f configs/app-silvestrini/service.yaml
+        #kubectl apply -f configs/app-silvestrini/ingress.yaml
         argocd app create app-silvestrini \
             --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
             --path apps/app-silvestrini \
@@ -266,20 +266,20 @@ function deploy-apps() {
         ### Create the example 3 - kube-prometheus stack
         kubectl create ns kube-prometheus
         #kubectl config set-context --current --namespace=kube-prometheus
-        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-        helm repo update
-        helm upgrade -i -n kube-prometheus kube-prometheus prometheus-community/kube-prometheus-stack
-        # argocd app create kube-prometheus \
-        #      --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-        #      --path apps/kube-prometheus \
-        #      --dest-server https://kubernetes.default.svc \
-        #      --dest-namespace kube-prometheus \
-        #      --insecure
-        #kubectl replace -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+        # helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        # helm repo update
+        # helm upgrade -i -n kube-prometheus kube-prometheus prometheus-community/kube-prometheus-stack
+        argocd app create kube-prometheus \
+             --repo https://github.com/prometheus-community/helm-charts.git \
+             --path charts/kube-prometheus-stack/ \
+             --dest-server https://kubernetes.default.svc \
+             --dest-namespace kube-prometheus \
+             --insecure
+        # kubectl replace -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/master/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
         
         ### Sync apps
         echo "SYNC APPS IN ARGOCD"
-        argocd --insecure app sync app-silvestrini guestbook helm-guestbook
+        argocd app sync --insecure --server-side kube-prometheus app-silvestrini guestbook helm-guestbook 
 
         # ### Update password
         # argocd account update-password \
