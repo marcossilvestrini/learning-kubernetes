@@ -27,7 +27,7 @@ mail                        A       192.168.0.130   ;mail
 ftp                         CNAME   infra-server01  ;ftp
 rancher                     CNAME   load-balance    ;rancher endpoint
 argocd                      CNAME   load-balance    ;argocd endpoint
-gitlab                      A       192.168.0.182    ;gitlab endpoint
+gitlab                      CNAME   load-balance    ;gitlab endpoint
 app-silvestrini             CNAME   load-balance    ;app-silvestrini load balance
 alertmanager                CNAME   load-balance    ;alertmanager endpoint
 prometheus                  CNAME   load-balance    ;prometheus endpoint
