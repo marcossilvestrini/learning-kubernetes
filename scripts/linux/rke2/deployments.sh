@@ -278,6 +278,16 @@ function deploy-apps() {
         echo "SYNC APPS IN ARGOCD"
         argocd app sync --insecure --server-side kube-prometheus app-silvestrini guestbook helm-guestbook
 
+        ### OpenEBS
+
+        #### OpenEBS localpv-hostpath
+        # argocd app create openebs-localpv-hostpath \
+        #     --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        #     --path charts/kube-prometheus-stack/ \
+        #     --dest-server https://kubernetes.default.svc \
+        #     --dest-namespace kube-prometheus \
+        #     --insecure
+
         # # Gitlab
         # kubectl create namespace gitlab
         # helm repo add gitlab https://charts.gitlab.io/
