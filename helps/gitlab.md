@@ -15,19 +15,13 @@ kubectl -n gitlab-system apply -f configs/gitlab/gitlab.yaml
 ## Deploy gitlab with helm
 
 kubectl create namespace gitlab
-
-helm repo add gitlab https://charts.gitlab.io/
-helm repo update
-kubectl create namespace gitlab
-
 helm repo add gitlab https://charts.gitlab.io/
 helm repo update
 helm upgrade --install gitlab gitlab/gitlab \
   --set certmanager.installCRDs=false \
   --namespace gitlab \
-  --timeout 2000s \
-  --set global.hosts.domain=skynet.com.br \
-  --set global.hosts.gitlab.hostnameOverride=gitlab.skynet.com.br \
+  --timeout 600s \
+  --set global.hosts.domain=gitlab.skynet.com.br \
   --set global.edition=ce \
   --set certmanager-issuer.email=marcos.silvestrini@gmail.com \
   --set postgresql.image.tag=13.6.0 \
