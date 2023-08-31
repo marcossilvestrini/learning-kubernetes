@@ -37,9 +37,9 @@ localpv:
   healthCheck:
     initialDelaySeconds: 30
     periodSeconds: 60
-  replicas: 3
+  replicas: 1
   enableLeaderElection: true
-  basePath: "/var/k8s/storage"
+  basePath: "/var/openebs/local"
 # This sets the number of times the provisioner should try
 # with a polling interval of 5 seconds, to get the Blockdevice
 # Name from a BlockDeviceClaim, before the BlockDeviceClaim
