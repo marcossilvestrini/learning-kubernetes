@@ -21,7 +21,7 @@ helm upgrade --install gitlab gitlab/gitlab \
   --set certmanager.installCRDs=false \
   --namespace gitlab \
   --timeout 600s \
-  --set global.hosts.domain=gitlab.skynet.com.br \
+  --set global.hosts.domain=skynet.com.br \
   --set global.edition=ce \
   --set certmanager-issuer.email=marcos.silvestrini@gmail.com \
   --set postgresql.image.tag=13.6.0 \
@@ -29,18 +29,6 @@ helm upgrade --install gitlab gitlab/gitlab \
   --set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
   --set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce \
   --set gitlab.unicorn.workhorse.image=registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
-  #--set global.hosts.externalIP=192.168.0.182
-
-
-hosts:
-    domain: gestorp.com.br
-    hostSuffix:
-    https: true
-    externalIP: 2.2.2.0
-    ssh: ~
-    gitlab:
-      https: true
-      hostnameOverride: gitlab.gestorp.com.br
 
 ## Chart
 
