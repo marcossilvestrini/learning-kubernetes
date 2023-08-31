@@ -280,13 +280,13 @@ function deploy-apps() {
 
         ### OpenEBS
 
-        #### OpenEBS localpv-hostpath
-        # argocd app create openebs-localpv-hostpath \
-        #     --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-        #     --path charts/kube-prometheus-stack/ \
-        #     --dest-server https://kubernetes.default.svc \
-        #     --dest-namespace kube-prometheus \
-        #     --insecure
+        #### OpenEBS localpv-hostpath        
+        argocd app create openebs-localpv-hostpath \
+            --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+            --path openebs/dynamic-localpv-hostpath  \
+            --dest-server https://kubernetes.default.svc \
+            --dest-namespace openebs-localpv-hostpath \
+            --insecure
 
         # # Gitlab
         # kubectl create namespace gitlab
