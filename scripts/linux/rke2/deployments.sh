@@ -278,24 +278,24 @@ function deploy-apps() {
         echo "SYNC APPS IN ARGOCD"
         argocd app sync --insecure --server-side kube-prometheus app-silvestrini guestbook helm-guestbook
 
-        # Gitlab
-        kubectl create namespace gitlab
-        helm repo add gitlab https://charts.gitlab.io/
-        helm repo update
-        helm upgrade --install gitlab gitlab/gitlab \
-            --set certmanager.installCRDs=false \
-            --namespace gitlab \
-            --timeout 600s \
-            --set global.hosts.domain=skynet.com.br \
-            --set global.edition=ce \
-            --set certmanager-issuer.email=marcos.silvestrini@gmail.com \
-            --set postgresql.image.tag=13.6.0 \
-            --set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
-            --set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
-            --set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce \
-            --set gitlab.unicorn.workhorse.image=registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
-        ## Save password
-        kubectl get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode > security/gitlab
+        # # Gitlab
+        # kubectl create namespace gitlab
+        # helm repo add gitlab https://charts.gitlab.io/
+        # helm repo update
+        # helm upgrade --install gitlab gitlab/gitlab \
+        #     --set certmanager.installCRDs=false \
+        #     --namespace gitlab \
+        #     --timeout 600s \
+        #     --set global.hosts.domain=skynet.com.br \
+        #     --set global.edition=ce \
+        #     --set certmanager-issuer.email=marcos.silvestrini@gmail.com \
+        #     --set postgresql.image.tag=13.6.0 \
+        #     --set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
+        #     --set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
+        #     --set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce \
+        #     --set gitlab.unicorn.workhorse.image=registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
+        # ## Save password
+        # kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode > security/gitlab
 
         # ### Update password
         # argocd account update-password \
