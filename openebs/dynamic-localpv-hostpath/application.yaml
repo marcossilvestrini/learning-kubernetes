@@ -16,5 +16,12 @@ spec:
     server: "https://kubernetes.default.svc"
     namespace: openebs-localpv-hostpath
   syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
     syncOptions:
-    - CreateNamespace=true
+      - Validate=false
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true
+      - RespectIgnoreDifferences=true
