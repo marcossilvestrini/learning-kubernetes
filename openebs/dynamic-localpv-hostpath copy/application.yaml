@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: openebs-localpv-hostpath
+  namespace: argocd
+spec:
+  project: default
+  source:    
+    repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
+    path: openebs/dynamic-localpv-hostpath
+    helm:
+      releaseName: openebs-localpv-hostpath
+      valueFiles:
+        - values.yaml
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: openebs-localpv-hostpath
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
