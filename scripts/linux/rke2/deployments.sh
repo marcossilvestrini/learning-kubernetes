@@ -321,14 +321,14 @@ function delete-all-apps(){
 # Main
 source .bashrc
 init
-# deploy-cert-manager
-# deploy-metalLB
-# deploy-longhorn
-# deploy-rancher
-# deploy-argocd
-deploy-openebs-localpv
+deploy-cert-manager
+deploy-metalLB
+deploy-longhorn
+deploy-rancher
+deploy-argocd
 deploy-kube-prometheus
 deploy-app-examples
 deploy-app-silvestrini
+#deploy-openebs-localpv
 #deploy-gitlab
 #delete-all-apps
