@@ -168,7 +168,7 @@ function deploy-argocd() {
     login-argocd
     kubectl delete -f configs/argocd/argocd-cm.yml
     kubectl apply -f configs/argocd/argocd-cm.yml
-    argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"
+    argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"    
 }
 
 function login-argcd() {
@@ -195,6 +195,7 @@ function update-argcd-password(){
 }
 
 function deploy-kube-prometheus() {
+    export ARGOCD_EXEC_TIMEOUT="900s"
     login-argcd
     echo "DEPLOY KUBE-PROMETHEUS-STACK"
 
@@ -326,9 +327,9 @@ deploy-metalLB
 deploy-longhorn
 deploy-rancher
 deploy-argocd
-deploy-kube-prometheus
 deploy-app-examples
 deploy-app-silvestrini
+deploy-kube-prometheus
 #deploy-openebs-localpv
 #deploy-gitlab
 #delete-all-apps
