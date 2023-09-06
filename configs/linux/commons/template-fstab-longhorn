@@ -1,0 +1,3 @@
+#K8S STORAGE -BEGIN
+/dev/mapper/vg_k8s-lv_k8s    /var/k8s/storage ext4     defaults        0 0
+#K8S STORAGE -END
