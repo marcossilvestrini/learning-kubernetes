@@ -104,3 +104,4 @@ $Env:VAGRANT_PREFER_SYSTEM_BIN += 0
 
 #Remove Semafore
 Remove-Item -Force $semafore
+
