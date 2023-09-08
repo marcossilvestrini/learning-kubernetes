@@ -279,7 +279,7 @@ function deploy-openebs-localpv() {
     echo "DEPLOY OPENEBS LOCALPV"
 
     # OpenEBS localpv-hostpath
-    echo "CREATE ARGOCD APP APP-SILVESTRINI"
+    echo "CREATE ARGOCD APP OPENEBS LOCALPV "
     argocd app create openebs-localpv-hostpath \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path openebs/dynamic-localpv-hostpath \
