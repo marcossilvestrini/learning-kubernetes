@@ -22,7 +22,7 @@ fi
 echo "SET STORAGE FOR OPENEBS..."
 
 # Variables
-WORK_DIR="$HOME/openebs"
+WORK_DIR="/home/ubuntu/setup-openebs"
 PARTITION_NUMBER=1
 VG_NAME="vg_openebs"
 LV_NAME="lv_openebs"
@@ -32,7 +32,6 @@ FS_FOLDER="/var/k8s/storage/openebs"
 # Set workdir
 echo "Create workdir: $WORK_DIR"
 if [ ! -d "$WORK_DIR" ]; then
-
     mkdir -p "$WORK_DIR"
 fi
 if [ -d "$WORK_DIR" ]; then
@@ -57,10 +56,19 @@ for disk in $disks; do
     if mount | grep -q "/dev/$disk"; then
         echo "  Disk is in use by another aplication!!! Skipping"
     else
-        echo "  Disk not Not Mounted. This is disk for OpenEBS Storage"
         DISK_OPENEBS="/dev/$disk"
-        break
-    fi
+        PARTITION="$DISK_OPENEBS"1 
+        echo "  Disk not Not Mounted. This is disk for OpenEBS Storage"        
+        # Check if the partition file exists
+        echo "Check partition: $PARTITION"
+        if [ -e "$PARTITION" ]; then
+        echo "  $PARTITION exists...Disk is in use by another aplication!!! Skipping"
+        else
+            echo "  $PARTITION does not exist.This is partition for OpenEBS Storage"
+            break
+        fi         
+    fi 
+    
     echo
 done
 
@@ -81,7 +89,7 @@ parted "$DISK_OPENEBS" --script mklabel gpt
 
 ## Create a partition with hex code 8e (Linux LVM)
 parted "$DISK_OPENEBS" --script mkpart primary 0% 100%
-parted "$DISK_OPENEBS"--script set 1 lvm on
+parted "$DISK_OPENEBS" --script set 1 lvm on
 
 ## Print the partition table to verify
 parted "$DISK_OPENEBS" --script print
