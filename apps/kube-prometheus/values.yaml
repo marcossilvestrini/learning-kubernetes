@@ -27,8 +27,7 @@ kube-prometheus-stack:
     prometheusspec:
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn          
-
+          storageClassName: longhorn
   grafana:
     ingress:
       enabled: true
