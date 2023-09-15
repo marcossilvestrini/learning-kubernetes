@@ -255,7 +255,7 @@ function deploy-app-examples() {
     argocd app sync --insecure guestbook helm-guestbook
 }
 
-function deploy-app-silvestrini() {
+function deploy-chart-silvestrini() {
     login-argcd
     echo "DEPLOY MY APPS IN ARGOCD"    
     echo "CREATE ARGOCD APP APP-SILVESTRINI"
