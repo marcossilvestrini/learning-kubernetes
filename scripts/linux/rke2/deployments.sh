@@ -255,13 +255,32 @@ function deploy-app-examples() {
     argocd app sync --insecure guestbook helm-guestbook
 }
 
-function deploy-chart-silvestrini() {
+function deploy-app-silvestrini() {
     login-argcd
     echo "DEPLOY MY APPS IN ARGOCD"    
     echo "CREATE ARGOCD APP APP-SILVESTRINI"
     argocd app create app-silvestrini \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path apps/app-silvestrini \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace silvestrini \
+        --insecure
+    argocd app set app-silvestrini --sync-option ApplyOutOfSyncOnly=true
+    argocd app set app-silvestrini --sync-option CreateNamespace=true
+    argocd app set app-silvestrini --sync-option ServerSideApply=true
+
+    # Sync apps
+    echo "SYNC APP IN ARGOCD"
+    argocd app sync --insecure app-silvestrini
+}
+
+function deploy-chart-silvestrini() {
+    login-argcd
+    echo "DEPLOY MY APPS IN ARGOCD"    
+    echo "CREATE ARGOCD APP APP-SILVESTRINI"
+    argocd app create app-silvestrini \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        --path charts/app-silvestrini \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
         --insecure
@@ -328,7 +347,7 @@ deploy-longhorn
 deploy-rancher
 deploy-argocd
 deploy-app-examples
-deploy-app-silvestrini
+deploy-chart-silvestrini
 deploy-kube-prometheus
 #deploy-openebs-localpv
 #deploy-gitlab
