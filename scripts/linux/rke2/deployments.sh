@@ -88,7 +88,7 @@ function deploy-longhorn() {
     helm upgrade --install longhorn longhorn/longhorn \
         --namespace longhorn-system \
         --create-namespace \
-        --values configs/longhorn/values.yaml
+        --values charts/longhorn/values.yaml
     sleep 10s
     kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
     # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
@@ -97,7 +97,7 @@ function deploy-longhorn() {
     #kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
     ## create ingress
-    kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
+    kubectl -n longhorn-system apply -f charts/longhorn/longhorn-ingress.yml
 }
 
 function deploy-rancher() {
