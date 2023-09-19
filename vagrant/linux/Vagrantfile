@@ -257,8 +257,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
-     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
-     node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+      # INSTALL SALT MASTER AND MINIONS
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+
+      # INSTALL RKE2
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
       
     end
 
@@ -339,6 +342,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+      # INSTALL SALT MASTER AND MINIONS
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
       
       # CONFIGURE STORAGE
       node.vm.provision "shell", name: "[SCRIPT STORAGE-LONGHORN.SH]", path: "../../scripts/linux/commons/storage-longhorn.sh"
@@ -370,4 +376,37 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # END TRIGGER DESTROY
     end
   end
+
+  # VM managment - managment.skynet.com.br
+  config.vm.define "managment"  do |managment|
+    managment.vm.box = BOX_LB
+    
+     
+     # VARIABLE HOSTNAME
+     VM_MANAGMENT= "managment"
+ 
+     # HOSTNAM
+     managment.vm.hostname =VM_MANAGMENT
+ 
+     # NETWORK
+     managment.vm.network "public_network", nic_type: "virtio", mac: "080022f3066b", ip: "192.168.0.132", netmask: "255.255.255.0", mode: "bridge",bridge: [
+       "Intel(R) I211 Gigabit Network Connection",
+       "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
+     ]
+ 
+     # PROVIDER
+     managment.vm.provider "virtualbox" do |vb|
+       vb.linked_clone = true
+       vb.name =VM_MANAGMENT
+       vb.memory = 1024
+       vb.cpus = 1
+     end
+ 
+     # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+     managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+     # INSTALL SALT MASTER AND MINIONS
+     managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+
+   end
 end

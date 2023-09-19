@@ -14,6 +14,7 @@ $TTL 1h
 
 infra-server01              A       192.168.0.130   ;glue record,dns master
 load-balance                A       192.168.0.131   ;rancher load balance
+managment                   A       192.168.0.132   ;managment configuration server
 control-plane01             A       192.168.0.140   ;rancher control plane 1
 control-plane02             A       192.168.0.141   ;rancher control plane 2
 control-plane03             A       192.168.0.142   ;rancher control plane 3

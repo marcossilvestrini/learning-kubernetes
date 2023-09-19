@@ -82,6 +82,7 @@ Set-Location $kubernetes
 vagrant up
 Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
 Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
+Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment
 Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
 Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
 Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
