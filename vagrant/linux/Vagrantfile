@@ -101,7 +101,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # VM infra-server01 - DNS Bind, Postfix,Samba, NFS, Pure-FTP
   config.vm.define "infra-server01"  do |infra_server01|
-    infra_server01.vm.box = BOX_DNS    
+    infra_server01.vm.box = BOX_DNS 
 
     # STORAGE    
 
@@ -165,6 +165,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # SET DNS BIND
     infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-BIND-MASTER.SH]", path: "../../scripts/linux/bind/userdata-bind-master.sh"
 
+    # INSTALL SALT MASTER AND MINIONS
+    managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+
     # SET ISC DHCP
     #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
 
@@ -223,6 +226,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # CONFIGURE NGINX LOAD BALANCE
     load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-LOAD-BALANCE.SH]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
+
+    # INSTALL SALT MASTER AND MINIONS
+    managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
 
   end
 
@@ -379,8 +385,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # VM managment - managment.skynet.com.br
   config.vm.define "managment"  do |managment|
-    managment.vm.box = BOX_LB
-    
+    managment.vm.box = "silvestrini-ol9"  
      
      # VARIABLE HOSTNAME
      VM_MANAGMENT= "managment"
@@ -389,7 +394,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      managment.vm.hostname =VM_MANAGMENT
  
      # NETWORK
-     managment.vm.network "public_network", nic_type: "virtio", mac: "080022f3066b", ip: "192.168.0.132", netmask: "255.255.255.0", mode: "bridge",bridge: [
+     managment.vm.network "public_network", nic_type: "virtio", ip: "192.168.0.132", netmask: "255.255.255.0", mode: "bridge",bridge: [
        "Intel(R) I211 Gigabit Network Connection",
        "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
      ]
