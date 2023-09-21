@@ -67,8 +67,8 @@ function deploy-metalLB() {
     sleep 10s
     kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=600s
 
-    echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
-    sleep 30
+    # echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
+    # sleep 30
     kubectl -n metallb-system apply -f configs/rke2/metallb.yaml
     echo "MetalLB deployment has complete with success!!!"
 }
@@ -120,6 +120,20 @@ function deploy-rancher() {
     #kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=60s
 }
 
+function login-argcd() {
+    # Login in server
+    echo "LOGIN IN ARGOCD"
+
+    PASS=$(
+        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+        echo
+    )
+    echo "y" | argocd --insecure login argocd.skynet.com.br \
+        --username=admin \
+        --password="$PASS" \
+        --grpc-web
+}
+
 function deploy-argocd() {
     # Deploy ArgoCD
     echo "DEPLOY ARGOCD STACK"
@@ -159,30 +173,16 @@ function deploy-argocd() {
     echo "GET ARGOCD INITIAL PASSWORD"
     kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password
 
-    ## Create argocd user
-    echo "CREATE NEW ARGOCD USER FOR DEPLOYMENT"
-    PASS=$(
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-        echo
-    )
-    login-argocd
-    kubectl delete -f configs/argocd/argocd-cm.yml
-    kubectl apply -f configs/argocd/argocd-cm.yml
-    argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"    
-}
-
-function login-argcd() {
-    # Login in server
-    echo "LOGIN IN ARGOCD"
-
-    PASS=$(
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-        echo
-    )
-    echo "y" | argocd --insecure login argocd.skynet.com.br \
-        --username=admin \
-        --password="$PASS" \
-        --grpc-web
+    # ## Create argocd user
+    # echo "CREATE NEW ARGOCD USER FOR DEPLOYMENT"
+    # PASS=$(
+    #     kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
+    #     echo
+    # )
+    # login-argocd
+    # kubectl delete -f configs/argocd/argocd-cm.yml
+    # kubectl apply -f configs/argocd/argocd-cm.yml
+    # argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"    
 }
 
 function update-argcd-password(){
@@ -204,7 +204,6 @@ function deploy-kube-prometheus() {
     argocd app create kube-prometheus \
         --repo https://github.com/prometheus-community/helm-charts.git \
         --path charts/kube-prometheus-stack/ \
-        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace kube-prometheus \
         --insecure
@@ -213,6 +212,9 @@ function deploy-kube-prometheus() {
     argocd app set kube-prometheus --sync-option ApplyOutOfSyncOnly=true
     argocd app set kube-prometheus --sync-option CreateNamespace=true
     argocd app set kube-prometheus --sync-option ServerSideApply=true
+
+    # Waiting for deploy
+    argocd app wait kube-prometheus --operation
 
     # Sync app
     echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
@@ -233,25 +235,31 @@ function deploy-app-examples() {
     argocd app create guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
         --path guestbook \
-        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace examples \
         --insecure
+
     argocd app set guestbook --sync-option ApplyOutOfSyncOnly=true
     argocd app set guestbook --sync-option CreateNamespace=true
     argocd app set guestbook --sync-option ServerSideApply=true
+
+    # Waiting for deploy
+    argocd app wait guestbook --operation
 
     ### Create the example 2 - Helm Charts
     argocd app create helm-guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
         --path helm-guestbook \
-        --upsert \
+
         --dest-server https://kubernetes.default.svc \
         --dest-namespace examples \
         --insecure
     argocd app set helm-guestbook --sync-option ApplyOutOfSyncOnly=true
     argocd app set helm-guestbook --sync-option CreateNamespace=true
     argocd app set helm-guestbook --sync-option ServerSideApply=true
+
+    # Waiting for deploy
+    argocd app wait helm-guestbook --operation
 
     # Sync app
     echo "SYNC APP EXAMPLES"
@@ -265,13 +273,15 @@ function deploy-app-silvestrini() {
     argocd app create app-silvestrini \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path apps/app-silvestrini \
-        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
         --insecure
     argocd app set app-silvestrini --sync-option ApplyOutOfSyncOnly=true
     argocd app set app-silvestrini --sync-option CreateNamespace=true
     argocd app set app-silvestrini --sync-option ServerSideApply=true
+
+    # Waiting for deploy
+    argocd app wait app-silvestrini --operation
 
     # Sync apps
     echo "SYNC APP IN ARGOCD"
@@ -285,13 +295,15 @@ function deploy-chart-silvestrini() {
     argocd app create app-silvestrini \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path charts/app-silvestrini \
-        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
         --insecure
     argocd app set app-silvestrini --sync-option ApplyOutOfSyncOnly=true
     argocd app set app-silvestrini --sync-option CreateNamespace=true
     argocd app set app-silvestrini --sync-option ServerSideApply=true
+
+    # Waiting for deploy
+    argocd app wait app-silvestrini --operation
 
     # Sync apps
     echo "SYNC APP IN ARGOCD"
@@ -307,13 +319,16 @@ function deploy-openebs-localpv() {
     argocd app create openebs-localpv-hostpath \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path openebs/dynamic-localpv-hostpath \
-        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace openebs-localpv-hostpath \
         --insecure    
     argocd app set openebs-localpv-hostpath --sync-option ApplyOutOfSyncOnly=true
     argocd app set openebs-localpv-hostpath --sync-option CreateNamespace=true
     argocd app set openebs-localpv-hostpath --sync-option ServerSideApply=true
+
+    # Waiting for deploy
+    argocd app wait  openebs-localpv-hostpath --operation
+
     echo "SYNC APP IN ARGOCD"
     argocd app sync --insecure openebs-localpv-hostpath
 }
