@@ -54,7 +54,7 @@ function deploy-cert-manager() {
         --version v1.12.0 \
         --set installCRDs=true
     sleep 10s
-    kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=300s
+    kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=600s
 }
 
 function deploy-metalLB() {
@@ -65,7 +65,7 @@ function deploy-metalLB() {
     #time_out=0
     echo "Check MetalLB deployment..."
     sleep 10s
-    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=300s
+    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=600s
 
     echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
     sleep 30
@@ -90,7 +90,7 @@ function deploy-longhorn() {
         --create-namespace \
         --values charts/longhorn/values.yaml
     sleep 10s
-    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
+    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=600s
     # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
 
     ## create secret

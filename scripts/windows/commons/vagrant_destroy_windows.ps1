@@ -16,11 +16,11 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
   Break
 }
 
-#Stop vagrant process
+# Stop vagrant process
 Get-Process -Name *vagrant* | Stop-Process -Force
 Get-Process -Name *ruby* | Stop-Process -Force
 
-#  define variables
+# Define variables
 switch ($(hostname)) {
     "silvestrini" {       
         $vagrant = "E:\Apps\Vagrant\bin\vagrant.exe"
@@ -47,7 +47,7 @@ Start-Process -Wait -NoNewWindow -FilePath "$virtualboxFolder\VBoxManage.exe" `
 # Vagrant home directory for downloadad boxes.
 setx VAGRANT_HOME $vagrantHome >$null
 
-#Vagrant Boxes
+# Vagrant Boxes
 $kubernetes="$baseVagrantfile\linux"
 
 # VM name
@@ -76,7 +76,7 @@ $vmStorageFolders = @(
     }    
 )
 
-#Destroy lab stack
+# Destroy lab stack
 Set-Location $kubernetes
 Start-Process -Wait -WindowStyle Hidden  -FilePath $vagrant -ArgumentList "destroy -f"  -Verb RunAs
 

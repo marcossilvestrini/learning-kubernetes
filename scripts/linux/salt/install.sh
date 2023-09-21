@@ -72,7 +72,7 @@ function install-salt() {
         salt-key -y -A
 
         # Test connections with minions
-        salt -t 30 '*' test.ping
+        #salt -t 30 '*' test.ping
 
     else
         echo "CONFIGURE SALT MINION IN $(hostname -f)"        

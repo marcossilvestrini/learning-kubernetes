@@ -166,7 +166,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-BIND-MASTER.SH]", path: "../../scripts/linux/bind/userdata-bind-master.sh"
 
     # INSTALL SALT MASTER AND MINIONS
-    managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+    infra_server01.vm.provision "shell", name: "[SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
 
     # SET ISC DHCP
     #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
@@ -228,7 +228,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-LOAD-BALANCE.SH]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
 
     # INSTALL SALT MASTER AND MINIONS
-    managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+    load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
 
   end
 
