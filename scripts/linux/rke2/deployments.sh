@@ -204,6 +204,7 @@ function deploy-kube-prometheus() {
     argocd app create kube-prometheus \
         --repo https://github.com/prometheus-community/helm-charts.git \
         --path charts/kube-prometheus-stack/ \
+        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace kube-prometheus \
         --insecure
@@ -232,6 +233,7 @@ function deploy-app-examples() {
     argocd app create guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
         --path guestbook \
+        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace examples \
         --insecure
@@ -243,6 +245,7 @@ function deploy-app-examples() {
     argocd app create helm-guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
         --path helm-guestbook \
+        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace examples \
         --insecure
@@ -262,6 +265,7 @@ function deploy-app-silvestrini() {
     argocd app create app-silvestrini \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path apps/app-silvestrini \
+        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
         --insecure
@@ -281,6 +285,7 @@ function deploy-chart-silvestrini() {
     argocd app create app-silvestrini \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path charts/app-silvestrini \
+        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
         --insecure
@@ -302,6 +307,7 @@ function deploy-openebs-localpv() {
     argocd app create openebs-localpv-hostpath \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path openebs/dynamic-localpv-hostpath \
+        --upsert \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace openebs-localpv-hostpath \
         --insecure    
