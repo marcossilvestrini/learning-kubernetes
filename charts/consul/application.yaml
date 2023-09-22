@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: consul-application
+  name: consul
   namespace: argocd
 spec:
   project: default # Nome do projeto Argo CD (ajuste conforme necessário)
