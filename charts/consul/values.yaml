@@ -1799,7 +1799,7 @@ ui:
   ingress:
     # This will create an Ingress resource for the Consul UI.
     # @type: boolean
-    enabled: false
+    enabled: true
 
     # Optionally set the ingressClassName.
     ingressClassName: ""
