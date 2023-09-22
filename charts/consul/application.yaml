@@ -7,7 +7,7 @@ spec:
   project: default # Nome do projeto Argo CD (ajuste conforme necessário)
   source:
     repoURL: https://github.com/hashicorp/consul-k8s
-    targetRevision: HEAD # Você pode especificar uma revisão específica, se necessário
+    targetRevision: main # Você pode especificar uma revisão específica, se necessário
     path: charts/consul
     helm:
       valueFiles:
