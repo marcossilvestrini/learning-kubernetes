@@ -353,8 +353,8 @@ function deploy-netbox() {
     echo "DEPLOY NETBOX IN ARGOCD"    
     echo "CREATE ARGOCD APP NETBOX"
     argocd app create netbox \
-        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-        --path charts/netbox \
+        --repo https://charts.boo.tc.git \
+        --path charts \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace netbox \
         --insecure
