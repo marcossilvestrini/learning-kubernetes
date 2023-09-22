@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/hashicorp/consul-k8s.git
+    repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git \
     targetRevision: main
     path: charts/consul
   destination:
