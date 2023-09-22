@@ -1812,7 +1812,8 @@ ui:
     hosts:
       - host: consul.skynet.com.br
         paths:
-          path: /
+          - path: /
+            
 
     # tls is a list of hosts and secret name in an Ingress
     # which tells the Ingress controller to secure the channel.
