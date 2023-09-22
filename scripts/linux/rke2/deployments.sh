@@ -88,7 +88,7 @@ function deploy-longhorn() {
     helm upgrade --install longhorn longhorn/longhorn \
         --namespace longhorn-system \
         --create-namespace \
-        --values configs/longhorn/values.yaml
+        --values charts/longhorn/values.yaml
     sleep 10s
     kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
     # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
@@ -97,7 +97,7 @@ function deploy-longhorn() {
     #kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
 
     ## create ingress
-    kubectl -n longhorn-system apply -f configs/longhorn/longhorn-ingress.yml
+    kubectl -n longhorn-system apply -f charts/longhorn/longhorn-ingress.yml
 }
 
 function deploy-rancher() {
@@ -274,6 +274,25 @@ function deploy-app-silvestrini() {
     argocd app sync --insecure app-silvestrini
 }
 
+function deploy-chart-silvestrini() {
+    login-argcd
+    echo "DEPLOY MY APPS IN ARGOCD"    
+    echo "CREATE ARGOCD APP APP-SILVESTRINI"
+    argocd app create app-silvestrini \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        --path charts/app-silvestrini \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace silvestrini \
+        --insecure
+    argocd app set app-silvestrini --sync-option ApplyOutOfSyncOnly=true
+    argocd app set app-silvestrini --sync-option CreateNamespace=true
+    argocd app set app-silvestrini --sync-option ServerSideApply=true
+
+    # Sync apps
+    echo "SYNC APP IN ARGOCD"
+    argocd app sync --insecure app-silvestrini
+}
+
 function deploy-openebs-localpv() {
     login-argcd    
     echo "DEPLOY OPENEBS LOCALPV"
@@ -328,7 +347,7 @@ deploy-longhorn
 deploy-rancher
 deploy-argocd
 deploy-app-examples
-deploy-app-silvestrini
+deploy-chart-silvestrini
 deploy-kube-prometheus
 #deploy-openebs-localpv
 #deploy-gitlab

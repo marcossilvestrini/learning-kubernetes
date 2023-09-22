@@ -16,6 +16,7 @@ $TTL 1h
 102                 PTR     luizalabs.skynet.com.br.
 130                 PTR     infra-server01.skynet.com.br.
 131                 PTR     load-balance.skynet.com.br.
+132                 PTR     managment.skynet.com.br.
 140                 PTR     control-plane01.skynet.com.br.
 141                 PTR     control-plane02.skynet.com.br.
 142                 PTR     control-plane03.skynet.com.br.
