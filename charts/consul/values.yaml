@@ -1,21 +1,22 @@
-global:
-  enabled: true
+consul:
+  global:
+    enabled: true
 
-server:
-  enabled: true
+  server:
+    enabled: true
 
-ui:
-  enabled: true
+  ui:
+    enabled: true
 
-ingress:
-  enabled: true
-  annotations:
-    kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod"
-  hosts:
-    - name: consul.skynet.com.br
-      path: /
-      tls:
-        - secretName: consul-tls-secret
-          hosts:
-            - consul.skynet.com.br
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    hosts:
+      - name: consul.skynet.com.br
+        path: /
+        tls:
+          - secretName: consul-tls-secret
+            hosts:
+              - consul.skynet.com.br
