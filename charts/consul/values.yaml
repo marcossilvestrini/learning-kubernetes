@@ -1805,7 +1805,7 @@ ui:
     ingressClassName: "nginx"
 
     # pathType override - refer to: https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
-    #pathType: Prefix
+    pathType: ImplementationSpecific
 
     # hosts is a list of host name to create Ingress rules.
     #
@@ -1818,8 +1818,7 @@ ui:
     hosts:
     - host: consul.skynet.com.br
       paths:
-        - path: /
-          pathType: ImplementationSpecific
+        - path: /          
     #       - /test
     # ```
     #
