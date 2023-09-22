@@ -4,19 +4,23 @@ metadata:
   name: consul
   namespace: argocd
 spec:
-  project: default
-  source:
-    repoURL: https://github.com/hashicorp/consul-k8s.git
-    targetRevision: main
-    path: charts/consul
   destination:
-    server: https://kubernetes.default.svc
+    server: 'https://kubernetes.default.svc'
     namespace: consul
+  source:
+    repoURL: 'https://github.com/hashicorp/consul-k8s'
+    path: charts/consul
+    targetRevision: main
+    helm:
+      valueFiles:
+        - values.yaml
+  project: default
   syncPolicy:
+    syncOptions:
+      - CreateNamespace=true    
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
     automated:
       prune: true
       selfHeal: true
-  helm:
-    releaseName: consul
-    valueFiles:
-      - values.yaml
+
