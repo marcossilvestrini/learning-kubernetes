@@ -1813,7 +1813,7 @@ ui:
     hosts:
       - host: consul.skynet.com.br
         paths:
-           - /*
+           - /
     #       - /test
     # ```
     #
