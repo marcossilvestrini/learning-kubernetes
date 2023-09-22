@@ -1799,7 +1799,7 @@ ui:
   ingress:
     # This will create an Ingress resource for the Consul UI.
     # @type: boolean
-    enabled: false
+    enabled: true
 
     # Optionally set the ingressClassName.
     ingressClassName: ""
@@ -1809,16 +1809,11 @@ ui:
 
     # hosts is a list of host name to create Ingress rules.
     #
-    # ```yaml
-    # hosts:
-    #   - host: foo.bar
-    #     paths:
-    #       - /example
-    #       - /test
-    # ```
-    #
-    # @type: array<map>
-    hosts: []
+    
+    hosts:
+      - host: consul.skynet.com.br
+        paths:
+          - /    
 
     # tls is a list of hosts and secret name in an Ingress
     # which tells the Ingress controller to secure the channel.
@@ -1841,7 +1836,9 @@ ui:
     #   'annotation-key': annotation-value
     # ```
     # @type: string
-    annotations: null
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
 
   # Configurations for displaying metrics in the UI.
   metrics:
