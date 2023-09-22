@@ -1,0 +1,15 @@
+global:
+  nameOverride: consul
+  fullnameOverride: consul
+
+server:
+  enabled: true
+
+ui:
+  enabled: true
+
+client:
+  enabled: true
+
+connectInject:
+  enabled: true

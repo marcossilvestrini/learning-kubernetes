@@ -5,22 +5,45 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
     namespace: consul
-  source:
-    repoURL: 'https://github.com/hashicorp/consul-k8s'
-    path: charts/consul
-    targetRevision: main
-    helm:
-      valueFiles:
-        - my-values.yaml
+
   project: default
+
+  source:
+    repoURL: https://github.com/hashicorp/consul-k8s
+    targetRevision: main
+    path: charts/consul
+
   syncPolicy:
-    syncOptions:
-      - CreateNamespace=true    
-      - ApplyOutOfSyncOnly=true
-      - ServerSideApply=true
     automated:
       prune: true
       selfHeal: true
 
+  chart:
+    values: |
+      global:
+        nameOverride: consul
+        fullnameOverride: consul
+
+      server:
+        enabled: true
+
+      ui:
+        enabled: true
+
+      client:
+        enabled: true
+
+      connectInject:
+        enabled: true
+
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: nginx # Substitua pela classe do ingress desejada
+    hosts:
+      - consul.skynet.com.br
+    paths:
+      - /
+    tls: []
