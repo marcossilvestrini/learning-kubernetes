@@ -1810,15 +1810,12 @@ ui:
     # hosts is a list of host name to create Ingress rules.
     #
     # ```yaml
-    # hosts:
-    #   - host: consul.skynet.com.br
-    #     paths:
-    #       - /
-
     hosts:
-    - host: consul.skynet.com.br
-      paths:
-        - path: /        
+       - host: consul.skynet.com.br
+         paths:
+           - /
+
+  
     #       - /test
     # ```
     #
