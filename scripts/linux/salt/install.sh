@@ -65,11 +65,14 @@ function install-salt() {
         systemctl enable salt-syndic && systemctl start salt-syndic
         systemctl enable salt-api && systemctl start salt-api
 
+        # Waiting for servevices up
+        sleep 30
+
         # Accept minions keys
         salt-key -y -A
 
         # Test connections with minions
-        salt -t 300 '*' test.ping
+        #salt -t 30 '*' test.ping
 
     else
         echo "CONFIGURE SALT MINION IN $(hostname -f)"        

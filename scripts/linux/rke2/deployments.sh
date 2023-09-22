@@ -37,6 +37,46 @@ function init() {
     fi
 }
 
+function deploy-argocd() {
+    # Deploy ArgoCD
+    echo "DEPLOY ARGOCD STACK"
+
+    ## Create a namespace
+    echo "CREATE ARGOCD NAMESPACE"
+    kubectl create namespace argocd
+
+    ## Ingress
+    echo "CREATE ARGOCD INGRESS"
+    kubectl apply -f apps/argocd/ingress.yaml
+
+    ## Deployment
+    echo "DEPLOY ARGOCD PODS"
+    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    echo "Waiting for deployment argocd to complete..."
+    sleep 10s    
+    kubectl wait --for condition=containersready -n argocd pod --all --timeout=900s
+    STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+    while [ "$STATUS" != 200 ]; do
+        clear
+        echo "Waiting for argocd stack to be initialized..."
+        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+        echo "$STATUS"
+        sleep 1
+    done
+
+    ## Install CLI
+    echo "INSTALL ARGOCD CLI"
+    if ! command -v argocd &>/dev/null; then
+        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+        rm argocd-linux-amd64
+    fi
+
+    ## Save password
+    echo "GET ARGOCD INITIAL PASSWORD"
+    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password       
+}
+
 function deploy-cert-manager() {
     # Deploy cert-manager
     echo "DEPLOY CERT-MANAGER STACK"
@@ -53,8 +93,9 @@ function deploy-cert-manager() {
         --create-namespace \
         --version v1.12.0 \
         --set installCRDs=true
+    echo "Waiting for deployment cert-manager to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=300s
+    kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=600s
 }
 
 function deploy-metalLB() {
@@ -63,12 +104,12 @@ function deploy-metalLB() {
     kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml
     #ok=0
     #time_out=0
-    echo "Check MetalLB deployment..."
+    echo "Waiting for deployment metallb to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=300s
+    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=600s
 
-    echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
-    sleep 30
+    # echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
+    # sleep 30
     kubectl -n metallb-system apply -f configs/rke2/metallb.yaml
     echo "MetalLB deployment has complete with success!!!"
 }
@@ -89,8 +130,9 @@ function deploy-longhorn() {
         --namespace longhorn-system \
         --create-namespace \
         --values charts/longhorn/values.yaml
+    echo "Waiting for deployment longhorn to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=300s
+    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=900s
     # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
 
     ## create secret
@@ -116,59 +158,9 @@ function deploy-rancher() {
         --namespace cattle-system \
         --set hostname=rancher.skynet.com.br \
         --set bootstrapPassword=Rancher@123456
+    echo "Waiting for deployment rancher to complete..."
     sleep 10s
     #kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=60s
-}
-
-function deploy-argocd() {
-    # Deploy ArgoCD
-    echo "DEPLOY ARGOCD STACK"
-
-    ## Create a namespace
-    echo "CREATE ARGOCD NAMESPACE"
-    kubectl create namespace argocd
-
-    ## Ingress
-    echo "CREATE ARGOCD INGRESS"
-    kubectl apply -f configs/argocd/ingress.yaml
-
-    ## Deployment
-    echo "DEPLOY ARGOCD PODS"
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-    sleep 10s
-    echo "Waiting for deployment argocd to complete..."
-    kubectl wait --for condition=containersready -n argocd pod --all --timeout=900s
-    STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
-    while [ "$STATUS" != 200 ]; do
-        clear
-        echo "Waiting for argocd stack to be initialized..."
-        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
-        echo "$STATUS"
-        sleep 1
-    done
-
-    ## Install CLI
-    echo "INSTALL ARGOCD CLI"
-    if ! command -v argocd &>/dev/null; then
-        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-        rm argocd-linux-amd64
-    fi
-
-    ## Save password
-    echo "GET ARGOCD INITIAL PASSWORD"
-    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password
-
-    ## Create argocd user
-    echo "CREATE NEW ARGOCD USER FOR DEPLOYMENT"
-    PASS=$(
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-        echo
-    )
-    login-argocd
-    kubectl delete -f configs/argocd/argocd-cm.yml
-    kubectl apply -f configs/argocd/argocd-cm.yml
-    argocd account update-password --account "$ARGOCD_USER" --current-password "$PASS" --new-password "$ARGOCD_PASS"    
 }
 
 function login-argcd() {
@@ -217,6 +209,10 @@ function deploy-kube-prometheus() {
     echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
     argocd app sync --insecure kube-prometheus
 
+    # Waiting for deploy
+    echo "Waiting for deployment kube-prometheus to complete..."
+    argocd app wait kube-prometheus --health --timeout 300
+
     # Create ingress
     kubectl apply -f apps/kube-prometheus/ingress.yaml
 }
@@ -235,6 +231,7 @@ function deploy-app-examples() {
         --dest-server https://kubernetes.default.svc \
         --dest-namespace examples \
         --insecure
+
     argocd app set guestbook --sync-option ApplyOutOfSyncOnly=true
     argocd app set guestbook --sync-option CreateNamespace=true
     argocd app set guestbook --sync-option ServerSideApply=true
@@ -253,6 +250,11 @@ function deploy-app-examples() {
     # Sync app
     echo "SYNC APP EXAMPLES"
     argocd app sync --insecure guestbook helm-guestbook
+
+    # Waiting for deploy
+    echo "Waiting for deployment guestbook to complete..."
+    argocd app wait guestbook --health --timeout 300 
+    argocd app wait helm-guestbook --health --timeout 300 
 }
 
 function deploy-app-silvestrini() {
@@ -272,6 +274,10 @@ function deploy-app-silvestrini() {
     # Sync apps
     echo "SYNC APP IN ARGOCD"
     argocd app sync --insecure app-silvestrini
+
+    # Waiting for deploy
+    echo "Waiting for deployment app-silvestrini to complete..."
+    argocd app wait app-silvestrini --health --timeout 300 
 }
 
 function deploy-chart-silvestrini() {
@@ -291,6 +297,10 @@ function deploy-chart-silvestrini() {
     # Sync apps
     echo "SYNC APP IN ARGOCD"
     argocd app sync --insecure app-silvestrini
+
+    # Waiting for deploy
+    echo "Waiting for deployment app-silvestrini to complete..."
+    argocd app wait app-silvestrini --health --timeout 300 
 }
 
 function deploy-openebs-localpv() {
@@ -308,8 +318,13 @@ function deploy-openebs-localpv() {
     argocd app set openebs-localpv-hostpath --sync-option ApplyOutOfSyncOnly=true
     argocd app set openebs-localpv-hostpath --sync-option CreateNamespace=true
     argocd app set openebs-localpv-hostpath --sync-option ServerSideApply=true
+
     echo "SYNC APP IN ARGOCD"
     argocd app sync --insecure openebs-localpv-hostpath
+
+    # Waiting for deploy
+    echo "Waiting for deployment openebs-localpv to complete..."
+    argocd app wait  openebs-localpv-hostpath --health --timeout 300 
 }
 
 function deploy-gitlab() {
@@ -341,11 +356,11 @@ function delete-all-apps(){
 # Main
 source .bashrc
 init
+deploy-argocd
 deploy-cert-manager
 deploy-metalLB
 deploy-longhorn
 deploy-rancher
-deploy-argocd
 deploy-app-examples
 deploy-chart-silvestrini
 deploy-kube-prometheus
