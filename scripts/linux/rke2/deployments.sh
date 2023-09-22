@@ -392,7 +392,7 @@ function deploy-consul() {
         --upsert
     
     # Set app preferences in argocd  
-    argocd app set consul --values my-values.yaml  
+    argocd app set consul --values values.yaml
     argocd app set consul --sync-option ApplyOutOfSyncOnly=true
     argocd app set consul --sync-option CreateNamespace=true
     argocd app set consul --sync-option ServerSideApply=true
