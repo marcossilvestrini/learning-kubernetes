@@ -348,6 +348,29 @@ function deploy-gitlab() {
     kubectl -n gitlab get secret gitlab-gitlab-initial-root-password -ojsonpath='{.data.password}' | base64 --decode >security/gitlab
 }
 
+function deploy-netbox() {
+    login-argcd
+    echo "DEPLOY NETBOX IN ARGOCD"    
+    echo "CREATE ARGOCD APP NETBOX"
+    argocd app create netbox \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        --path charts/netbox \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace netbox \
+        --insecure
+    argocd app set netbox --sync-option ApplyOutOfSyncOnly=true
+    argocd app set netbox --sync-option CreateNamespace=true
+    argocd app set netbox --sync-option ServerSideApply=true
+
+    # Sync apps
+    echo "SYNC APP IN ARGOCD"
+    argocd app sync --insecure netbox
+
+    # Waiting for deploy
+    echo "Waiting for deployment netbox to complete..."
+    argocd app wait netbox --health --timeout 300 
+}
+
 function delete-all-apps(){
     login-argcd
     argocd  app delete -y openebs-localpv-hostpath kube-prometheus guestbook helm-guestbook app-silvestrini
