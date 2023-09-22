@@ -570,15 +570,15 @@ ingress:
         # required. This could be useful if for exemple you are using the AWS
         # ALB Ingress Controller and want to set up automatic SSL redirect.
         # https://kubernetes-sigs.github.io/aws-alb-ingress-controller/guide/tasks/ssl_redirect/#redirect-traffic-from-http-to-https
-        # - path: /*
-           backend:
-             serviceName: netbox
-             servicePort: 80
+        - path: /
+          backend:
+              serviceName: netbox
+              servicePort: 80
         #
         # Or you can let the template set it for you.
         # Both types of rule can be combined.
         # NB: You may also want to set the basePath above
-        - /
+        #- /
 
   tls: []
   #  - secretName: chart-example-tls
