@@ -1818,7 +1818,7 @@ ui:
     hosts:
     - host: consul.skynet.com.br
       paths:
-        - path: /          
+        - path: /        
     #       - /test
     # ```
     #
