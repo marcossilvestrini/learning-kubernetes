@@ -1799,7 +1799,7 @@ ui:
   ingress:
     # This will create an Ingress resource for the Consul UI.
     # @type: boolean
-    enabled: false
+    enabled: true
 
     # Optionally set the ingressClassName.
     ingressClassName: ""
@@ -1810,15 +1810,15 @@ ui:
     # hosts is a list of host name to create Ingress rules.
     #
     # ```yaml
-    # hosts:
-    #   - host: foo.bar
-    #     paths:
-    #       - /example
+    hosts:
+      - host: consul.skynet.com.br
+        paths:
+           - /*
     #       - /test
     # ```
     #
     # @type: array<map>
-    hosts: []
+    #hosts: []
 
     # tls is a list of hosts and secret name in an Ingress
     # which tells the Ingress controller to secure the channel.
