@@ -1808,12 +1808,11 @@ ui:
     pathType: Prefix
 
     # hosts is a list of host name to create Ingress rules.
-    #
-    
+    #    
     hosts:
       - host: consul.skynet.com.br
         paths:
-          - /    
+          path: /
 
     # tls is a list of hosts and secret name in an Ingress
     # which tells the Ingress controller to secure the channel.
@@ -1837,8 +1836,8 @@ ui:
     # ```
     # @type: string
     annotations:
-        kubernetes.io/ingress.class: nginx
-        kubernetes.io/tls-acme: "true"
+      kubernetes.io/ingress.class: nginx
+      kubernetes.io/tls-acme: "true"
 
   # Configurations for displaying metrics in the UI.
   metrics:
