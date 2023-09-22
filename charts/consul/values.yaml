@@ -1,0 +1,38 @@
+# Values that configure the Consul UI.
+ui:
+  ingress:
+    # This will create an Ingress resource for the Consul UI.
+    # @type: boolean
+    enabled: true    
+
+    # Optionally set the ingressClassName.
+    ingressClassName: ""
+
+    # pathType override - refer to: https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
+    pathType: Prefix
+
+    # hosts is a list of host name to create Ingress rules.
+    hosts:
+      - host: consul.skynet.com.br
+        paths:
+          - /
+    # tls is a list of hosts and secret name in an Ingress
+    # which tells the Ingress controller to secure the channel.
+    #
+    tls:
+      - hosts:
+        - consul.skynet.com.br
+        secretName: consul
+    # Annotations to apply to the UI ingress.
+    #
+    # Example:
+    #
+    # ```yaml
+    # annotations: |
+    #   'annotation-key': annotation-value
+    # ```
+    # @type: string
+    annotations:
+        kubernetes.io/ingress.class: nginx
+        kubernetes.io/tls-acme: "true"
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"

@@ -379,6 +379,33 @@ function deploy-netbox() {
     argocd app wait netbox --health --timeout 300 
 }
 
+function deploy-consul() {
+    login-argcd
+    echo "DEPLOY CONSUL IN ARGOCD"    
+    echo "CREATE ARGOCD APP CONSUL"
+    argocd app create consul \
+        --repo https://github.com/hashicorp/consul-k8s \
+        --path charts/consul \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace consul \
+        --insecure \
+        --upsert
+    
+    # Set app preferences in argocd  
+    argocd app set consul --values values.yaml  
+    argocd app set consul --sync-option ApplyOutOfSyncOnly=true
+    argocd app set consul --sync-option CreateNamespace=true
+    argocd app set consul --sync-option ServerSideApply=true
+
+    # Sync apps
+    echo "SYNC APP IN ARGOCD"
+    argocd app sync --insecure consul
+
+    # Waiting for deploy
+    echo "Waiting for deployment consul to complete..."
+    argocd app wait consul --health --timeout 300 
+}
+
 function delete-all-apps(){
     login-argcd
     argocd  app delete -y openebs-localpv-hostpath kube-prometheus guestbook helm-guestbook app-silvestrini
