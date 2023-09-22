@@ -198,7 +198,8 @@ function deploy-kube-prometheus() {
         --path charts/kube-prometheus-stack/ \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace kube-prometheus \
-        --insecure
+        --insecure \
+        --upsert
 
     # Set argocd app with some options
     argocd app set kube-prometheus --sync-option ApplyOutOfSyncOnly=true
@@ -230,7 +231,8 @@ function deploy-app-examples() {
         --path guestbook \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace examples \
-        --insecure
+        --insecure \
+        --upsert
 
     argocd app set guestbook --sync-option ApplyOutOfSyncOnly=true
     argocd app set guestbook --sync-option CreateNamespace=true
@@ -266,7 +268,8 @@ function deploy-app-silvestrini() {
         --path apps/app-silvestrini \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
-        --insecure
+        --insecure \
+        --upsert
     argocd app set app-silvestrini --sync-option ApplyOutOfSyncOnly=true
     argocd app set app-silvestrini --sync-option CreateNamespace=true
     argocd app set app-silvestrini --sync-option ServerSideApply=true
@@ -289,7 +292,8 @@ function deploy-chart-silvestrini() {
         --path charts/app-silvestrini \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace silvestrini \
-        --insecure
+        --insecure \
+        --upsert
     argocd app set app-silvestrini --sync-option ApplyOutOfSyncOnly=true
     argocd app set app-silvestrini --sync-option CreateNamespace=true
     argocd app set app-silvestrini --sync-option ServerSideApply=true
@@ -314,7 +318,8 @@ function deploy-openebs-localpv() {
         --path openebs/dynamic-localpv-hostpath \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace openebs-localpv-hostpath \
-        --insecure    
+        --insecure \
+        --upsert
     argocd app set openebs-localpv-hostpath --sync-option ApplyOutOfSyncOnly=true
     argocd app set openebs-localpv-hostpath --sync-option CreateNamespace=true
     argocd app set openebs-localpv-hostpath --sync-option ServerSideApply=true
