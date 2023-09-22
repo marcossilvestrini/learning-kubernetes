@@ -384,7 +384,7 @@ function deploy-consul() {
     echo "DEPLOY CONSUL IN ARGOCD"    
     echo "CREATE ARGOCD APP CONSUL"
     argocd app create consul \
-        --repo https://github.com/hashicorp/consul-k8s \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
         --path charts/consul \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace consul \
