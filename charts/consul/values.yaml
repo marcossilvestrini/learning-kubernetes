@@ -1839,9 +1839,7 @@ ui:
     #   'annotation-key': annotation-value
     # ```
     # @type: string
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+    annotations: null      
 
   # Configurations for displaying metrics in the UI.
   metrics:
