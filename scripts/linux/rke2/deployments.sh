@@ -357,7 +357,8 @@ function deploy-netbox() {
         --path charts/netbox \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace netbox \
-        --insecure
+        --insecure \
+        --upsert
     
     # Set app preferences in argocd    
     argocd app set netbox --sync-option ApplyOutOfSyncOnly=true
