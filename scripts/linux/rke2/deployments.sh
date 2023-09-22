@@ -353,14 +353,13 @@ function deploy-netbox() {
     echo "DEPLOY NETBOX IN ARGOCD"    
     echo "CREATE ARGOCD APP NETBOX"
     argocd app create netbox \
-        --repo https://charts.boo.tc.git \
-        --path charts \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        --path charts/netbox \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace netbox \
         --insecure
     
-    # Set app preferences in argocd
-    argocd app set netbox --values values.yaml
+    # Set app preferences in argocd    
     argocd app set netbox --sync-option ApplyOutOfSyncOnly=true
     argocd app set netbox --sync-option CreateNamespace=true
     argocd app set netbox --sync-option ServerSideApply=true
