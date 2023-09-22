@@ -5,20 +5,21 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    server: https://kubernetes.default.svc
-    namespace: consul
+    server: 'https://kubernetes.default.svc'
+    namespace: NAMESPACE_AQUI # Substitua pelo namespace desejado
 
   project: default
 
   source:
-    repoURL: https://github.com/hashicorp/consul-k8s
+    repoURL: 'https://github.com/hashicorp/consul-k8s'
     targetRevision: main
-    path: charts/consul
+    path: 'charts/consul'
 
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
 
-  chart:
-    values: values.yaml
+  helm:
+    valueFiles:
+      - values.yaml # Caminho para o arquivo de valores personalizados
