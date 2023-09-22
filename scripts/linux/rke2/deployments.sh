@@ -205,13 +205,13 @@ function deploy-kube-prometheus() {
     argocd app set kube-prometheus --sync-option CreateNamespace=true
     argocd app set kube-prometheus --sync-option ServerSideApply=true
 
-    # Waiting for deploy
-    echo "Waiting for deployment kube-prometheus to complete..."
-    argocd app wait kube-prometheus --health --timeout 300
-
     # Sync app
     echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
     argocd app sync --insecure kube-prometheus
+
+    # Waiting for deploy
+    echo "Waiting for deployment kube-prometheus to complete..."
+    argocd app wait kube-prometheus --health --timeout 300
 
     # Create ingress
     kubectl apply -f apps/kube-prometheus/ingress.yaml
@@ -236,10 +236,6 @@ function deploy-app-examples() {
     argocd app set guestbook --sync-option CreateNamespace=true
     argocd app set guestbook --sync-option ServerSideApply=true
 
-    # Waiting for deploy
-    echo "Waiting for deployment guestbook to complete..."
-    argocd app wait guestbook --health --timeout 300 
-
     ### Create the example 2 - Helm Charts
     argocd app create helm-guestbook \
         --repo https://github.com/argoproj/argocd-example-apps.git \
@@ -251,13 +247,14 @@ function deploy-app-examples() {
     argocd app set helm-guestbook --sync-option CreateNamespace=true
     argocd app set helm-guestbook --sync-option ServerSideApply=true
 
-    # Waiting for deploy
-    echo "Waiting for deployment helm-guestbook to complete..."
-    argocd app wait helm-guestbook --health --timeout 300 
-
     # Sync app
     echo "SYNC APP EXAMPLES"
     argocd app sync --insecure guestbook helm-guestbook
+
+    # Waiting for deploy
+    echo "Waiting for deployment guestbook to complete..."
+    argocd app wait guestbook --health --timeout 300 
+    argocd app wait helm-guestbook --health --timeout 300 
 }
 
 function deploy-app-silvestrini() {
@@ -274,13 +271,13 @@ function deploy-app-silvestrini() {
     argocd app set app-silvestrini --sync-option CreateNamespace=true
     argocd app set app-silvestrini --sync-option ServerSideApply=true
 
-    # Waiting for deploy
-    echo "Waiting for deployment app-silvestrini to complete..."
-    argocd app wait app-silvestrini --health --timeout 300 
-
     # Sync apps
     echo "SYNC APP IN ARGOCD"
     argocd app sync --insecure app-silvestrini
+
+    # Waiting for deploy
+    echo "Waiting for deployment app-silvestrini to complete..."
+    argocd app wait app-silvestrini --health --timeout 300 
 }
 
 function deploy-chart-silvestrini() {
@@ -297,13 +294,13 @@ function deploy-chart-silvestrini() {
     argocd app set app-silvestrini --sync-option CreateNamespace=true
     argocd app set app-silvestrini --sync-option ServerSideApply=true
 
-    # Waiting for deploy
-    echo "Waiting for deployment app-silvestrini to complete..."
-    argocd app wait app-silvestrini --health --timeout 300 
-
     # Sync apps
     echo "SYNC APP IN ARGOCD"
     argocd app sync --insecure app-silvestrini
+
+    # Waiting for deploy
+    echo "Waiting for deployment app-silvestrini to complete..."
+    argocd app wait app-silvestrini --health --timeout 300 
 }
 
 function deploy-openebs-localpv() {
@@ -322,12 +319,12 @@ function deploy-openebs-localpv() {
     argocd app set openebs-localpv-hostpath --sync-option CreateNamespace=true
     argocd app set openebs-localpv-hostpath --sync-option ServerSideApply=true
 
+    echo "SYNC APP IN ARGOCD"
+    argocd app sync --insecure openebs-localpv-hostpath
+
     # Waiting for deploy
     echo "Waiting for deployment openebs-localpv to complete..."
     argocd app wait  openebs-localpv-hostpath --health --timeout 300 
-
-    echo "SYNC APP IN ARGOCD"
-    argocd app sync --insecure openebs-localpv-hostpath
 }
 
 function deploy-gitlab() {
