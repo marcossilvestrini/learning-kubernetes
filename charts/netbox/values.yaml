@@ -564,7 +564,7 @@ ingress:
     kubernetes.io/ingress.class: nginx
     kubernetes.io/tls-acme: "true"
   hosts:
-    - host: https://netbox.skynet.com.br
+    - host: netbox.skynet.com.br
       paths:
         # You can manually specify the service name and service port if
         # required. This could be useful if for exemple you are using the AWS
