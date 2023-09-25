@@ -2,15 +2,16 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: consul-application  
+  namespace: argocd
 spec:
   destination:
     namespace: consul
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://helm.releases.hashicorp.com/
+    repoURL: https://github.com/hashicorp
     targetRevision: main
-    path: charts/consul
+    path: consul-k8s/charts/consul
   syncPolicy:
     automated:
       prune: true
