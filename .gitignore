@@ -66,4 +66,4 @@ security/.docker-secrets
 
 # Helm
 
-/charts/**/*.tgz
+#/charts/**/*.tgz
