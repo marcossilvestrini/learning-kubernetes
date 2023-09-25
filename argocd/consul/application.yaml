@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: consul
+  namespace: argocd
+spec:
+  project: default # Nome do projeto Argo CD (ajuste conforme necessário)
+  source:
+    repoURL: https://github.com/hashicorp/consul-k8s
+    targetRevision: main # Você pode especificar uma revisão específica, se necessário
+    path: charts/consul
+    helm:
+      valueFiles:
+        - values.yaml # Arquivo de valores personalizados, se necessário
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: consul # Namespace onde você deseja implantar o Consul
+  syncPolicy:
+    automated:
+      prune: true
+    syncOptions:
+      - Validate=false # Defina como true para realizar validações
