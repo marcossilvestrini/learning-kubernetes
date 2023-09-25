@@ -15,8 +15,8 @@ spec:
         charts/consul        
     helm:
       ignoreMissingValueFiles: true
-      #valueFiles:
-      #  - values.yaml        
+      valueFiles:
+        - values.yaml        
   syncPolicy:
     automated:
       prune: true
