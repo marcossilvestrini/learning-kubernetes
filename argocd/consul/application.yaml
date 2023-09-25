@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/hashicorp/consul-k8s
+    repoURL: https://github.com/marcossilvestrini/learning-kubernetes
     targetRevision: main
     path: charts/consul
   syncPolicy:

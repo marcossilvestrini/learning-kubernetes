@@ -379,22 +379,29 @@ function deploy-netbox() {
     argocd app wait netbox --health --timeout 300 
 }
 
-function deploy-consul() {
+function deploy-consul() {    
     login-argcd
     echo "DEPLOY CONSUL IN ARGOCD"    
     echo "CREATE ARGOCD APP CONSUL"
-    kubectl create namespace argocd
-    kubectl apply -f argocd/consul/application.yaml
-    # argocd app create consul \
-    #     --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-    #     --path charts/consul \
-    #     --dest-server https://kubernetes.default.svc \
-    #     --dest-namespace consul \
-    #     --insecure \
-    #     --upsert
+
+    # Install helm chart
+    helm repo add hashicorp https://helm.releases.hashicorp.com
+    helm repo update
+    helm upgrade --install consul hashicorp/consul \
+        -f charts/consul/values.yaml \
+        -n consul --create-namespace
+
+    # Create argocd app    
+    argocd app create consul \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        --path charts/consul \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace consul \
+        --insecure \
+        --upsert
     
     # Set app preferences in argocd  
-    #argocd app set consul --values values.yaml
+    argocd app set consul --values charts/consul/values.yaml
     argocd app set consul --sync-option ApplyOutOfSyncOnly=true
     argocd app set consul --sync-option CreateNamespace=true
     argocd app set consul --sync-option ServerSideApply=true
