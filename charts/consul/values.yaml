@@ -1837,13 +1837,13 @@ ui:
     # Example:
     #
     # ```yaml
-    # annotations: |
-    #   'annotation-key': annotation-value
-    # ```
+    annotations: |
+       'kubernetes.io/ingress.class': nginx
+       'kubernetes.io/tls-acme': true
     # @type: string
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      kubernetes.io/tls-acme: "true"
+    #annotations: null
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
 
   # Configurations for displaying metrics in the UI.
   metrics:
