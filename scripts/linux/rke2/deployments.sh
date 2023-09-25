@@ -389,9 +389,9 @@ function deploy-consul() {
     helm repo update
     mkdir -p charts/consul/charts
     helm pull hashicorp/consul -d charts/consul/charts
-    # helm upgrade --install consul hashicorp/consul \
-    #     -f argocd/consul/values.yaml \
-    #     -n consul --create-namespace
+    helm upgrade --install consul hashicorp/consul \
+        -f charts/consul/values.yaml \
+        -n consul --create-namespace
 
     # Create argocd app    
     argocd app create consul \

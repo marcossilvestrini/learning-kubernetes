@@ -15,7 +15,7 @@ spec:
         charts/consul        
     helm:       
        valueFiles:
-         - values.yaml    
+         - templates/app.yaml    
   syncPolicy:    
     syncOptions:
       - CreateNamespace=true
