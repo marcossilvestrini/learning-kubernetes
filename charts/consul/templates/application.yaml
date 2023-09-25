@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: consul-silvestrini
+  namespace: argocd
+spec:
+  destination:
+    namespace: consul
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
+    targetRevision: HEAD
+    path: 
+        charts/consul
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=true
+      - ServerSideApply=true
