@@ -1837,11 +1837,11 @@ ui:
     # Example:
     #
     # ```yaml
-    annotations: |
-       'kubernetes.io/ingress.class': nginx
-       'kubernetes.io/tls-acme': true
+    # annotations: |
+    #    'kubernetes.io/ingress.class': nginx
+    #    'kubernetes.io/tls-acme': true
     # @type: string
-    #annotations: null
+    annotations: null
       # kubernetes.io/ingress.class: nginx
       # kubernetes.io/tls-acme: "true"
 
