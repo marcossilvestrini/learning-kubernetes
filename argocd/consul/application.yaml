@@ -16,7 +16,8 @@ spec:
     helm:
       ignoreMissingValueFiles: true
       valueFiles:
-        - values.yaml        
+        - values.yaml
+        - template/values.yaml
   syncPolicy:
     automated:
       prune: true
