@@ -1,0 +1,32 @@
+#helm upgrade --install consul hashicorp/consul -f values.yaml -n consul --create-namespace
+consul:  
+  global:
+    name: consul
+    datacenter: skynet
+  ui:
+    ingress:
+      enabled: true
+      ingressClassName: "nginx"
+      pathType: Prefix
+      hosts: 
+        - host: consul.skynet.com.br
+      tls: 
+      - secretName: consul-tls
+        hosts:
+          - consul.skynet.com.br
+      annotations: |
+        cert-manager.io/cluster-issuer: "letsencrypt-prod"
+  server:
+    exposeGossipAndRPCPorts: true
+    exposeService:
+      enabled: true
+    service:  
+      type: LoadBalancer
+    replicas: 3  
+    bootstrapExpect: 3  
+    disruptionBudget:
+      enabled: true
+      maxUnavailable: 0
+    storageClass: longhorn
+  connectInject:
+    enabled: false
