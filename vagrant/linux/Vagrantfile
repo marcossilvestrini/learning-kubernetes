@@ -85,13 +85,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box_download_insecure=true  
     
   ## MOUNTS
-  config.vm.synced_folder ".", "/vagrant", disabled: true
-  config.vm.synced_folder "../../security/", "/home/vagrant/security"
-  config.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
-  config.vm.synced_folder "../../scripts/linux/", "/home/vagrant/scripts"  
-  config.vm.synced_folder "../../kubernetes", "/home/vagrant/kubernetes"  
-  config.vm.synced_folder "../../apps", "/home/vagrant/apps"
-  config.vm.synced_folder "../../charts", "/home/vagrant/charts"
+  config.vm.synced_folder ".", "/vagrant", disabled: true 
+  config.vm.synced_folder "../../security/", "/home/vagrant/security", type: "rsync"
+  config.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs", type: "rsync"
+  config.vm.synced_folder "../../scripts/linux/", "/home/vagrant/scripts", type: "rsync"
+  config.vm.synced_folder "../../kubernetes", "/home/vagrant/kubernetes", type: "rsync"  
+  config.vm.synced_folder "../../apps", "/home/vagrant/apps", type: "rsync"
+  config.vm.synced_folder "../../charts", "/home/vagrant/charts", type: "rsync"
+  config.vm.synced_folder "../../argocd", "/home/vagrant/argocd", type: "rsync"
     
   ## PROVIDER
   config.vm.provider "virtualbox" do |vb|
