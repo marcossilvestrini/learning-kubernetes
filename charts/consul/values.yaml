@@ -1811,9 +1811,9 @@ ui:
     #
     # ```yaml
     hosts:
-       - host: consul.skynet.com.br
-         paths:
-           - /*
+      - host: consul.skynet.com.br
+        paths:
+          - /*
     #       - /test
     # ```
     #
@@ -1825,8 +1825,8 @@ ui:
     #
     # ```yaml
     tls:
-       - hosts:
-         - consul.skynet.com.br
+      - hosts:
+        - consul.skynet.com.br
     #     secretName: testsecret-tls
     # ```
     # @type: array<map>
