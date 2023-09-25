@@ -14,8 +14,7 @@ spec:
     path: charts/consul
     helm:
       valueFiles:
-        - values.yaml
-        - myvalues.yaml
+        - values.yaml        
   syncPolicy:
     automated:
       prune: true
