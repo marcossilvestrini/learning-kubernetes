@@ -384,7 +384,9 @@ function deploy-consul() {
     echo "DEPLOY CONSUL IN ARGOCD"    
     echo "CREATE ARGOCD APP CONSUL"
     helm repo add hashicorp https://helm.releases.hashicorp.com
-    
+    helm repo update
+    kubectl create namespace consul    
+    kubectl apply -n consul charts
     # argocd app create consul \
     #     --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
     #     --path charts/consul \
