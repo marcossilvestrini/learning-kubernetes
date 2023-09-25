@@ -1803,7 +1803,7 @@ ui:
     hosts:
        - host: consul.skynet.com.br
          paths:
-           - /*
+           - /
     tls:
        - hosts:
          - consul.skynet.com.br    
