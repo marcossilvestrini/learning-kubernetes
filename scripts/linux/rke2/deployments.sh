@@ -394,7 +394,7 @@ function deploy-consul() {
     # Create argocd app    
     argocd app create consul \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-        --path argocd/consul \
+        --path charts/consul \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace consul \
         --insecure \
