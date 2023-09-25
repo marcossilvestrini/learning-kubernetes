@@ -13,14 +13,10 @@ spec:
     targetRevision: HEAD
     path: 
         charts/consul        
-    helm:
-       ignoreMissingValueFiles: true
+    helm:       
        valueFiles:
          - values.yaml    
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
+  syncPolicy:    
     syncOptions:
       - CreateNamespace=true
       - ApplyOutOfSyncOnly=true
