@@ -384,38 +384,38 @@ function deploy-consul() {
     echo "DEPLOY CONSUL IN ARGOCD"    
     echo "CREATE ARGOCD APP CONSUL"
 
-    # Install helm chart
-    helm repo add hashicorp https://helm.releases.hashicorp.com
-    helm repo update
-    # mkdir -p charts/consul/charts
-    # helm pull hashicorp/consul -d charts/consul/charts
-    helm upgrade --install consul hashicorp/consul \
-        -f charts/consul/values.yaml \
-        -n consul --create-namespace
+    # # Install helm chart
+    # helm repo add hashicorp https://helm.releases.hashicorp.com
+    # helm repo update
+    # # mkdir -p charts/consul/charts
+    # # helm pull hashicorp/consul -d charts/consul/charts
+    # helm upgrade --install consul hashicorp/consul \
+    #     -f charts/consul/values.yaml \
+    #     -n consul --create-namespace
 
-#     # Create argocd app    
-#     argocd app create consul \
-#         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-#         --path charts/consul \
-#         --dest-server https://kubernetes.default.svc \
-#         --dest-namespace consul \
-#         --insecure \
-#         --upsert
+    # Create argocd app    
+    argocd app create consul \
+        --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
+        --path charts/consul \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace consul \
+        --insecure \
+        --upsert
     
-#     # Set app preferences in argocd  
-#     argocd app set consul --values charts/consul/values.yaml
-#     argocd app set consul --sync-option ApplyOutOfSyncOnly=true
-#     argocd app set consul --sync-option CreateNamespace=true
-#     argocd app set consul --sync-option ServerSideApply=true
+    # Set app preferences in argocd  
+    argocd app set consul --values charts/consul/values.yaml
+    argocd app set consul --sync-option ApplyOutOfSyncOnly=true
+    argocd app set consul --sync-option CreateNamespace=true
+    argocd app set consul --sync-option ServerSideApply=true
 
-#     # Sync apps
-#     echo "SYNC APP IN ARGOCD"
-#     argocd app sync --insecure consul
+    # Sync apps
+    echo "SYNC APP IN ARGOCD"
+    argocd app sync --insecure consul
 
-#     # Waiting for deploy
-#     echo "Waiting for deployment consul to complete..."
-#     argocd app wait consul --health --timeout 300 
-# }
+    # Waiting for deploy
+    echo "Waiting for deployment consul to complete..."
+    argocd app wait consul --health --timeout 300 
+}
 
 function delete-all-apps(){
     login-argcd
