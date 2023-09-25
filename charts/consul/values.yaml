@@ -1812,8 +1812,8 @@ ui:
     # ```yaml
     hosts:
       - host: consul.skynet.com.br
-        paths:
-          - /*
+        # paths:
+        #   - /*
     #       - /test
     # ```
     #
