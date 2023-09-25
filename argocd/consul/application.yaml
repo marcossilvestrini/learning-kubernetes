@@ -13,10 +13,11 @@ spec:
     targetRevision: HEAD
     path: 
         charts/consul        
-    helm:
-      ignoreMissingValueFiles: true
-      valueFiles:
-        - values.yaml        
+    # helm:
+    #   ignoreMissingValueFiles: true
+    #   valueFiles:
+    #     - values.yaml
+    #     - template/values.yaml
   syncPolicy:
     automated:
       prune: true
