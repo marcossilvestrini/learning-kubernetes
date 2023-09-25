@@ -12,6 +12,9 @@ spec:
     repoURL: https://github.com/marcossilvestrini/learning-kubernetes
     targetRevision: main
     path: charts/consul
+    helm:
+      valueFiles:
+        - values.yaml
   syncPolicy:
     automated:
       prune: true
