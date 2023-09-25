@@ -388,13 +388,13 @@ function deploy-consul() {
     helm repo add hashicorp https://helm.releases.hashicorp.com
     helm repo update
     helm upgrade --install consul hashicorp/consul \
-        -f charts/consul/values.yaml \
+        -f argocd/consul/values.yaml \
         -n consul --create-namespace
 
     # Create argocd app    
     argocd app create consul \
         --repo https://github.com/marcossilvestrini/learning-kubernetes.git \
-        --path charts/consul \
+        --path argocd/consul \
         --dest-server https://kubernetes.default.svc \
         --dest-namespace consul \
         --insecure \
