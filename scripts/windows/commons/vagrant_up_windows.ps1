@@ -79,7 +79,7 @@ Copy-Item -Force -Recurse "$baseProject\images" -Destination "$baseProject\apps\
 # Up kubernetes stack
 $kubernetes = "$baseVagrantfile"
 Set-Location $kubernetes
-vagrant up
+vagrant up --provision
 Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
 Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
 Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment

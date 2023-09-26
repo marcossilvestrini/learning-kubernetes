@@ -1799,10 +1799,10 @@ ui:
   ingress:
     # This will create an Ingress resource for the Consul UI.
     # @type: boolean
-    enabled: false
+    enabled: true
 
     # Optionally set the ingressClassName.
-    ingressClassName: ""
+    ingressClassName: "nginx"
 
     # pathType override - refer to: https://kubernetes.io/docs/concepts/services-networking/ingress/#path-types
     pathType: Prefix
@@ -1810,27 +1810,27 @@ ui:
     # hosts is a list of host name to create Ingress rules.
     #
     # ```yaml
-    # hosts:
-    #   - host: foo.bar
-    #     paths:
-    #       - /example
+    hosts:
+      - host: consul.skynet.com.br
+        # paths:
+        #   - /*
     #       - /test
     # ```
     #
     # @type: array<map>
-    hosts: []
+    #hosts: []
 
     # tls is a list of hosts and secret name in an Ingress
     # which tells the Ingress controller to secure the channel.
     #
     # ```yaml
-    # tls:
-    #   - hosts:
-    #     - chart-example.local
+    tls:
+      - hosts:
+        - consul.skynet.com.br
     #     secretName: testsecret-tls
     # ```
     # @type: array<map>
-    tls: []
+    #tls: []
 
     # Annotations to apply to the UI ingress.
     #
@@ -1838,10 +1838,12 @@ ui:
     #
     # ```yaml
     # annotations: |
-    #   'annotation-key': annotation-value
-    # ```
+    #    'kubernetes.io/ingress.class': nginx
+    #    'kubernetes.io/tls-acme': true
     # @type: string
     annotations: null
+      # kubernetes.io/ingress.class: nginx
+      # kubernetes.io/tls-acme: "true"
 
   # Configurations for displaying metrics in the UI.
   metrics:

@@ -63,3 +63,7 @@ security/dashboard-token
 
 # Docker
 security/.docker-secrets
+
+# Helm
+
+#/charts/**/*.tgz

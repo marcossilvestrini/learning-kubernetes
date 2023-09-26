@@ -384,12 +384,14 @@ function deploy-consul() {
     echo "DEPLOY CONSUL IN ARGOCD"    
     echo "CREATE ARGOCD APP CONSUL"
 
-    # Install helm chart
-    helm repo add hashicorp https://helm.releases.hashicorp.com
-    helm repo update
-    helm upgrade --install consul hashicorp/consul \
-        -f argocd/consul/values.yaml \
-        -n consul --create-namespace
+    # # Install helm chart
+    # helm repo add hashicorp https://helm.releases.hashicorp.com
+    # helm repo update
+    # # mkdir -p charts/consul/charts
+    # # helm pull hashicorp/consul -d charts/consul/charts
+    # helm upgrade --install consul hashicorp/consul \
+    #     -f charts/consul/values.yaml \
+    #     -n consul --create-namespace
 
     # Create argocd app    
     argocd app create consul \
@@ -401,7 +403,7 @@ function deploy-consul() {
         --upsert
     
     # Set app preferences in argocd  
-    argocd app set consul --values charts/consul/values.yaml
+    #argocd app set consul --values charts/consul/values.yaml
     argocd app set consul --sync-option ApplyOutOfSyncOnly=true
     argocd app set consul --sync-option CreateNamespace=true
     argocd app set consul --sync-option ServerSideApply=true
