@@ -71,11 +71,7 @@ function set-network() {
 
 function set-rke2() {
     if [[ "$NODE_NAME" == *"plane"* ]]; then
-
-        # Set rke2 ingress nginx
-        mkdir -p  /var/lib/rancher/rke2/server/manifests/
-        cp configs/rke2/rke2-ingress-nginx.yaml /var/lib/rancher/rke2/server/manifests
-
+        
         # Create etcd user
         echo "CREATE ETCD USER LOCAL..."
         useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
