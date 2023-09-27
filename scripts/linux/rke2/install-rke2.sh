@@ -37,7 +37,7 @@ function init() {
         exit 1
     fi
 
-    echo "SET PATH FOR KUBECTL..."        
+    echo "SET PATH FOR KUBECTL..."
     export PATH=$PATH:/usr/local/bin
     # Get token
     if [[ "$NODE_NAME" == *"worker"* ]]; then
@@ -70,7 +70,16 @@ function set-network() {
 }
 
 function set-rke2() {
-    if [[ "$NODE_NAME" == *"plane"* ]]; then       
+    if [[ "$NODE_NAME" == *"plane"* ]]; then
+        
+        # Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]
+        # Using api http://load-balance.skynet.com.br:5000/update-nginx-config
+        echo "Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]"
+        echo "Using api http://load-balance.skynet.com.br:5000/update-nginx-config"
+        python3 scripts/load-balance/update-nginx-config.py rke2_backend "$IP_NODE" 9345 3 6s
+        python3 scripts/load-balance/update-nginx-config.py rke2_api "$IP_NODE" 6443 3 6s
+        python3 scripts/load-balance/update-nginx-config.py rke2_etcd_client "$IP_NODE" 2379 3 6s
+        python3 scripts/load-balance/update-nginx-config.py rke2_etcd_peer "$IP_NODE" 2380 3 6s
 
         # Create etcd user
         echo "CREATE ETCD USER LOCAL..."
@@ -97,18 +106,18 @@ function set-rke2() {
             echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
             systemctl restart rke2-server.service
 
-            # Waiting for first control plane is Ready            
+            # Waiting for first control plane is Ready
             echo "Waiting for first control plane is Ready..."
             export KUBECONFIG=/etc/rancher/rke2/rke2.yaml
             COUNTER=0
-            CP_STATUS="$(kubectl get nodes | grep control-plane| awk '{ print $2}')"
+            CP_STATUS="$(kubectl get nodes | grep control-plane | awk '{ print $2}')"
             while [ "$CP_STATUS" != "Ready" ]; do
-                CP_STATUS="$(kubectl get nodes | grep control-plane| awk '{ print $2}')"
+                CP_STATUS="$(kubectl get nodes | grep control-plane | awk '{ print $2}')"
                 sleep 1s
                 COUNTER=($COUNTER + 1)
                 if [[ $COUNTER -gt 200 ]]; then
                     break
-                fi                
+                fi
             done
             # save first node token
             TOKEN_NODE=$(cat /var/lib/rancher/rke2/server/node-token)
@@ -136,14 +145,6 @@ function set-rke2() {
             echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
             systemctl restart rke2-server.service
 
-            # Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380] 
-            # Using api http://load-balance.skynet.com.br:5000/update-nginx-config            
-            echo "Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]"
-            echo "Using api http://load-balance.skynet.com.br:5000/update-nginx-config"
-            python3 scripts/load-balance/update-nginx-config.py rke2_backend "$IP_NODE" 9345 3 6s
-            python3 scripts/load-balance/update-nginx-config.py rke2_api "$IP_NODE" 6443 3 6s
-            python3 scripts/load-balance/update-nginx-config.py rke2_etcd_client "$IP_NODE" 2379 3 6s
-            python3 scripts/load-balance/update-nginx-config.py rke2_etcd_peer "$IP_NODE" 2380 3 6s
         fi
 
     else
