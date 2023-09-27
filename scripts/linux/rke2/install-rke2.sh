@@ -73,7 +73,8 @@ function set-rke2() {
     if [[ "$NODE_NAME" == *"plane"* ]]; then
         
         # Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]
-        # Using api http://load-balance.skynet.com.br:5000/update-nginx-config
+        # Using api http://load-balance.skynet.com.br:5000/update-nginx-config# Install required packages for api api-update-nginx-config.py
+        pip install requests        
         echo "Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]"
         echo "Using api http://load-balance.skynet.com.br:5000/update-nginx-config"
         python3 scripts/load-balance/update-nginx-config.py rke2_backend "$IP_NODE" 9345 3 6s
@@ -124,10 +125,7 @@ function set-rke2() {
             echo "$TOKEN_NODE" >configs/rke2/token-first-node
 
         else
-            echo "ADD NODE $(hostname -f) IN CLUSTER"
-
-            # Install required packages for api api-update-nginx-config.py
-            pip install requests
+            echo "ADD NODE $(hostname -f) IN CLUSTER"            
 
             # Add nodes to cluster
             cp configs/rke2/config-nodes.yaml /etc/rancher/rke2/config.yaml
