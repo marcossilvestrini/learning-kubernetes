@@ -11,9 +11,9 @@ export LANG=C
 
 cd /home/vagrant || exit
 
-# Install required packages
+# Install required packages for api api-update-nginx-config.py
 pip install flask
 
 # Up api
-#echo -e "\n" | nohup python3 api/load-balance/api-update-nginx-config.py &
-python3 api/load-balance/api-update-nginx-config.py
+echo -e "\n" | nohup python3 api/load-balance/api-update-nginx-config.py &
+# python3 api/load-balance/api-update-nginx-config.py

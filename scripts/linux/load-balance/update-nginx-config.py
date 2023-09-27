@@ -36,5 +36,5 @@ if __name__ == '__main__':
     main()
 
 # Use: 
-# pip install requests && python3 scripts/python/update-nginx-config.py upstream_name server_address port max_fails fail_timeout
-# pip install requests && python3 scripts/python/update-nginx-config.py rke2_backend 192.168.0.141 9345 3 6s
+# pip install requests && python3 scripts/load-balance/update-nginx-config.py upstream_name server_address port max_fails fail_timeout
+# pip install requests && python3 scripts/load-balance/update-nginx-config.py rke2_backend 192.168.0.141 9345 3 6s

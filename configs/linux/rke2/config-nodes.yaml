@@ -1,6 +1,4 @@
-
 debug: true
-#server: https://control-plane01.skynet.com.br:9345
 server: https://rancher.skynet.com.br:9345
 token: tokenNode
 write-kubeconfig-mode: "0644"

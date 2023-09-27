@@ -70,8 +70,8 @@ function set-network() {
 }
 
 function set-rke2() {
-    if [[ "$NODE_NAME" == *"plane"* ]]; then
-        
+    if [[ "$NODE_NAME" == *"plane"* ]]; then       
+
         # Create etcd user
         echo "CREATE ETCD USER LOCAL..."
         useradd -r -c "etcd user" -s /sbin/nologin -M etcd -U
@@ -117,6 +117,9 @@ function set-rke2() {
         else
             echo "ADD NODE $(hostname -f) IN CLUSTER"
 
+            # Install required packages for api api-update-nginx-config.py
+            pip install requests
+
             # Add nodes to cluster
             cp configs/rke2/config-nodes.yaml /etc/rancher/rke2/config.yaml
             chmod 600 /etc/rancher/rke2/config.yaml
@@ -133,6 +136,14 @@ function set-rke2() {
             echo "RESTART RKE2 SERVICE AFTER APPLY [/etc/rancher/rke2/config.yaml]"
             systemctl restart rke2-server.service
 
+            # Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380] 
+            # Using api http://load-balance.skynet.com.br:5000/update-nginx-config            
+            echo "Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]"
+            echo "Using api http://load-balance.skynet.com.br:5000/update-nginx-config"
+            python3 scripts/load-balance/update-nginx-config.py rke2_backend "$IP_NODE" 9345 3 6s
+            python3 scripts/load-balance/update-nginx-config.py rke2_api "$IP_NODE" 6443 3 6s
+            python3 scripts/load-balance/update-nginx-config.py rke2_etcd_client "$IP_NODE" 2379 3 6s
+            python3 scripts/load-balance/update-nginx-config.py rke2_etcd_peer "$IP_NODE" 2380 3 6s
         fi
 
     else

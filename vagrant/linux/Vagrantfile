@@ -232,7 +232,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     load_balance.vm.provision "shell", name: "[SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
 
     # UP API UPDATE NGINX CONFIG
-    load_balance.vm.provision "shell", name: "[SCRIPT START-API-UPDATE-NGINX-CONFIG.SH]", path: "../../api/load-balance/start-api-update-nginx-config.sh"
+    load_balance.vm.provision "shell", name: "[SCRIPT START-API-UPDATE-NGINX-CONFIG.SH]", path: "../../scripts/linux/load-balance/start-api-update-nginx-config.sh"
 
   end
 
