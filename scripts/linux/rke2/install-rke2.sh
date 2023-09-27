@@ -44,6 +44,9 @@ function init() {
         echo "GET CLUSTER TOKEN..."
         TOKEN_NODE=$(cat configs/rke2/token-first-node)
     fi
+
+    # Fix encoding
+    find . -name "*.sh" | xargs dos2unix
 }
 
 function install-rke2() {
@@ -71,16 +74,6 @@ function set-network() {
 
 function set-rke2() {
     if [[ "$NODE_NAME" == *"plane"* ]]; then
-        
-        # Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]
-        # Using api http://load-balance.skynet.com.br:5000/update-nginx-config# Install required packages for api api-update-nginx-config.py
-        pip install requests        
-        echo "Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]"
-        echo "Using api http://load-balance.skynet.com.br:5000/update-nginx-config"
-        python3 scripts/load-balance/update-nginx-config.py rke2_backend "$IP_NODE" 9345 3 6s
-        python3 scripts/load-balance/update-nginx-config.py rke2_api "$IP_NODE" 6443 3 6s
-        python3 scripts/load-balance/update-nginx-config.py rke2_etcd_client "$IP_NODE" 2379 3 6s
-        python3 scripts/load-balance/update-nginx-config.py rke2_etcd_peer "$IP_NODE" 2380 3 6s
 
         # Create etcd user
         echo "CREATE ETCD USER LOCAL..."
@@ -125,7 +118,7 @@ function set-rke2() {
             echo "$TOKEN_NODE" >configs/rke2/token-first-node
 
         else
-            echo "ADD NODE $(hostname -f) IN CLUSTER"            
+            echo "ADD NODE $(hostname -f) IN CLUSTER"
 
             # Add nodes to cluster
             cp configs/rke2/config-nodes.yaml /etc/rancher/rke2/config.yaml
@@ -144,6 +137,16 @@ function set-rke2() {
             systemctl restart rke2-server.service
 
         fi
+
+        # Add node in HA Nginx pool: rancher.skynet.com.br:[9345,6443,2379,2380]
+        # Using api http://load-balance.skynet.com.br:5000/update-nginx-config# Install required packages for api api-update-nginx-config.py        
+        echo "ADD NODE IN HA NGINX POOL: RANCHER.SKYNET.COM.BR:[9345,6443,2379,2380]"
+        echo "USING API HTTP://LOAD-BALANCE.SKYNET.COM.BR:5000/UPDATE-NGINX-CONFIG"
+        pip3 install requests        
+        python3 scripts/load-balance/update-nginx-config.py rke2_backend "$IP_NODE" 9345 3 6s
+        python3 scripts/load-balance/update-nginx-config.py rke2_api "$IP_NODE" 6443 3 6s
+        python3 scripts/load-balance/update-nginx-config.py rke2_etcd_client "$IP_NODE" 2379 3 6s
+        python3 scripts/load-balance/update-nginx-config.py rke2_etcd_peer "$IP_NODE" 2380 3 6s
 
     else
         echo "CONFIGURE NODE WORKER $(hostname -f)"
