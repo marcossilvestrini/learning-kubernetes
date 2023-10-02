@@ -89,6 +89,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../../security/", "/home/vagrant/security"
   config.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
   config.vm.synced_folder "../../scripts/linux/", "/home/vagrant/scripts"
+  config.vm.synced_folder "../../api/", "/home/vagrant/api"
   config.vm.synced_folder "../../kubernetes", "/home/vagrant/kubernetes"
   config.vm.synced_folder "../../apps", "/home/vagrant/apps"
   config.vm.synced_folder "../../charts", "/home/vagrant/charts"
@@ -228,7 +229,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-LOAD-BALANCE.SH]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
 
     # INSTALL SALT MASTER AND MINIONS
-    load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+    load_balance.vm.provision "shell", name: "[SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
+
+    # UP API UPDATE NGINX CONFIG
+    load_balance.vm.provision "shell", name: "[SCRIPT START-API-UPDATE-NGINX-CONFIG.SH]", path: "../../scripts/linux/load-balance/start-api-update-nginx-config.sh"
 
   end
 
@@ -350,7 +354,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
       # INSTALL SALT MASTER AND MINIONS
-      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+      node.vm.provision "shell", name: "[SCRIPT SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
       
       # CONFIGURE STORAGE
       node.vm.provision "shell", name: "[SCRIPT STORAGE-LONGHORN.SH]", path: "../../scripts/linux/commons/storage-longhorn.sh"
@@ -411,7 +415,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
      managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
      # INSTALL SALT MASTER AND MINIONS
-     managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+     managment.vm.provision "shell", name: "[SCRIPT SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
 
    end
 end

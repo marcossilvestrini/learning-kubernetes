@@ -1,6 +1,4 @@
-
 debug: true
-#server: https://control-plane01.skynet.com.br:9345
 server: https://rancher.skynet.com.br:9345
 token: tokenNode
 write-kubeconfig-mode: "0644"
@@ -18,7 +16,6 @@ tls-san:
   - 192.168.0.141
   - control-plane03.skynet.com.br
   - 192.168.0.142
-
 cni:
   - canal
 node-taint:
