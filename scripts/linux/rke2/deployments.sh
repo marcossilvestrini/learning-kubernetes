@@ -54,7 +54,7 @@ function deploy-argocd() {
     kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
     echo "Waiting for deployment argocd to complete..."
     sleep 10s    
-    kubectl wait --for condition=containersready -n argocd pod --all --timeout=900s
+    kubectl wait --for condition=containersready -n argocd pod --all --timeout=1800s
     STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
     while [ "$STATUS" != 200 ]; do
         clear
@@ -74,7 +74,8 @@ function deploy-argocd() {
 
     ## Save password
     echo "GET ARGOCD INITIAL PASSWORD"
-    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password       
+    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password     
+   
 }
 
 function deploy-cert-manager() {
@@ -186,38 +187,6 @@ function update-argcd-password(){
     #     --insecure
 }
 
-function deploy-kube-prometheus() {
-    export ARGOCD_EXEC_TIMEOUT="900s"
-    login-argcd
-    echo "DEPLOY KUBE-PROMETHEUS-STACK"
-
-    # Create argocd aplication
-    echo "CREATE ARGOCD APP KUBE-PROMETHEUS-STACK"
-    argocd app create kube-prometheus \
-        --repo https://github.com/prometheus-community/helm-charts.git \
-        --path charts/kube-prometheus-stack/ \
-        --dest-server https://kubernetes.default.svc \
-        --dest-namespace kube-prometheus \
-        --insecure \
-        --upsert
-
-    # Set argocd app with some options
-    argocd app set kube-prometheus --sync-option ApplyOutOfSyncOnly=true
-    argocd app set kube-prometheus --sync-option CreateNamespace=true
-    argocd app set kube-prometheus --sync-option ServerSideApply=true
-
-    # Sync app
-    echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
-    argocd app sync --insecure kube-prometheus
-
-    # Waiting for deploy
-    echo "Waiting for deployment kube-prometheus to complete..."
-    argocd app wait kube-prometheus --health --timeout 300
-
-    # Create ingress
-    kubectl apply -f apps/kube-prometheus/ingress.yaml
-}
-
 function deploy-app-examples() {
     login-argcd
     echo "DEPLOY APPS EXAMPLES"
@@ -255,8 +224,8 @@ function deploy-app-examples() {
 
     # Waiting for deploy
     echo "Waiting for deployment guestbook to complete..."
-    argocd app wait guestbook --health --timeout 300 
-    argocd app wait helm-guestbook --health --timeout 300 
+    argocd app wait guestbook --sync --timeout 300 
+    argocd app wait helm-guestbook --sync --timeout 300 
 }
 
 function deploy-app-silvestrini() {
@@ -280,7 +249,7 @@ function deploy-app-silvestrini() {
 
     # Waiting for deploy
     echo "Waiting for deployment app-silvestrini to complete..."
-    argocd app wait app-silvestrini --health --timeout 300 
+    argocd app wait app-silvestrini --sync --timeout 300 
 }
 
 function deploy-chart-silvestrini() {
@@ -304,7 +273,7 @@ function deploy-chart-silvestrini() {
 
     # Waiting for deploy
     echo "Waiting for deployment app-silvestrini to complete..."
-    argocd app wait app-silvestrini --health --timeout 300 
+    argocd app wait app-silvestrini --sync --timeout 300 
 }
 
 function deploy-openebs-localpv() {
@@ -329,7 +298,7 @@ function deploy-openebs-localpv() {
 
     # Waiting for deploy
     echo "Waiting for deployment openebs-localpv to complete..."
-    argocd app wait  openebs-localpv-hostpath --health --timeout 300 
+    argocd app wait  openebs-localpv-hostpath --sync --timeout 300 
 }
 
 function deploy-gitlab() {
@@ -376,7 +345,7 @@ function deploy-netbox() {
 
     # Waiting for deploy
     echo "Waiting for deployment netbox to complete..."
-    argocd app wait netbox --health --timeout 300 
+    argocd app wait netbox --sync --timeout 300 
 }
 
 function deploy-consul() {    
@@ -414,7 +383,7 @@ function deploy-consul() {
 
     # Waiting for deploy
     echo "Waiting for deployment consul to complete..."
-    argocd app wait consul --health --timeout 300 
+    argocd app wait consul --sync --timeout 300 
 }
 
 function delete-all-apps(){
@@ -422,12 +391,44 @@ function delete-all-apps(){
     argocd  app delete -y openebs-localpv-hostpath kube-prometheus guestbook helm-guestbook app-silvestrini
 }
 
+function deploy-kube-prometheus() {
+    export ARGOCD_EXEC_TIMEOUT="900s"
+    login-argcd
+    echo "DEPLOY KUBE-PROMETHEUS-STACK"
+
+    # Create argocd aplication
+    echo "CREATE ARGOCD APP KUBE-PROMETHEUS-STACK"
+    argocd app create kube-prometheus \
+        --repo https://github.com/prometheus-community/helm-charts.git \
+        --path charts/kube-prometheus-stack/ \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace kube-prometheus \
+        --insecure \
+        --upsert
+
+    # Set argocd app with some options
+    argocd app set kube-prometheus --sync-option ApplyOutOfSyncOnly=true
+    argocd app set kube-prometheus --sync-option CreateNamespace=true
+    argocd app set kube-prometheus --sync-option ServerSideApply=true
+
+    # Sync app
+    echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
+    argocd app sync --insecure kube-prometheus
+
+    # Waiting for deploy
+    echo "Waiting for deployment kube-prometheus to complete..."
+    argocd app wait kube-prometheus --sync --timeout 300
+
+    # Create ingress
+    kubectl apply -f apps/kube-prometheus/ingress.yaml
+}
+
 # Main
 source .bashrc
 init
-deploy-argocd
 deploy-cert-manager
 deploy-metalLB
+deploy-argocd
 deploy-longhorn
 deploy-rancher
 deploy-app-examples
