@@ -36,7 +36,7 @@ function install-salt() {
     rpm --import https://repo.saltproject.io/salt/py3/fedora/38/x86_64/SALT-PROJECT-GPG-PUBKEY-2023.pub
     curl -fsSL https://repo.saltproject.io/salt/py3/fedora/38/x86_64/latest.repo | tee /etc/yum.repos.d/salt.repo
 
-    # cclear cache
+    # clear cache
     dnf clean expire-cache
 
     # Install the salt-minion, salt-master, or other Salt components
