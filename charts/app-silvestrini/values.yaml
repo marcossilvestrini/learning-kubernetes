@@ -16,7 +16,7 @@ fullnameOverride: ""
 
 deployment:
   labels:
-    app: app-silvestrini
+    app-silvestrini: "true"
 
 serviceAccount:
   # Specifies whether a service account should be created
