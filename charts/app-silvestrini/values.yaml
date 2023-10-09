@@ -14,10 +14,6 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-deployment:
-  labels:
-    app-silvestrini: "true"
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
