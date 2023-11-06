@@ -1,12 +1,25 @@
 apiVersion: v1
 kind: ConfigMap
-metadata:  
+metadata:
+  name: argocd-cm
+  namespace: argocd
   labels:
     app.kubernetes.io/name: argocd-cm
     app.kubernetes.io/part-of: argocd
-  name: argocd-cm
-  namespace: argocd
-  resourceVersion: "7704"
 data:
-  policy.default: role:admin  
-  accounts.skynet: apiKey, login
+  policy.default: role:admin
+  accounts.skynet: apiKey, login  # Capacidade de login e criação de chave API para o usuário 'skynet'
+  policy.csv: |
+    # Regras para o usuário 'skynet'
+    p, skynet, applications, *, */*, allow
+    p, skynet, clusters, get, *, allow
+    p, skynet, repositories, get, *, allow
+    p, skynet, repositories, create, *, allow
+    p, skynet, repositories, update, *, allow
+    p, skynet, repositories, delete, *, allow
+    p, skynet, projects, get, *, allow
+    p, skynet, projects, create, *, allow
+    p, skynet, projects, update, *, allow
+    p, skynet, projects, delete, *, allow
+    p, skynet, logs, get, *, allow
+    p, skynet, exec, create, */*, allow
