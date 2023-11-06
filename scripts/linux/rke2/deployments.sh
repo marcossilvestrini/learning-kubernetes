@@ -186,7 +186,14 @@ function update-argcd-password(){
     #     --new-password "Argocd@123456" \
     #     --insecure
 }
-
+function create-argcd-user() {
+    # Create argocd user
+    login-argcd    
+    kubectl delete -f sre-silvestrini/kubernetes/configs/argocd/argocd-cm.yml
+    kubectl apply -f sre-silvestrini/kubernetes/configs/argocd/argocd-cm.yml
+    argocd account update-password --account "$ARGOCD_USER" --new-password "$ARGOCD_PASS"
+    
+}
 function deploy-app-examples() {
     login-argcd
     echo "DEPLOY APPS EXAMPLES"
