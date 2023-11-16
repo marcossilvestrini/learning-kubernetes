@@ -107,49 +107,34 @@ function login-argcd() {
     local password="$2"
 
     # Login in server
-    echo "LOGIN IN ARGOCD"
-    
-    # Use the provided username and password    
+    echo "LOGIN IN ARGOCD"    
     echo "y" | argocd --insecure login argocd.skynet.com.br \
         --username="$username" \
         --password="$password" \
         --grpc-web    
 }
 
-function create-argcd-user() {
-    # Create argocd user    
-    # kubectl delete -f charts/argocd/argocd-cm.yml
-    # kubectl apply -f charts/argocd/argocd-cm.yml    
-    login-argcd admin "$ARGOCD_ADMIN_PASS"  
-    expect -c "
-        spawn argocd account update-password --account $ARGOCD_USER --current-password $ARGOCD_ADMIN_PASS --new-password $ARGOCD_PASS
-        expect \"Enter password of currently logged in user (admin):\"
-        send \"$ARGOCD_ADMIN_PASS\n\"
-        interact
-    "    
-}
-
-function update-argcd-password(){
-    echo "UPDATE ARGOCD PASSWORD"    
-    if [ "$#" -ne 3 ]; then
-        echo "Usage: update-argcd-password <username> <current-password> <new-password>"
+function update-argcd-password(){    
+    if [ "$#" -ne 2 ]; then
+        echo "Usage: update-argcd-password <username> <new-password>"
         return 1
     fi
 
     # Variables
-    local username="$1"
-    local current_password="$2"
-    local new_password="$3"
+    local username="$1"    
+    local new_password="$2"
     
-    # Login as admin
-    password=$(cat security/argocd-password)
+    # Login as admin    
     login-argcd admin "$ARGOCD_ADMIN_PASS"
-    
-    # Update password
-    argocd account update-password \
-        --current-password "$current_password" \
-        --new-password "$new_password" \
-        --insecure
+
+    # Update password    
+    echo "UPDATE ARGOCD PASSWORD FOR USER: $username"    
+    expect -c "
+        spawn argocd account update-password --account $username --current-password $ARGOCD_ADMIN_PASS --new-password $new_password
+        expect \"Enter password of currently logged in user (admin):\"
+        send \"$ARGOCD_ADMIN_PASS\n\"
+        interact
+    "
 }
 
 function deploy-metalLB() {
@@ -456,9 +441,9 @@ function deploy-kube-prometheus() {
 # Main
 source .bashrc
 init
-deploy-cert-manager
+#deploy-cert-manager
 deploy-argocd
-#create-argcd-user
+update-argcd-password $ARGOCD_USER $ARGOCD_PASS
 
 # deploy-metalLB
 # deploy-longhorn
