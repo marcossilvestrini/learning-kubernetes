@@ -1,0 +1,53 @@
+# https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
+configs:
+  params:    
+    server.insecure: true    
+    applicationsetcontroller.policy: create-only  
+  secret:
+    # -- Bcrypt hashed admin password
+    ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+    ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+    argocdServerAdminPassword: "$2a$10$1PwBWvXXUsl235gMWA8JIukpzjfC9o3jcjlZR2wNWNhjkYhP840PW"
+  rbac:
+    create: true  
+    #policy.default: 'role:admin'   
+    #accounts.skynet: apiKey, login
+    #accounts.skynet.enabled: "true"
+    # policy.csv: |
+    #   g, skynet, role:admin
+    #   g, magaloki, role:admin
+    # scopes: "[groups]"
+    policy.csv: |
+        p, skynet, applications, *, */*, allow
+        p, skynet, clusters, get, *, allow
+        p, skynet, repositories, get, *, allow
+        p, skynet, repositories, create, *, allow
+        p, skynet, repositories, update, *, allow
+        p, skynet, repositories, delete, *, allow
+        p, skynet, projects, get, *, allow
+        p, skynet, projects, create, *, allow
+        p, skynet, projects, update, *, allow
+        p, skynet, projects, delete, *, allow
+        p, skynet, logs, get, *, allow
+        p, skynet, exec, create, */*, allow
+    scopes: '[users,groups]'
+
+
+
+
+
+## Server
+server:
+  ingress:    
+    enabled: true    
+    ingressClassName: "nginx"
+    hosts: 
+      - argocd.skynet.com.br    
+    paths:
+      - /    
+    pathType: Prefix        
+    tls:
+      - secretName: argocd-secret
+        hosts:
+          - argocd.skynet.com.br    
+    https: true

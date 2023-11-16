@@ -26,6 +26,7 @@ function init() {
     DISTRO=$(cat /etc/*release | grep -ws NAME=)
     ARGOCD_USER="skynet"
     ARGOCD_PASS="Skynet@123456"
+    ARGOCD_ADMIN_PASS="Skynet@123456"
 
     # Check if distribution is RPM-->Oracle Linux Server
     if [[ "$DISTRO" == *"Oracle"* ]]; then
@@ -37,47 +38,8 @@ function init() {
     fi
 }
 
-function deploy-argocd() {
-    # Deploy ArgoCD
-    echo "DEPLOY ARGOCD STACK"
 
-    ## Create a namespace
-    echo "CREATE ARGOCD NAMESPACE"
-    kubectl create namespace argocd
-
-    ## Ingress
-    echo "CREATE ARGOCD INGRESS"
-    kubectl apply -f apps/argocd/ingress.yaml
-
-    ## Deployment
-    echo "DEPLOY ARGOCD PODS"
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-    echo "Waiting for deployment argocd to complete..."
-    sleep 10s    
-    kubectl wait --for condition=containersready -n argocd pod --all --timeout=1800s
-    STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
-    while [ "$STATUS" != 200 ]; do
-        clear
-        echo "Waiting for argocd stack to be initialized..."
-        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
-        echo "$STATUS"
-        sleep 1
-    done
-
-    ## Install CLI
-    echo "INSTALL ARGOCD CLI"
-    if ! command -v argocd &>/dev/null; then
-        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
-        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
-        rm argocd-linux-amd64
-    fi
-
-    ## Save password
-    echo "GET ARGOCD INITIAL PASSWORD"
-    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d >security/argocd-password     
-   
-}
-
+# Cert Manager
 function deploy-cert-manager() {
     # Deploy cert-manager
     echo "DEPLOY CERT-MANAGER STACK"
@@ -88,7 +50,7 @@ function deploy-cert-manager() {
     helm repo update
 
     ## Install cert-manager
-    helm install \
+    helm upgrade --install \
         cert-manager jetstack/cert-manager \
         --namespace cert-manager \
         --create-namespace \
@@ -97,6 +59,97 @@ function deploy-cert-manager() {
     echo "Waiting for deployment cert-manager to complete..."
     sleep 10s
     kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=600s
+}
+
+# Argocd functions
+
+function deploy-argocd() {
+    # Deploy ArgoCD
+    echo "DEPLOY ARGOCD STACK"    
+
+    # Deployment
+    echo "DEPLOY ARGOCD PODS"    
+    helm repo add argo https://argoproj.github.io/argo-helm
+    
+    helm repo update
+    helm upgrade --install argocd argo/argo-cd -f charts/argocd/values.yaml --create-namespace --namespace argocd
+    
+    echo "Waiting for deployment argocd to complete..."
+    sleep 10s    
+    kubectl wait --for condition=containersready -n argocd pod --all --timeout=1800s
+    STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+    while [ "$STATUS" != 200 ]; do
+        clear
+        echo "Waiting for argocd stack to be initialized..."
+        STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
+        echo "HTTP Status do argocd: $STATUS"
+        sleep 1
+    done
+
+    ## Install CLI
+    echo "INSTALL ARGOCD CLI"
+    if ! command -v argocd &>/dev/null; then
+        curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+        install -m 555 argocd-linux-amd64 /usr/local/bin/argocd
+        rm argocd-linux-amd64
+    fi
+}
+
+# Exemplo de uso:
+# login-argcd admin minha_senha
+function login-argcd() {
+    if [ "$#" -ne 2 ]; then
+        echo "Usage: login-argcd <username> <password>"
+        return 1
+    fi
+
+    local username="$1"
+    local password="$2"
+
+    # Login in server
+    echo "LOGIN IN ARGOCD"
+    
+    # Use the provided username and password    
+    echo "y" | argocd --insecure login argocd.skynet.com.br \
+        --username="$username" \
+        --password="$password" \
+        --grpc-web    
+}
+
+function create-argcd-user() {
+    # Create argocd user    
+    # kubectl delete -f charts/argocd/argocd-cm.yml
+    # kubectl apply -f charts/argocd/argocd-cm.yml    
+    login-argcd admin "$ARGOCD_ADMIN_PASS"  
+    expect -c "
+        spawn argocd account update-password --account $ARGOCD_USER --current-password $ARGOCD_ADMIN_PASS --new-password $ARGOCD_PASS
+        expect \"Enter password of currently logged in user (admin):\"
+        send \"$ARGOCD_ADMIN_PASS\n\"
+        interact
+    "    
+}
+
+function update-argcd-password(){
+    echo "UPDATE ARGOCD PASSWORD"    
+    if [ "$#" -ne 3 ]; then
+        echo "Usage: update-argcd-password <username> <current-password> <new-password>"
+        return 1
+    fi
+
+    # Variables
+    local username="$1"
+    local current_password="$2"
+    local new_password="$3"
+    
+    # Login as admin
+    password=$(cat security/argocd-password)
+    login-argcd admin "$ARGOCD_ADMIN_PASS"
+    
+    # Update password
+    argocd account update-password \
+        --current-password "$current_password" \
+        --new-password "$new_password" \
+        --insecure
 }
 
 function deploy-metalLB() {
@@ -164,36 +217,6 @@ function deploy-rancher() {
     #kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=60s
 }
 
-function login-argcd() {
-    # Login in server
-    echo "LOGIN IN ARGOCD"
-
-    PASS=$(
-        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
-        echo
-    )
-    echo "y" | argocd --insecure login argocd.skynet.com.br \
-        --username=admin \
-        --password="$PASS" \
-        --grpc-web
-}
-
-function update-argcd-password(){
-    echo "UPDATE ARGOCD PASSWORD"
-    # ### Update password
-    # argocd account update-password \
-    #     --current-password "$ARGO_PASS" \
-    #     --new-password "Argocd@123456" \
-    #     --insecure
-}
-function create-argcd-user() {
-    # Create argocd user
-    login-argcd    
-    kubectl delete -f sre-silvestrini/kubernetes/configs/argocd/argocd-cm.yml
-    kubectl apply -f sre-silvestrini/kubernetes/configs/argocd/argocd-cm.yml
-    argocd account update-password --account "$ARGOCD_USER" --new-password "$ARGOCD_PASS"
-    
-}
 function deploy-app-examples() {
     login-argcd
     echo "DEPLOY APPS EXAMPLES"
@@ -236,7 +259,7 @@ function deploy-app-examples() {
 }
 
 function deploy-app-silvestrini() {
-    login-argcd
+    login-argcd $ARGOCD_USER $ARGOCD_PASS
     echo "DEPLOY MY APPS IN ARGOCD"    
     echo "CREATE ARGOCD APP APP-SILVESTRINI"
     argocd app create app-silvestrini \
@@ -260,7 +283,7 @@ function deploy-app-silvestrini() {
 }
 
 function deploy-chart-silvestrini() {
-    login-argcd
+    login-argcd $ARGOCD_USER $ARGOCD_PASS
     echo "DEPLOY MY APPS IN ARGOCD"    
     echo "CREATE ARGOCD APP APP-SILVESTRINI"
     argocd app create app-silvestrini \
@@ -434,13 +457,15 @@ function deploy-kube-prometheus() {
 source .bashrc
 init
 deploy-cert-manager
-deploy-metalLB
 deploy-argocd
-deploy-longhorn
-deploy-rancher
-deploy-app-examples
-deploy-chart-silvestrini
-deploy-kube-prometheus
+#create-argcd-user
+
+# deploy-metalLB
+# deploy-longhorn
+# deploy-rancher
+# deploy-app-examples
+#deploy-chart-silvestrini
+# deploy-kube-prometheus
 #deploy-openebs-localpv
 #deploy-gitlab
 #delete-all-apps

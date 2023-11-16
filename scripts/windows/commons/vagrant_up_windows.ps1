@@ -98,7 +98,7 @@ Copy-Item -Force  "$baseProject\configs\linux\kubectl\rke2.yaml" "G:\Projetos\le
 
 # Copy security to G:\
 Copy-Item -Force  "$baseProject\security\*" "G:\Projetos\learning-kubernetes\security"
-                 
+
 
 # Fix powershell error
 $Env:VAGRANT_PREFER_SYSTEM_BIN += 0
