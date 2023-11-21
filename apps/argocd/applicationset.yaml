@@ -82,7 +82,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: silvestrini-applicationset
+  name: skynet-apps
   namespace: argocd
 spec:
   goTemplate: true

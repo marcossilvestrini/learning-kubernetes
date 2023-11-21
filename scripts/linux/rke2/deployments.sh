@@ -36,6 +36,10 @@ function init() {
         echo "THIS SCRIPT IS AVAILABLE ONLY ORACLE LINUX SERVER DISTRIBUTIONS!!!"
         exit 1
     fi
+
+    # Add helm my repositories
+     helm repo add app-silvestrini https://marcossilvestrini.github.io/learning-kubernetes/charts/app-silvestrini
+     helm search repo app-silvestrini
 }
 
 
