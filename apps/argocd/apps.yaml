@@ -1,0 +1,22 @@
+key:
+  components:
+    - name: argocd
+      chart: argo-cd
+      version: "5.51.4"
+      releaseName: argocd
+      repoUrl: "https://argoproj.github.io/argo-helm"
+      namespace: argocd
+    
+    - name: metallb
+      chart: metallb
+      version: "4.7.15"
+      releaseName: metallb
+      repoUrl: "https://github.com/bitnami/charts"
+      namespace: metallb
+
+    - name: app-silvestrini
+      chart: app-silvestrini
+      version: "0.1.0"
+      releaseName: app-silvestrini
+      repoUrl: "https://github.com/marcossilvestrini/learning-kubernetes/tree/main/charts"
+      namespace: app-silvestrini

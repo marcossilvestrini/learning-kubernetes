@@ -32,48 +32,87 @@
 #         syncOptions:
 #         - CreateNamespace=true
 
+# apiVersion: argoproj.io/v1alpha1
+# kind: ApplicationSet
+# metadata:
+#   name: silvestrini-applicationset
+#   namespace: argocd
+# spec:
+#   generators:
+#   - list:
+#       elements:
+#         - appName: argocd
+#           namespace: argocd
+#         - appName: longhorn
+#           namespace: longhorn
+#         - appName: metallb
+#           namespace: metallb
+#         - appName: app-silvestrini
+#           namespace: silvestrini
+#   template:
+#     metadata:
+#       name: "{{appName}}"
+#       annotations:
+#         argocd.argoproj.io/manifest-generate-paths: ".;.."
+#     spec:
+#       project: default
+#       source:
+#         repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
+#         targetRevision: HEAD
+#         path: "charts/{{appName}}"
+#         #path: "charts/"
+#         helm:
+#           # Release name override (defaults to application name)
+#           releaseName: "{{appName}}"
+#           valueFiles:
+#           - "values.yaml"          
+#           #- "../../values/{{name}}/{{appName}}/values.yaml"
+#       destination:
+#         # Default base cluster
+#         #name: in-cluster
+#         server: https://kubernetes.default.svc
+#         namespace: "{{namespace}}"
+#       syncPolicy:
+#         # automated:
+#         #   prune: true
+#         #   selfHeal: true
+#         syncOptions:
+#           - CreateNamespace=true
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
   name: silvestrini-applicationset
   namespace: argocd
 spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
   generators:
-  - list:
-      elements:
-        - appName: argocd
-          namespace: argocd
-        - appName: longhorn
-          namespace: longhorn
-        - appName: metallb
-          namespace: metallb
-        - appName: app-silvestrini
-          namespace: silvestrini
+  - matrix:
+      generators:
+      - git:
+          repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
+          revision: HEAD
+          files:
+          - path: apps/argocd/apps.yaml
+      - list:
+          elementsYaml: "{{ .key.components | toJson }}"
   template:
     metadata:
-      name: "{{appName}}"
-      annotations:
-        argocd.argoproj.io/manifest-generate-paths: ".;.."
+      name: '{{.name}}'
     spec:
       project: default
-      source:
-        repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
-        targetRevision: HEAD
-        #path: "charts/{{appName}}"
-        path: "charts/"
-        helm:
-          # Release name override (defaults to application name)
-          releaseName: "{{appName}}"
-          valueFiles:
-          - "values.yaml"          
-          #- "../../values/{{name}}/{{appName}}/values.yaml"
-      destination:
-        # Default base cluster
-        name: in-cluster
-        namespace: "{{namespace}}"
       syncPolicy:
         # automated:
-        #   prune: true
-        #   selfHeal: true
+        #   selfHeal: true    
         syncOptions:
-          - CreateNamespace=true
+        - CreateNamespace=true        
+      sources:
+        - chart: '{{.chart}}'
+          repoURL: '{{.repoUrl}}'
+          targetRevision: '{{.version}}'
+          helm:
+            releaseName: '{{.releaseName}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.namespace}}'
