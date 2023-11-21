@@ -96,6 +96,7 @@ spec:
           files:
           - path: apps/argocd/apps.yaml
       - list:
+          elements: []
           elementsYaml: "{{ .key.components | toJson }}"
   template:
     metadata:
