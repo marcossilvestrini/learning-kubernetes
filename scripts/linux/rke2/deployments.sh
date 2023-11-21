@@ -174,7 +174,7 @@ function deploy-metalLB() {
     echo "Waiting for deployment metallb to complete..."
     sleep 10s
     kubectl wait --for condition=containersready -n metallb pod --all --timeout=600s    
-    kubectl -n metallb apply -f charts/metallb/metallb.yaml
+    kubectl -n metallb apply -f apps/metallb/metallb.yaml
     echo "MetalLB deployment has complete with success!!!"
 }
 
