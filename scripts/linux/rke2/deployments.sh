@@ -137,22 +137,6 @@ function update-argcd-password(){
     "
 }
 
-function deploy-metalLB() {
-    echo "DEPLOY METALLB STACK"
-    # Deploy metallb
-    kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.10/config/manifests/metallb-native.yaml
-    #ok=0
-    #time_out=0
-    echo "Waiting for deployment metallb to complete..."
-    sleep 10s
-    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=600s
-
-    # echo "Pods are running!!! Now, waiting for alocate ip addresss pool..."
-    # sleep 30
-    kubectl -n metallb-system apply -f configs/rke2/metallb.yaml
-    echo "MetalLB deployment has complete with success!!!"
-}
-
 function deploy-longhorn() {
     # Deploy longhorn
     echo "DEPLOY LONGHORN STACK"
@@ -171,15 +155,23 @@ function deploy-longhorn() {
         --values charts/longhorn/values.yaml
     echo "Waiting for deployment longhorn to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=900s
-    # --set defaultSettings.v2DataEngine=true --set persistence.defaultDataLocality="best-effort"
-
-    ## create secret
-    #kubectl -n longhorn-system create secret generic basic-auth --from-file=security/auth
-
-    ## create ingress
-    kubectl -n longhorn-system apply -f charts/longhorn/longhorn-ingress.yml
+    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=900s    
+    
 }
+
+function deploy-metalLB() {    
+    echo "DEPLOY METALLB STACK"
+    # Deploy metallb    
+    helm install metallb oci://registry-1.docker.io/bitnamicharts/metallb \
+        --namespace metallb-system \
+        --create-namespace
+    echo "Waiting for deployment metallb to complete..."
+    sleep 10s
+    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=600s    
+    kubectl -n metallb-system apply -f charts/metallb/metallb.yaml
+    echo "MetalLB deployment has complete with success!!!"
+}
+
 
 function deploy-rancher() {
     # Deploy rancher
@@ -441,12 +433,12 @@ function deploy-kube-prometheus() {
 # Main
 source .bashrc
 init
-#deploy-cert-manager
-deploy-argocd
-update-argcd-password $ARGOCD_USER $ARGOCD_PASS
-
-# deploy-metalLB
+# deploy-cert-manager
+# deploy-argocd
+# update-argcd-password $ARGOCD_USER $ARGOCD_PASS
 # deploy-longhorn
+deploy-metalLB
+
 # deploy-rancher
 # deploy-app-examples
 #deploy-chart-silvestrini

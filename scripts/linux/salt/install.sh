@@ -77,7 +77,7 @@ function install-salt() {
     else
         echo "CONFIGURE SALT MINION IN $(hostname -f)"        
         # Instal salt minion
-        dnf install -y salt-minion
+        #dnf install -y salt-minion
 
         # Set Salt master
         MASTER_IP=$(cat configs/salt/ipmaster)
@@ -85,7 +85,7 @@ function install-salt() {
         sed -i "s/IP_MASTER/$MASTER_IP/g" /etc/salt/minion.d/master.conf
 
         # Start service
-        systemctl enable salt-minion && systemctl start salt-minion
+        systemctl enable salt-minion && systemctl restart salt-minion
     fi
 }
 
