@@ -9,6 +9,6 @@ entries:
     name: app-silvestrini
     type: application
     urls:
-    - https://github.com/marcossilvestrini/learning-kubernetes/app-silvestrini-0.1.0.tgz
+    - https://github.com/marcossilvestrini/learning-kubernetes/blob/main/charts/app-silvestrini/app-silvestrini-0.1.0.tgz
     version: 0.1.0
 generated: "2023-11-21T20:42:10.3669114-03:00"
