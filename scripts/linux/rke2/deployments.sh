@@ -137,6 +137,12 @@ function update-argcd-password(){
     "
 }
 
+function create-applicationset() {    
+    echo "CREATE ARGOCD APPLICATION SET"
+    kubectl apply -n argocd -f apps/argocd/applicationset.yaml
+}
+
+
 function deploy-longhorn() {
     # Deploy longhorn
     echo "DEPLOY LONGHORN STACK"
@@ -150,12 +156,12 @@ function deploy-longhorn() {
     helm repo add longhorn https://charts.longhorn.io
     helm repo update
     helm upgrade --install longhorn longhorn/longhorn \
-        --namespace longhorn-system \
+        --namespace longhorn \
         --create-namespace \
         --values charts/longhorn/values.yaml
     echo "Waiting for deployment longhorn to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n longhorn-system pod --all --timeout=900s    
+    kubectl wait --for condition=containersready -n longhorn pod --all --timeout=900s    
     
 }
 
@@ -163,12 +169,12 @@ function deploy-metalLB() {
     echo "DEPLOY METALLB STACK"
     # Deploy metallb    
     helm install metallb oci://registry-1.docker.io/bitnamicharts/metallb \
-        --namespace metallb-system \
+        --namespace metallb \
         --create-namespace
     echo "Waiting for deployment metallb to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n metallb-system pod --all --timeout=600s    
-    kubectl -n metallb-system apply -f charts/metallb/metallb.yaml
+    kubectl wait --for condition=containersready -n metallb pod --all --timeout=600s    
+    kubectl -n metallb apply -f charts/metallb/metallb.yaml
     echo "MetalLB deployment has complete with success!!!"
 }
 
@@ -436,8 +442,9 @@ init
 # deploy-cert-manager
 # deploy-argocd
 # update-argcd-password $ARGOCD_USER $ARGOCD_PASS
+create-applicationset
 # deploy-longhorn
-deploy-metalLB
+# deploy-metalLB
 
 # deploy-rancher
 # deploy-app-examples
