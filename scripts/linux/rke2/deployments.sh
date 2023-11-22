@@ -38,8 +38,8 @@ function init() {
     fi
 
     # Add helm my repositories
-     helm repo add app-silvestrini https://marcossilvestrini.github.io/learning-kubernetes/charts/app-silvestrini
-     helm search repo app-silvestrini
+     helm repo add silvestrini https://marcossilvestrini.github.io/learning-kubernetes/charts
+     helm search repo silvestrini
 }
 
 
