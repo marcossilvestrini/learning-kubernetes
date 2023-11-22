@@ -13,8 +13,8 @@ key:
       repoUrl: "https://github.com/bitnami/charts"
       namespace: metallb
     - name: app-silvestrini
-      chart: app-silvestrini
+      chart: silvestrini/app-silvestrini
       version: "0.1.0"
-      releaseName: silvestrini/app-silvestrini
+      releaseName: app-silvestrini
       repoUrl: "https://marcossilvestrini.github.io/learning-kubernetes/charts"
       namespace: app-silvestrini
