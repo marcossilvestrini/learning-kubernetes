@@ -16,5 +16,5 @@ key:
       chart: silvestrini/app-silvestrini
       version: "0.1.0"
       releaseName: app-silvestrini
-      repoUrl: "https://marcossilvestrini.github.io/learning-kubernetes/charts"
+      repoUrl: "https://marcossilvestrini.github.io/learning-kubernetes"
       namespace: app-silvestrini
