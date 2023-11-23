@@ -14,7 +14,7 @@ key:
       namespace: metallb
     - name: app-silvestrini
       chart: silvestrini/app-silvestrini
-      version: "0.1.0"
+      version: "1.0.0"
       releaseName: app-silvestrini
-      repoUrl: "https://marcossilvestrini.github.io/learning-kubernetes"
+      repoUrl: "https://marcossilvestrini.github.io/learning-helm"
       namespace: app-silvestrini

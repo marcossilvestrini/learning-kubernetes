@@ -37,8 +37,9 @@ function init() {
         exit 1
     fi
 
-    # Add helm my repositories
-     helm repo add silvestrini https://marcossilvestrini.github.io/learning-kubernetes/charts
+    # Add helm my repositories     
+     helm repo add silvestrini https://marcossilvestrini.github.io/learning-helm/
+     helm repo update
      helm search repo silvestrini
 }
 
@@ -443,9 +444,9 @@ function deploy-kube-prometheus() {
 # Main
 source .bashrc
 init
-# deploy-cert-manager
-# deploy-argocd
-# update-argcd-password $ARGOCD_USER $ARGOCD_PASS
+deploy-cert-manager
+deploy-argocd
+update-argcd-password $ARGOCD_USER $ARGOCD_PASS
 create-applicationset
 # deploy-longhorn
 # deploy-metalLB
