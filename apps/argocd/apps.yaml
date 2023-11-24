@@ -1,11 +1,5 @@
 key:
-  components:
-    - name: argocd
-      chart: argo-cd
-      version: "5.51.4"
-      releaseName: argocd
-      repoUrl: "https://argoproj.github.io/argo-helm"
-      namespace: argocd    
+  components:  
     - name: metallb
       chart: metallb
       version: "4.7.15"
