@@ -349,7 +349,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
 
       # INSTALL SALT MASTER AND MINIONS
-      node.vm.provision "shell", name: "[SCRIPT SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
+      node.vm.provision "shell", name: "[SCRIPT SCRIPT SALT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
 
       # CONFIGURE STORAGE
       node.vm.provision "shell", name: "[SCRIPT STORAGE-LONGHORN.SH]", path: "../../scripts/linux/commons/storage-longhorn.sh"
