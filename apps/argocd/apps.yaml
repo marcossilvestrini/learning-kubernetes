@@ -6,12 +6,14 @@ key:
       releaseName: metallb
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
+    
     - name: longhorn
-      chart: longhorn
+      chart: longhorn/longhorn
       version: "1.6.0-dev"
-      releaseName: metallb
-      repoUrl: "https://charts.bitnami.com/bitnami"      
-      namespace: metallb
+      releaseName: longhorn
+      repoUrl: "https://charts.longhorn.io"      
+      namespace: longhorn
+
     - name: app-silvestrini
       chart: app-silvestrini
       version: "1.1.2"
