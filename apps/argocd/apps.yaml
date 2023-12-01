@@ -7,7 +7,7 @@ key:
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb    
     - name: longhorn
-      chart: longhorn/longhorn
+      chart: longhorn
       version: "1.5.3"
       releaseName: longhorn
       repoUrl: "https://charts.longhorn.io"      
