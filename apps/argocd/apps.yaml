@@ -1,10 +1,10 @@
 key:
   components:  
     - name: metallb
-      chart: bitnami/metallb
+      chart: metallb
       version: "4.7.15"
       releaseName: metallb
-      repoUrl: "https://github.com/bitnami/charts"      
+      repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
     - name: app-silvestrini
       chart: app-silvestrini
