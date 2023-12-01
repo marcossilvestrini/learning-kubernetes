@@ -49,7 +49,7 @@ if [ -d "/var/lib/rancher/rke2/bin" ]; then
     complete -F __start_kubectl k    
         
     if [[ "$NODE_MASTER" == "$NODE_NAME" ]]; then        
-        cp /etc/rancher/rke2/rke2.yaml configs/kubectl
-        sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" configs/kubectl/rke2.yaml
+        cp /etc/rancher/rke2/rke2.yaml configs/kubeconfig/rancher-skynet-local.yaml
+        sed -i "s/https:\/\/192.168.0.140:6443/https:\/\/rancher.skynet.com.br:6443/g" configs/kubeconfig/rancher-skynet-local.yaml
     fi
 fi

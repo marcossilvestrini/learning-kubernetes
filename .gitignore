@@ -58,7 +58,7 @@ terraform.rc
 
 
 # kubernetes
-configs/linux/kubectl/rke2.yaml
+configs/linux/kubeconfig/rancher-skynet-local.yaml
 security/dashboard-token
 
 # Docker
