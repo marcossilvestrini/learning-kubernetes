@@ -6,9 +6,15 @@ key:
       releaseName: metallb
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
+    - name: longhorn
+      chart: longhorn
+      version: "1.6.0-dev"
+      releaseName: metallb
+      repoUrl: "https://charts.bitnami.com/bitnami"      
+      namespace: metallb
     - name: app-silvestrini
       chart: app-silvestrini
-      version: "1.0.0"
+      version: "1.1.2"
       releaseName: app-silvestrini
       repoUrl: "https://marcossilvestrini.github.io/learning-helm"
       namespace: app-silvestrini
