@@ -1,4 +1,4 @@
-name: Check Web App Status
+name: Check kubernetes App
 
 on:
   push:
