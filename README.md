@@ -2,7 +2,7 @@
 
 [![PSScriptAnalyzer](https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/powershell.yml/badge.svg)](https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/powershell.yml)
 [![Release](https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/release.yml/badge.svg)](https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/release.yml)
-
+[![Check kubernetes App](https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/check-kubernetes-app.yml/badge.svg)](https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/check-kubernetes-app.yml)
 
 [![MIT License][license-shield]][license-url]
 [![Forks][forks-shield]][forks-url]
