@@ -174,12 +174,12 @@ function deploy-longhorn() {
     helm repo add longhorn https://charts.longhorn.io
     helm repo update
     helm upgrade --install longhorn longhorn/longhorn \
-        --namespace longhorn \
+        --namespace longhorn-system \
         --create-namespace \
         --values charts/longhorn/values.yaml
     echo "Waiting for deployment longhorn to complete..."
     sleep 10s
-    kubectl wait --for condition=containersready -n longhorn pod --all --timeout=900s    
+    kubectl wait --for condition=containersready -n longhorn-system  pod --all --timeout=900s    
     
 }
 
