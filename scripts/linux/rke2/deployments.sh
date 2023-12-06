@@ -66,6 +66,20 @@ function deploy-cert-manager() {
     kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=600s
 }
 
+# Metallb
+function deploy-metalLB() {    
+    echo "DEPLOY METALLB STACK"
+    # Deploy metallb    
+    helm install metallb oci://registry-1.docker.io/bitnamicharts/metallb \
+        --namespace metallb \
+        --create-namespace
+    echo "Waiting for deployment metallb to complete..."
+    sleep 10s
+    kubectl wait --for condition=containersready -n metallb pod --all --timeout=600s    
+    kubectl -n metallb apply -f apps/metallb/metallb.yaml
+    echo "MetalLB deployment has complete with success!!!"
+}
+
 # Argocd functions
 
 function deploy-argocd() {
@@ -147,7 +161,6 @@ function create-applicationset() {
     kubectl apply -n argocd -f apps/argocd/applicationset.yaml
 }
 
-
 function deploy-longhorn() {
     # Deploy longhorn
     echo "DEPLOY LONGHORN STACK"
@@ -168,19 +181,6 @@ function deploy-longhorn() {
     sleep 10s
     kubectl wait --for condition=containersready -n longhorn pod --all --timeout=900s    
     
-}
-
-function deploy-metalLB() {    
-    echo "DEPLOY METALLB STACK"
-    # Deploy metallb    
-    helm install metallb oci://registry-1.docker.io/bitnamicharts/metallb \
-        --namespace metallb \
-        --create-namespace
-    echo "Waiting for deployment metallb to complete..."
-    sleep 10s
-    kubectl wait --for condition=containersready -n metallb pod --all --timeout=600s    
-    kubectl -n metallb apply -f apps/metallb/metallb.yaml
-    echo "MetalLB deployment has complete with success!!!"
 }
 
 
@@ -441,10 +441,12 @@ function deploy-kube-prometheus() {
     kubectl apply -f apps/kube-prometheus/ingress.yaml
 }
 
+
 # Main
 source .bashrc
 init
 deploy-cert-manager
+deploy-metalLB
 deploy-argocd
 update-argcd-password $ARGOCD_USER $ARGOCD_PASS
 create-applicationset

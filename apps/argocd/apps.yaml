@@ -5,13 +5,15 @@ key:
       version: "4.7.15"
       releaseName: metallb
       repoUrl: "https://charts.bitnami.com/bitnami"      
-      namespace: metallb    
+      namespace: metallb
+
     - name: longhorn
       chart: longhorn
-      version: "1.5.3"
+      version: "1.6.0-dev"
       releaseName: longhorn
       repoUrl: "https://charts.longhorn.io"      
       namespace: longhorn
+
     - name: app-silvestrini
       chart: app-silvestrini
       version: "1.1.2"
