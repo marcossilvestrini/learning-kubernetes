@@ -1,7 +1,7 @@
 const axios = require('axios');
 
 async function checkWebAppStatus() {
-  const url = 'http://app-silvestrini.skynet.com.br/';
+  const url = 'https://app-silvestrini.skynet.com.br/';
   try {
     const response = await axios.get(url);
     if (response.status === 200) {
