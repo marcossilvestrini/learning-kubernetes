@@ -22,4 +22,4 @@ jobs:
       run: npm install axios
 
     - name: Check Web App Status
-      run: node check-kubernetes-app.js
+      run: node scripts/js/check-kubernetes-app.js                
