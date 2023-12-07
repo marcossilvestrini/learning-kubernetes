@@ -447,11 +447,10 @@ source .bashrc
 init
 deploy-cert-manager
 deploy-metalLB
+deploy-longhorn
 deploy-argocd
 update-argcd-password $ARGOCD_USER $ARGOCD_PASS
 create-applicationset
-# deploy-longhorn
-# deploy-metalLB
 
 # deploy-rancher
 # deploy-app-examples

@@ -1,4 +1,5 @@
 #https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
