@@ -1,51 +1,33 @@
-# key:
-#   components:  
-#     - name: metallb
-#       chart: metallb
-#       version: "4.7.15"
-#       releaseName: metallb
-#       path: charts/metallb
-#       repoUrl: "https://charts.bitnami.com/bitnami"      
-#       namespace: metallb
+key:
+  components:  
+    - name: metallb
+      chart: metallb
+      version: "4.7.15"
+      releaseName: metallb
+      path: charts/metallb
+      repoUrl: "https://charts.bitnami.com/bitnami"      
+      namespace: metallb
 
-#     - name: longhorn
-#       chart: longhorn
-#       version: "1.5.3"
-#       releaseName: longhorn
-#       path: charts/longhorn
-#       repoUrl: "https://charts.longhorn.io"      
-#       namespace: longhorn-system
+    - name: longhorn
+      chart: longhorn
+      version: "1.5.3"
+      releaseName: longhorn
+      path: charts/longhorn
+      repoUrl: "https://charts.longhorn.io"      
+      namespace: longhorn-system
 
-#     - name: kube-prometheus
-#       chart: kube-prometheus-stack
-#       version: "55.3.0"
-#       releaseName: kube-prometheus
-#       path: charts/kube-prometheus
-#       repoUrl: "https://prometheus-community.github.io/helm-charts"      
-#       namespace: kube-prometheus
+    - name: kube-prometheus
+      chart: kube-prometheus-stack
+      version: "55.3.0"
+      releaseName: kube-prometheus
+      path: charts/kube-prometheus
+      repoUrl: "https://prometheus-community.github.io/helm-charts"      
+      namespace: kube-prometheus
 
-#     - name: app-silvestrini
-#       chart: app-silvestrini
-#       version: "1.1.2"
-#       releaseName: app-silvestrini
-#       path: charts/app-silvestrini
-#       repoUrl: "https://marcossilvestrini.github.io/learning-helm"
-#       namespace: app-silvestrini
-
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: metallb-app
-  namespace: argocd
-spec:
-  project: default
-  source:
-    repoURL: "https://charts.bitnami.com/bitnami"
-    targetRevision: "4.7.15"
-    path: metallb
-    helm:
-      valueFiles:
-      - charts/metallb/values.yaml
-  destination:
-    server: https://kubernetes.default.svc
-    namespace: metallb
+    - name: app-silvestrini
+      chart: app-silvestrini
+      version: "1.1.2"
+      releaseName: app-silvestrini
+      path: charts/app-silvestrini
+      repoUrl: "https://marcossilvestrini.github.io/learning-helm"
+      namespace: app-silvestrini

@@ -32,7 +32,8 @@ spec:
       sources:
         - chart: '{{.chart}}'
           repoURL: '{{.repoUrl}}'
-          targetRevision: '{{.version}}'          
+          targetRevision: '{{.version}}'     
+          path: '{{.path}}'     
           helm:
             releaseName: '{{.releaseName}}'                        
       destination:
