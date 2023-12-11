@@ -32,10 +32,10 @@ spec:
       sources:
         - chart: '{{.chart}}'
           repoURL: '{{.repoUrl}}'
-          targetRevision: '{{.version}}'     
-          path: '{{.path}}'     
+          targetRevision: '{{.version}}'               
           helm:
-            releaseName: '{{.releaseName}}'                        
+            releaseName: '{{.releaseName}}'    
+          path: charts/{{.releaseName}}            
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{.namespace}}'
