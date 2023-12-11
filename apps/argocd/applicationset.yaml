@@ -34,7 +34,7 @@ spec:
           repoURL: '{{.repoUrl}}'
           targetRevision: '{{.version}}'
           helm:
-            releaseName: '{{.releaseName}}'
+            releaseName: '{{.releaseName}}'            
       destination:
         server: https://kubernetes.default.svc
         namespace: '{{.namespace}}'

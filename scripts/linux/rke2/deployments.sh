@@ -183,7 +183,6 @@ function deploy-longhorn() {
     
 }
 
-
 function deploy-rancher() {
     # Deploy rancher
     echo "DEPLOY RANCHER STACK"
@@ -292,6 +291,38 @@ function deploy-chart-silvestrini() {
     # Waiting for deploy
     echo "Waiting for deployment app-silvestrini to complete..."
     argocd app wait app-silvestrini --sync --timeout 300 
+}
+
+function deploy-kube-prometheus() {
+    export ARGOCD_EXEC_TIMEOUT="900s"
+    login-argcd
+    echo "DEPLOY KUBE-PROMETHEUS-STACK"
+
+    # Create argocd aplication
+    echo "CREATE ARGOCD APP KUBE-PROMETHEUS-STACK"
+    argocd app create kube-prometheus \
+        --repo https://github.com/prometheus-community/helm-charts.git \
+        --path charts/kube-prometheus-stack/ \
+        --dest-server https://kubernetes.default.svc \
+        --dest-namespace kube-prometheus \
+        --insecure \
+        --upsert
+
+    # Set argocd app with some options
+    argocd app set kube-prometheus --sync-option ApplyOutOfSyncOnly=true
+    argocd app set kube-prometheus --sync-option CreateNamespace=true
+    argocd app set kube-prometheus --sync-option ServerSideApply=true
+
+    # Sync app
+    echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
+    argocd app sync --insecure kube-prometheus
+
+    # Waiting for deploy
+    echo "Waiting for deployment kube-prometheus to complete..."
+    argocd app wait kube-prometheus --sync --timeout 300
+
+    # Create ingress
+    kubectl apply -f apps/kube-prometheus/ingress.yaml
 }
 
 function deploy-openebs-localpv() {
@@ -409,38 +440,6 @@ function delete-all-apps(){
     argocd  app delete -y openebs-localpv-hostpath kube-prometheus guestbook helm-guestbook app-silvestrini
 }
 
-function deploy-kube-prometheus() {
-    export ARGOCD_EXEC_TIMEOUT="900s"
-    login-argcd
-    echo "DEPLOY KUBE-PROMETHEUS-STACK"
-
-    # Create argocd aplication
-    echo "CREATE ARGOCD APP KUBE-PROMETHEUS-STACK"
-    argocd app create kube-prometheus \
-        --repo https://github.com/prometheus-community/helm-charts.git \
-        --path charts/kube-prometheus-stack/ \
-        --dest-server https://kubernetes.default.svc \
-        --dest-namespace kube-prometheus \
-        --insecure \
-        --upsert
-
-    # Set argocd app with some options
-    argocd app set kube-prometheus --sync-option ApplyOutOfSyncOnly=true
-    argocd app set kube-prometheus --sync-option CreateNamespace=true
-    argocd app set kube-prometheus --sync-option ServerSideApply=true
-
-    # Sync app
-    echo "SYNC APP KUBE-PROMETHEUS-STACK IN ARGOCD"
-    argocd app sync --insecure kube-prometheus
-
-    # Waiting for deploy
-    echo "Waiting for deployment kube-prometheus to complete..."
-    argocd app wait kube-prometheus --sync --timeout 300
-
-    # Create ingress
-    kubectl apply -f apps/kube-prometheus/ingress.yaml
-}
-
 
 # Main
 source .bashrc
@@ -450,12 +449,12 @@ deploy-metalLB
 deploy-longhorn
 deploy-argocd
 update-argcd-password $ARGOCD_USER $ARGOCD_PASS
-create-applicationset
-
+# create-applicationset
+# deploy-kube-prometheus
 # deploy-rancher
 # deploy-app-examples
-#deploy-chart-silvestrini
-# deploy-kube-prometheus
+# deploy-chart-silvestrini
+# 
 #deploy-openebs-localpv
 #deploy-gitlab
 #delete-all-apps
