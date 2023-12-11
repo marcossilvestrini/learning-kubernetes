@@ -1,0 +1,43 @@
+kube-prometheus-stack:
+  alertmanager:
+    enabled: true
+    externalUrl: https://alertmanager.skynet.com.br
+    ingress:
+      enabled: true
+      hosts:
+      - alertmanager.skynet.com.br
+      tls:
+        - secretName: alertmanager-tls
+          hosts:
+          - alertmanager.skynet.com.br
+    alertmanagerspec:    
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+    
+  prometheus:  
+    ingress:
+      enabled: true
+      hosts:
+      - prometheus.skynet.com.br
+      tls:
+        - secretName: prometheus-tls
+          hosts:
+          - prometheus.skynet.com.br
+    prometheusspec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+  grafana:
+    ingress:
+      enabled: true
+      hosts:
+      - grafana.skynet.com.br
+      tls:
+        - secretName: grafana-tls
+          hosts:
+          - grafana.skynet.com.br
+    grafanaspec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
