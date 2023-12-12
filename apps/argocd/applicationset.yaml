@@ -36,8 +36,9 @@ spec:
           helm:
             releaseName: '{{.releaseName}}'                
             valueFiles:
-            # - values.yaml                    
-            - ./{{.chartPath}}/{{.valuesFile}}
+            - values.yaml                    
+            values: |-
+              {{.values | indent 12}}
           path: 'charts/{{.releaseName}}'
           
       destination:

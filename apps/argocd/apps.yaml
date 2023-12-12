@@ -1,23 +1,23 @@
 key:
   components:  
-    - name: metallb
-      chart: metallb
-      version: "4.7.15"
-      releaseName: metallb            
-      repoUrl: "https://charts.bitnami.com/bitnami"      
-      namespace: metallb
-      chartPath: charts/metallb
-      valuesFile: values-metallb.yaml
+    # - name: metallb
+    #   chart: metallb
+    #   version: "4.7.15"
+    #   releaseName: metallb            
+    #   repoUrl: "https://charts.bitnami.com/bitnami"      
+    #   namespace: metallb
+    #   chartPath: charts/metallb
+    #   valuesFile: values-metallb.yaml
 
 
-    - name: longhorn
-      chart: longhorn
-      version: "1.5.3"
-      releaseName: longhorn      
-      repoUrl: "https://charts.longhorn.io"      
-      namespace: longhorn-system
-      chartPath: charts/longhorn
-      valuesFile: values-longhorn.yaml
+    # - name: longhorn
+    #   chart: longhorn
+    #   version: "1.5.3"
+    #   releaseName: longhorn      
+    #   repoUrl: "https://charts.longhorn.io"      
+    #   namespace: longhorn-system
+    #   chartPath: charts/longhorn
+    #   valuesFile: values-longhorn.yaml
 
     - name: kube-prometheus
       chart: kube-prometheus-stack
@@ -25,14 +25,56 @@ key:
       releaseName: kube-prometheus      
       repoUrl: "https://prometheus-community.github.io/helm-charts"      
       namespace: kube-prometheus
-      chartPath: charts/kube-prometheus
-      valuesFile: values-prometheus.yaml  
+      values: |
+        alertmanager:
+          enabled: true
+          externalUrl: https://alertmanager.skynet.com.br
+          ingress:
+            enabled: true
+            hosts:
+              - alertmanager.skynet.com.br
+            tls:
+              - secretName: alertmanager-tls
+                hosts:
+                  - alertmanager.skynet.com.br
+          alertmanagerspec:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: longhorn
 
-    - name: app-silvestrini
-      chart: app-silvestrini
-      version: "1.1.2"
-      releaseName: app-silvestrini      
-      repoUrl: "https://marcossilvestrini.github.io/learning-helm"
-      namespace: app-silvestrini
-      chartPath: charts/app-silvestrini
-      valuesFile: values-app-silvestrini.yaml
+        prometheus:
+          ingress:
+            enabled: true
+            hosts:
+              - prometheus.skynet.com.br
+            tls:
+              - secretName: prometheus-tls
+                hosts:
+                  - prometheus.skynet.com.br
+          prometheusspec:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: longhorn
+        grafana:
+          ingress:
+            enabled: true
+            hosts:
+              - grafana.skynet.com.br
+            tls:
+              - secretName: grafana-tls
+                hosts:
+                  - grafana.skynet.com.br
+          grafanaspec:
+            volumeClaimTemplate:
+              spec:
+                storageClassName: longhorn
+
+
+    # - name: app-silvestrini
+    #   chart: app-silvestrini
+    #   version: "1.1.2"
+    #   releaseName: app-silvestrini      
+    #   repoUrl: "https://marcossilvestrini.github.io/learning-helm"
+    #   namespace: app-silvestrini
+    #   chartPath: charts/app-silvestrini
+    #   valuesFile: values-app-silvestrini.yaml
