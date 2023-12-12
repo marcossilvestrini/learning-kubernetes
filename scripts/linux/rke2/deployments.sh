@@ -440,7 +440,6 @@ function delete-all-apps(){
     argocd  app delete -y openebs-localpv-hostpath kube-prometheus guestbook helm-guestbook app-silvestrini
 }
 
-
 # Main
 source .bashrc
 init
