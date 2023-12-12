@@ -3,35 +3,36 @@ key:
     - name: metallb
       chart: metallb
       version: "4.7.15"
-      releaseName: metallb  
-      values: |
-        loadBalancerClass: ""    
+      releaseName: metallb            
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
+      chartPath: charts/metallb
+      valuesFile: values-metallb.yaml
 
-    # - name: longhorn
-    #   chart: longhorn
-    #   version: "1.5.3"
-    #   releaseName: longhorn      
-    #   values: |
-    #     ""    
-    #   repoUrl: "https://charts.longhorn.io"      
-    #   namespace: longhorn-system
 
-    # - name: kube-prometheus
-    #   chart: kube-prometheus-stack
-    #   version: "55.3.0"
-    #   releaseName: kube-prometheus      
-    #   values: |
-    #     ""    
-    #   repoUrl: "https://prometheus-community.github.io/helm-charts"      
-    #   namespace: kube-prometheus
+    - name: longhorn
+      chart: longhorn
+      version: "1.5.3"
+      releaseName: longhorn      
+      repoUrl: "https://charts.longhorn.io"      
+      namespace: longhorn-system
+      chartPath: charts/longhorn
+      valuesFile: values-longhorn.yaml
 
-    # - name: app-silvestrini
-    #   chart: app-silvestrini
-    #   version: "1.1.2"
-    #   releaseName: app-silvestrini      
-    #   values: |
-    #     ""    
-    #   repoUrl: "https://marcossilvestrini.github.io/learning-helm"
-    #   namespace: app-silvestrini
+    - name: kube-prometheus
+      chart: kube-prometheus-stack
+      version: "55.3.0"
+      releaseName: kube-prometheus      
+      repoUrl: "https://prometheus-community.github.io/helm-charts"      
+      namespace: kube-prometheus
+      chartPath: charts/kube-prometheus-stack
+      valuesFile: values-prometheus.yaml  
+
+    - name: app-silvestrini
+      chart: app-silvestrini
+      version: "1.1.2"
+      releaseName: app-silvestrini      
+      repoUrl: "https://marcossilvestrini.github.io/learning-helm"
+      namespace: app-silvestrini
+      chartPath: charts/app-silvestrini
+      valuesFile: values-app-silvestrini.yaml
