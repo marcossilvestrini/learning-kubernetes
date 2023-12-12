@@ -166,7 +166,7 @@ postDelete:
   ignoreTimeoutError: false
 
 # Set a bootstrap password. If leave empty, a random password will be generated.
-bootstrapPassword: "Rancher@123456"
+#bootstrapPassword: ""
 
 livenessProbe:
   initialDelaySeconds: 60
