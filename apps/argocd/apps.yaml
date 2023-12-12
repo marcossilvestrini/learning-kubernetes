@@ -3,35 +3,35 @@ key:
     - name: metallb
       chart: metallb
       version: "4.7.15"
-      releaseName: metallb
-      chartPath: charts/metallb
-      valueFile: charts/metallb/values.yaml
+      releaseName: metallb  
+      values: |
+        ""    
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
 
     - name: longhorn
       chart: longhorn
       version: "1.5.3"
-      releaseName: longhorn
-      chartPath: charts/longhorn
-      valueFile: charts/longhorn/values.yaml
+      releaseName: longhorn      
+      values: |
+        ""    
       repoUrl: "https://charts.longhorn.io"      
       namespace: longhorn-system
 
     - name: kube-prometheus
       chart: kube-prometheus-stack
       version: "55.3.0"
-      releaseName: kube-prometheus
-      chartPath: charts/kube-prometheus
-      valueFile: charts/kube-prometheus/values.yaml
+      releaseName: kube-prometheus      
+      values: |
+        ""    
       repoUrl: "https://prometheus-community.github.io/helm-charts"      
       namespace: kube-prometheus
 
     - name: app-silvestrini
       chart: app-silvestrini
       version: "1.1.2"
-      releaseName: app-silvestrini
-      chartPath: charts/app-silvestrini
-      valueFile: charts/app-silvestrini/values.yaml
+      releaseName: app-silvestrini      
+      values: |
+        ""    
       repoUrl: "https://marcossilvestrini.github.io/learning-helm"
       namespace: app-silvestrini

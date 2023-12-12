@@ -36,9 +36,9 @@ spec:
           helm:
             releaseName: '{{.releaseName}}'                
             valueFiles:
-            - values.yaml
-            - ./{{.chartPath}}/values.yaml            
-          path: '{{.chartPath}}'
+            - values.yaml        
+            values: '{{.values}}'    
+          path: 'charts/{{.releaseName}}'
           
       destination:
         server: https://kubernetes.default.svc
