@@ -15,10 +15,11 @@ spec:
           repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
           revision: HEAD
           files:
-          - path: apps/argocd/apps.yaml
-      - list:
-          elements: []
-          elementsYaml: "{{ .key.components | toJson }}"
+          - path: apps/argocd/templates/**.yaml
+          #- path: apps/argocd/apps.yaml
+      # - list:
+      #     elements: []
+      #     elementsYaml: "{{ .key.components | toJson }}"
   template:
     metadata:
       name: '{{.name}}'
@@ -35,10 +36,10 @@ spec:
           targetRevision: '{{.version}}'                         
           helm:
             releaseName: '{{.releaseName}}'                
-            valueFiles:
-            - values.yaml        
-            values: |-
-              {{values}}
+            # valueFiles:
+            # - values.yaml        
+            # values: |-
+            #   {{values}}
           path: 'charts/{{.releaseName}}'
           
       destination:
