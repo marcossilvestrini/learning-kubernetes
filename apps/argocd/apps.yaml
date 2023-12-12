@@ -25,7 +25,7 @@ key:
       releaseName: kube-prometheus      
       repoUrl: "https://prometheus-community.github.io/helm-charts"      
       namespace: kube-prometheus
-      chartPath: charts/kube-prometheus-stack
+      chartPath: charts/kube-prometheus
       valuesFile: values-prometheus.yaml  
 
     - name: app-silvestrini
