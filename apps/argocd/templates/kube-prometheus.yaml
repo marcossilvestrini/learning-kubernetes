@@ -1,22 +1,5 @@
 key:
-  components:  
-    # - name: metallb
-    #   chart: metallb
-    #   version: "4.7.15"
-    #   releaseName: metallb            
-    #   repoUrl: "https://charts.bitnami.com/bitnami"      
-    #   namespace: metallb
-    
-
-
-    # - name: longhorn
-    #   chart: longhorn
-    #   version: "1.5.3"
-    #   releaseName: longhorn      
-    #   repoUrl: "https://charts.longhorn.io"      
-    #   namespace: longhorn-system
-      
-
+  components:
     - name: kube-prometheus
       chart: kube-prometheus-stack
       version: "55.3.0"
@@ -66,12 +49,3 @@ key:
             volumeClaimTemplate:
               spec:
                 storageClassName: longhorn
-
-
-    # - name: app-silvestrini
-    #   chart: app-silvestrini
-    #   version: "1.1.2"
-    #   releaseName: app-silvestrini      
-    #   repoUrl: "https://marcossilvestrini.github.io/learning-helm"
-    #   namespace: app-silvestrini
-    
