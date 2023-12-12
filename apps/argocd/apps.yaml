@@ -9,29 +9,29 @@ key:
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
 
-    - name: longhorn
-      chart: longhorn
-      version: "1.5.3"
-      releaseName: longhorn      
-      values: |
-        ""    
-      repoUrl: "https://charts.longhorn.io"      
-      namespace: longhorn-system
+    # - name: longhorn
+    #   chart: longhorn
+    #   version: "1.5.3"
+    #   releaseName: longhorn      
+    #   values: |
+    #     ""    
+    #   repoUrl: "https://charts.longhorn.io"      
+    #   namespace: longhorn-system
 
-    - name: kube-prometheus
-      chart: kube-prometheus-stack
-      version: "55.3.0"
-      releaseName: kube-prometheus      
-      values: |
-        ""    
-      repoUrl: "https://prometheus-community.github.io/helm-charts"      
-      namespace: kube-prometheus
+    # - name: kube-prometheus
+    #   chart: kube-prometheus-stack
+    #   version: "55.3.0"
+    #   releaseName: kube-prometheus      
+    #   values: |
+    #     ""    
+    #   repoUrl: "https://prometheus-community.github.io/helm-charts"      
+    #   namespace: kube-prometheus
 
-    - name: app-silvestrini
-      chart: app-silvestrini
-      version: "1.1.2"
-      releaseName: app-silvestrini      
-      values: |
-        ""    
-      repoUrl: "https://marcossilvestrini.github.io/learning-helm"
-      namespace: app-silvestrini
+    # - name: app-silvestrini
+    #   chart: app-silvestrini
+    #   version: "1.1.2"
+    #   releaseName: app-silvestrini      
+    #   values: |
+    #     ""    
+    #   repoUrl: "https://marcossilvestrini.github.io/learning-helm"
+    #   namespace: app-silvestrini
