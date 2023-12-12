@@ -4,8 +4,7 @@ key:
       chart: metallb
       version: "4.7.15"
       releaseName: metallb  
-      values: |
-        ""    
+      values: ""    
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
 
