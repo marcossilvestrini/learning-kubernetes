@@ -4,7 +4,7 @@ key:
       chart: rancher
       version: "2.7.9"
       releaseName: rancher
-      repoUrl: "https://github.com/rancher/server-chart"                     
+      repoUrl: "https://releases.rancher.com/server-charts/latest"                     
       namespace:  cattle-system
       values: |
         hostname: rancher.skynet.com.br
