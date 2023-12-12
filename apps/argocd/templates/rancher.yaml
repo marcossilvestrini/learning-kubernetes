@@ -8,3 +8,10 @@ key:
       namespace:  cattle-system
       values: |
         hostname: rancher.skynet.com.br
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+          tls:
+          # options: rancher, letsEncrypt, secret
+            source: rancher
+            secretName: tls-rancher-ingress        
