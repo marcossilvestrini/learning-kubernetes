@@ -37,7 +37,8 @@ spec:
             releaseName: '{{.releaseName}}'                
             valueFiles:
             - values.yaml        
-            values: '{{.values}}'    
+            values: |-
+              {{values}}
           path: 'charts/{{.releaseName}}'
           
       destination:
