@@ -5,6 +5,7 @@ key:
       version: "4.7.15"
       releaseName: metallb
       path: charts/metallb
+      valueFile: charts/metallb/values.yaml
       repoUrl: "https://charts.bitnami.com/bitnami"      
       namespace: metallb
 
@@ -13,6 +14,7 @@ key:
       version: "1.5.3"
       releaseName: longhorn
       path: charts/longhorn
+      valueFile: charts/longhorn/values.yaml
       repoUrl: "https://charts.longhorn.io"      
       namespace: longhorn-system
 
@@ -21,6 +23,7 @@ key:
       version: "55.3.0"
       releaseName: kube-prometheus
       path: charts/kube-prometheus
+      valueFile: charts/kube-prometheus/values.yaml
       repoUrl: "https://prometheus-community.github.io/helm-charts"      
       namespace: kube-prometheus
 
@@ -29,5 +32,6 @@ key:
       version: "1.1.2"
       releaseName: app-silvestrini
       path: charts/app-silvestrini
+      valueFile: charts/app-silvestrini/values.yaml
       repoUrl: "https://marcossilvestrini.github.io/learning-helm"
       namespace: app-silvestrini
