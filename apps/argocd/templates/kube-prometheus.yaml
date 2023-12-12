@@ -6,8 +6,7 @@ key:
     #   releaseName: metallb            
     #   repoUrl: "https://charts.bitnami.com/bitnami"      
     #   namespace: metallb
-    #   chartPath: charts/metallb
-    #   valuesFile: values-metallb.yaml
+    
 
 
     # - name: longhorn
@@ -16,8 +15,7 @@ key:
     #   releaseName: longhorn      
     #   repoUrl: "https://charts.longhorn.io"      
     #   namespace: longhorn-system
-    #   chartPath: charts/longhorn
-    #   valuesFile: values-longhorn.yaml
+      
 
     - name: kube-prometheus
       chart: kube-prometheus-stack
@@ -76,5 +74,4 @@ key:
     #   releaseName: app-silvestrini      
     #   repoUrl: "https://marcossilvestrini.github.io/learning-helm"
     #   namespace: app-silvestrini
-    #   chartPath: charts/app-silvestrini
-    #   valuesFile: values-app-silvestrini.yaml
+    

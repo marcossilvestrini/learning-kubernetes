@@ -15,7 +15,7 @@ spec:
           repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
           revision: HEAD
           files:
-          - path: apps/argocd/apps.yaml
+          - path: apps/argocd/templates/**.yaml
       - list:
           elements: []
           elementsYaml: "{{ .key.components | toJson }}"
@@ -29,6 +29,7 @@ spec:
         #   selfHeal: true    
         syncOptions:
         - CreateNamespace=true        
+        - ServerSideApply=true
       sources:
         - chart: '{{.chart}}'
           repoURL: '{{.repoUrl}}'
@@ -37,8 +38,7 @@ spec:
             releaseName: '{{.releaseName}}'                
             valueFiles:
             - values.yaml                    
-            values: |-
-              {{.values | indent 12}}
+            values: '{{.values | indent 12}}'
           path: 'charts/{{.releaseName}}'
           
       destination:
