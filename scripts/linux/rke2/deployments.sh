@@ -449,7 +449,7 @@ deploy-metalLB
 deploy-longhorn
 deploy-argocd
 update-argcd-password $ARGOCD_USER $ARGOCD_PASS
-# create-applicationset
+create-applicationset
 # deploy-kube-prometheus
 # deploy-rancher
 # deploy-app-examples

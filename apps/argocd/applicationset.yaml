@@ -15,7 +15,7 @@ spec:
           repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
           revision: HEAD
           files:
-          - path: apps/argocd/templates/**.yaml
+          - path: apps/argocd/templates/*.yaml
       - list:
           elements: []
           elementsYaml: "{{ .key.components | toJson }}"
