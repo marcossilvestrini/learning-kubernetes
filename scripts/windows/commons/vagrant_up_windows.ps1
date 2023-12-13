@@ -1,7 +1,7 @@
 <#
 .Synopsis
    Up lab for learning
-.DESCRIPTION
+.DESCRIPTION 
    Set Vagrantfile for kubernetes server
    Set folder of virtualbox VM's
    Create a semafore for vagrant up
