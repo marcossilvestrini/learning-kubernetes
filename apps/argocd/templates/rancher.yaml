@@ -15,4 +15,4 @@ key:
           # options: rancher, letsEncrypt, secret
             source: rancher
             secretName: tls-rancher-ingress      
-        bootstrapPassword: "Rancher123456"  
+        bootstrapPassword: "Rancher@123456"  

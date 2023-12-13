@@ -34,7 +34,9 @@ alertmanager                CNAME   load-balance    ;alertmanager endpoint
 prometheus                  CNAME   load-balance    ;prometheus endpoint
 grafana                     CNAME   load-balance    ;grafana endpoint
 netbox                      CNAME   load-balance    ;netbox endpoint
-consul                      CNAME   load-balance    ;netbox endpoint
+consul                      CNAME   load-balance    ;consul endpoint
+vault                       CNAME   load-balance    ;vault endpoint
+
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
 
 skynet.com.br. IN DNSKEY 256 3 13 qzYHNPMPd6QjO66oHI4RL95LBSb3wRuEGJSXgByHJalof0DBJOucDKE1 MMudvv7eNoOabO+m91rQKUbRw6n/Vg==

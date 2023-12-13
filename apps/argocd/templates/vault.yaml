@@ -1,0 +1,24 @@
+key:
+  components:  
+    - name: vault
+      chart: vault
+      version: "0.27.0"
+      releaseName: vault            
+      repoUrl: "https://helm.releases.hashicorp.com" #https://github.com/hashicorp/vault-helm
+      namespace: vault    
+      values: |
+        global:
+          namespace: "vault"
+        server:
+          ingress:
+            enabled: true
+            ingressClassName: "nginx"
+            hosts:
+              - host: vault.skynet.com.br
+        ui:
+          enabled: true
+        postStart:          
+          - /bin/sh
+          - -c
+          - ls -lt
+          #- /vault/userconfig/myscript/run.sh
