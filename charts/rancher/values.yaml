@@ -1,6 +1,8 @@
 # Additional Trusted CAs.
 # Enable this flag and add your CA certs as a secret named tls-ca-additional in the namespace.
 # See README.md for details.
+
+# https://github.com/rancher/server-chart/blob/master/rancher/values.yaml
 additionalTrustedCAs: false
 
 antiAffinity: preferred

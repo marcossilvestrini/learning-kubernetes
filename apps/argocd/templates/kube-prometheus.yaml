@@ -1,3 +1,5 @@
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+
 key:
   components:
     - name: kube-prometheus
@@ -39,6 +41,7 @@ key:
         grafana:
           ingress:
             enabled: true
+            adminPassword: Skynet@123456
             hosts:
               - grafana.skynet.com.br
             tls:
