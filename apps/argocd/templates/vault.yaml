@@ -21,4 +21,4 @@ key:
         dev:
           enabled: true
           # Set VAULT_DEV_ROOT_TOKEN_ID value
-          devRootToken: "nVVIIlQR0zRFrITPE4dUlFoqcf9aFyAbXjxqoG5Hgcw="
+          devRootToken: hvs.m1VrvxzySolItmOwPsTxPbD0
