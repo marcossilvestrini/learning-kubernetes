@@ -15,5 +15,5 @@ ui:
 dev:
   enabled: true
   # Set VAULT_DEV_ROOT_TOKEN_ID value
-  devRootToken: "Skynet@123456"
+  devRootToken: "nVVIIlQR0zRFrITPE4dUlFoqcf9aFyAbXjxqoG5Hgcw="
   
