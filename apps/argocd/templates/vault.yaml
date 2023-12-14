@@ -21,9 +21,4 @@ key:
         dev:
           enabled: true
           # Set VAULT_DEV_ROOT_TOKEN_ID value
-          devRootToken: "Skynet@123456"
-        postStart:          
-          - /bin/sh
-          - -c
-          - ls -lt
-          #- /vault/userconfig/myscript/run.sh
+          devRootToken: "nVVIIlQR0zRFrITPE4dUlFoqcf9aFyAbXjxqoG5Hgcw="
