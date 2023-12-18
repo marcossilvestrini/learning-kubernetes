@@ -6,7 +6,7 @@ key:
       chart: cloudnative-pg
       version: "0.19.1"
       releaseName: cloudnative-pg            
-      repoUrl: "https://github.com/cloudnative-pg/charts"
+      repoUrl: "https://cloudnative-pg.github.io/charts"
       namespace: cnpg-system    
       values: |
         replicaCount: 1
