@@ -1,0 +1,10 @@
+# https://github.com/cloudnative-pg/charts/blob/main/charts/cloudnative-pg/values.yaml
+
+replicaCount: 1
+
+crds:
+  create: true
+
+monitoring:
+  # -- Specifies whether the monitoring should be enabled. Requires Prometheus Operator CRDs.
+  podMonitorEnabled: true
