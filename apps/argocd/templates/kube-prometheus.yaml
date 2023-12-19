@@ -41,7 +41,7 @@ key:
         grafana:
           ingress:
             enabled: true
-            adminPassword: Skynet@123456
+            adminPassword: U2t5bmV0QDEyMzQ1Ngo=
             hosts:
               - grafana.skynet.com.br
             tls:
