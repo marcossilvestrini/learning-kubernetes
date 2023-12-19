@@ -24,6 +24,10 @@ key:
             volumeClaimTemplate:
               spec:
                 storageClassName: longhorn
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 10Gi                   
         prometheus:
           ingress:
             enabled: true
@@ -37,10 +41,14 @@ key:
             volumeClaimTemplate:
               spec:
                 storageClassName: longhorn
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 10Gi                             
         grafana:
           ingress:
             enabled: true
-            adminPassword: Skynet@123456
+            adminPassword: "Skynet@123456"
             hosts:
               - grafana.skynet.com.br
             tls:
@@ -51,3 +59,7 @@ key:
             volumeClaimTemplate:
               spec:
                 storageClassName: longhorn
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 10Gi                             

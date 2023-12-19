@@ -39,7 +39,7 @@ prometheus:
 grafana:
   ingress:
     enabled: true
-    adminPassword: Skynet@123456
+    adminPassword: "Skynet@123456"
     hosts:
       - grafana.skynet.com.br
     tls:
