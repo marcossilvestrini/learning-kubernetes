@@ -949,7 +949,7 @@ grafana:
   ##
   defaultDashboardsEditable: true
 
-  adminPassword: prom-operator
+  adminPassword: Skynet@123456
 
   rbac:
     ## If true, Grafana PSPs will be created
