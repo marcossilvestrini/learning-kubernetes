@@ -1,0 +1,44 @@
+# https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml
+alertmanager:
+  enabled: true
+  externalUrl: https://alertmanager.skynet.com.br
+  ingress:
+    enabled: true
+    hosts:
+      - alertmanager.skynet.com.br
+    tls:
+      - secretName: alertmanager-tls
+        hosts:
+          - alertmanager.skynet.com.br
+  alertmanagerspec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn
+
+prometheus:
+  ingress:
+    enabled: true
+    hosts:
+      - prometheus.skynet.com.br
+    tls:
+      - secretName: prometheus-tls
+        hosts:
+          - prometheus.skynet.com.br
+  prometheusspec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn
+grafana:
+  ingress:
+    enabled: true
+    adminPassword: Skynet@123456
+    hosts:
+      - grafana.skynet.com.br
+    tls:
+      - secretName: grafana-tls
+        hosts:
+          - grafana.skynet.com.br
+  grafanaspec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn

@@ -24,7 +24,6 @@ key:
             volumeClaimTemplate:
               spec:
                 storageClassName: longhorn
-
         prometheus:
           ingress:
             enabled: true
