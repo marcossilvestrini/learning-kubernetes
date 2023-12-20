@@ -12,12 +12,10 @@ key:
         networkPolicies:
           enabled: true  
           type: "rke2"
-
         persistence:
           defaultClass: true
           defaultFsType: ext4  
-          defaultClassReplicaCount: 3    
-          
+          defaultClassReplicaCount: 3              
         defaultSettings:  
           defaultDataPath: /var/k8s/storage  
           upgradeChecker: true
@@ -26,12 +24,9 @@ key:
           disableSchedulingOnCordonedNode: true      
           allowVolumeCreationWithDegradedAvailability: true
           orphanAutoDeletion: true  
-
         ingress:  
           enabled: true
           ingressClassName: nginx
           host: longhorn.skynet.com.br  
-          tls: true  
-      
-
+          tls: true
     

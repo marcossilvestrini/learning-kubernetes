@@ -8,7 +8,6 @@ key:
       namespace: app-silvestrini
       values: |
         replicaCount: 3
-
         image:
           repository: mrsilvestrini/app-silvestrini
           pullPolicy: IfNotPresent          
@@ -18,7 +17,6 @@ key:
         service:
           type: ClusterIP
           port: 80
-
         ingress:
           enabled: true
           className: ""
@@ -34,7 +32,6 @@ key:
           #  - secretName: chart-example-tls
           #    hosts:
           #      - chart-example.local
-
         resources:  
           limits:
             cpu: 300m
@@ -42,7 +39,6 @@ key:
           requests:
             cpu: 100m
             memory: 128Mi
-
         autoscaling:
           enabled: false
           minReplicas: 1

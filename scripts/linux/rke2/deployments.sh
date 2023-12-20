@@ -443,17 +443,17 @@ function delete-all-apps(){
 # Main
 source .bashrc
 init
-deploy-cert-manager
-deploy-metalLB
-deploy-longhorn
-deploy-argocd
-update-argcd-password $ARGOCD_USER $ARGOCD_PASS
-create-applicationset
+# deploy-cert-manager
+# deploy-metalLB
+# deploy-longhorn
+# deploy-argocd
+# update-argcd-password $ARGOCD_USER $ARGOCD_PASS
+# create-applicationset
 # deploy-kube-prometheus
 # deploy-rancher
 # deploy-app-examples
 # deploy-chart-silvestrini
 # 
 #deploy-openebs-localpv
-#deploy-gitlab
+deploy-gitlab
 #delete-all-apps
