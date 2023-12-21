@@ -4,7 +4,7 @@ key:
       chart: gitlab
       version: "7.6.2"
       releaseName: gitlab            
-      repoUrl: "https://gitlab.com/gitlab-org/charts/gitlab"      
+      repoUrl: "https://charts.gitlab.io/"      
       namespace: gitlab    
       values: |
         namespace: gitlab
