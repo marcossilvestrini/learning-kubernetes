@@ -8,15 +8,15 @@ key:
       namespace: gitlab    
       values: |
         namespace: gitlab
-        certmanager:
-        install: false
-        installCRDs: false
+        certmanager:        
+            install: false
+            installCRDs: false
         certmanager-issuer:
-        email: marcos.silvestrini@gmail.com
+            email: marcos.silvestrini@gmail.com
         global:
-        edition: ce
-        hosts:
-            domain: skynet.com.br
+            edition: ce
+            hosts:
+                domain: skynet.com.br
         postgresql:
-        image:
-            tag: 14.8.0
+            image:
+                tag: 14.8.0
