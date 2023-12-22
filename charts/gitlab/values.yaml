@@ -1,4 +1,5 @@
 # https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/values.yaml
+# https://docs.gitlab.com/charts/installation/secrets#initial-root-password
 
 #     --set global.hosts.domain=skynet.com.br \
 #     --set global.edition=ce \
