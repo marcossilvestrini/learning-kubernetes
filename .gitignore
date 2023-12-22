@@ -81,3 +81,6 @@ security/.docker-secrets
 
 # Helm
 #/charts/**/*.tgz
+
+# Gitlab
+gitlab_secrets_backup.tar.gz
