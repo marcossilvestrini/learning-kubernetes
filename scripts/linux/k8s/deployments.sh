@@ -435,6 +435,15 @@ function deploy-consul() {
     argocd app wait consul --sync --timeout 300 
 }
 
+# Backstage
+function deploy-backstage() {    
+    echo "DEPLOY BACKSTAGE STACK"        
+    ./scripts/backstage/convert_env_to_yaml.sh
+    kubectl create namespace backstage
+    kubectl apply -n backstage -f security/secret-backstage.yaml
+}
+
+
 function delete-all-apps(){
     login-argcd
     argocd  app delete -y openebs-localpv-hostpath kube-prometheus guestbook helm-guestbook app-silvestrini
@@ -443,12 +452,14 @@ function delete-all-apps(){
 # Main
 source .bashrc
 init
-deploy-cert-manager
-deploy-metalLB
-deploy-longhorn
-deploy-argocd
-update-argcd-password $ARGOCD_USER $ARGOCD_PASS
-create-applicationset
+# deploy-cert-manager
+# deploy-metalLB
+# deploy-longhorn
+# deploy-argocd
+# update-argcd-password $ARGOCD_USER $ARGOCD_PASS
+# create-applicationset
+deploy-backstage
+
 # deploy-kube-prometheus
 # deploy-rancher
 # deploy-app-examples

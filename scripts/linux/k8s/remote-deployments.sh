@@ -7,4 +7,4 @@
     Date: 21/07/2023
 MULTILINE-COMMENT
 
-sshpass -p 'vagrant' ssh -o StrictHostKeyChecking=no vagrant@$NODE_MASTER -l vagrant sudo ./scripts/rke2/deployments.sh
+sshpass -p 'vagrant' ssh -o StrictHostKeyChecking=no vagrant@$NODE_MASTER -l vagrant sudo ./scripts/k8s/deployments.sh

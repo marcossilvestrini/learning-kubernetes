@@ -91,7 +91,7 @@ Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker0
 Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
 
 # Deployment kubernetes applications
-#vagrant ssh control-plane01  -c 'sudo ./scripts/rke2/deployments.sh'
+#vagrant ssh control-plane01  -c 'sudo ./scripts/k8s/deployments.sh'
 
 # Copy kubeconfig to G:\
 Copy-Item -Force  "$baseProject\configs\linux\kubeconfig\rancher-skynet-local.yaml" "G:\Projetos\learning-kubernetes\configs\linux\kubeconfig\rancher-skynet-local.yaml"

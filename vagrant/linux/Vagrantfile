@@ -268,7 +268,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
 
       # INSTALL RKE2
-      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/k8s/install-rke2.sh"
     end
   end
 
@@ -355,10 +355,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provision "shell", name: "[SCRIPT STORAGE-LONGHORN.SH]", path: "../../scripts/linux/commons/storage-longhorn.sh"
 
       # INSTAL RKE2 AGENT
-      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/rke2/install-rke2.sh"
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/k8s/install-rke2.sh"
 
       if WORKERS[j] == "worker03"
-        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/rke2/remote-deployments.sh"
+        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/k8s/remote-deployments.sh"
       end
 
       # CLEANUP AFTER "DESTROY" ACTION

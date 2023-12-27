@@ -11,4 +11,3 @@ Your private key for ssh access
 ## file: kubernetes-key-ecdsa.pub
 
 Your pub key for ssh access
-
