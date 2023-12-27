@@ -36,6 +36,7 @@ grafana                     CNAME   load-balance    ;grafana endpoint
 netbox                      CNAME   load-balance    ;netbox endpoint
 consul                      CNAME   load-balance    ;consul endpoint
 vault                       CNAME   load-balance    ;vault endpoint
+backstage                   CNAME   load-balance    ;backstage endpoint
 
 @                   IN      TXT     "skynet - The Company for crazy people!!!"
 

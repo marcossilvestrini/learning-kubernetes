@@ -4,7 +4,7 @@ key:
       chart: backstage
       version: "1.8.1"
       releaseName: backstage            
-      repoUrl: "https://backstage.github.io/charts"      
+      repoUrl: "https://github.com/backstage/charts/tree/main/charts/backstage"      
       namespace: backstage    
       values: |
         ingress:
