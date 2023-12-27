@@ -14,12 +14,12 @@ key:
           host: "backstage.skynet.com.br"
         backstage:  
           replicas: 1
-          image:    
-            registry: docker.io    
-            repository: mrsilvestrini/backstage    
-            tag: latest    
-            pullPolicy: Always
-            debug: false  
+          # image:    
+          #   registry: docker.io    
+          #   repository: mrsilvestrini/backstage    
+          #   tag: latest    
+          #   pullPolicy: Always
+          #   debug: false  
           containerPorts:
             backend: 7007  
           command: ["node", "packages/backend"]
