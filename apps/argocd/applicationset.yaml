@@ -1,0 +1,46 @@
+#https://medium.com/@mprzygrodzki/argocd-applicationsset-with-helm-72bb6362d494
+
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: skynet-apps
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+  - matrix:
+      generators:
+      - git:
+          repoURL: https://github.com/marcossilvestrini/learning-kubernetes.git
+          revision: HEAD
+          files:
+          - path: apps/argocd/templates/*.yaml
+      - list:
+          elements: []
+          elementsYaml: "{{ .key.components | toJson }}"
+  template:
+    metadata:
+      name: '{{.name}}'
+    spec:
+      project: default
+      syncPolicy:
+        # automated:
+        #   selfHeal: true    
+        syncOptions:
+        - CreateNamespace=true        
+        - ServerSideApply=true
+      sources:
+        - chart: '{{.chart}}'
+          repoURL: '{{.repoUrl}}'
+          targetRevision: '{{.version}}'                         
+          helm:
+            releaseName: '{{.releaseName}}'                
+            valueFiles:
+              - values.yaml                    
+            values: '{{.values | indent 12}}'
+          path: 'charts/{{.releaseName}}'
+          
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{.namespace}}'

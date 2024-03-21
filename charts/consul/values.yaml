@@ -1,0 +1,27 @@
+# https://github.com/hashicorp/consul-k8s/blob/main/charts/consul/values.yaml
+
+global:
+  enabled: true
+  name: consul
+  domain: skynet.com.br
+  datacenter: dc1
+
+server:
+  replicas: 1
+  storage: 10Gi
+  storageClass: longhorn
+
+ui:
+  enabled: true
+  ingress:  
+    enabled: true    
+    ingressClassName: "nginx"
+    hosts:
+      - host: consul.skynet.com.br
+
+syncCatalog:
+  enabled: false
+  k8sAllowNamespaces: ["*"]
+  consulNamespaces:    
+    consulDestinationNamespace: "consul"
+

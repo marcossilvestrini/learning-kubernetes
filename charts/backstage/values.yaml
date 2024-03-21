@@ -1,0 +1,53 @@
+# https://github.com/backstage/charts/blob/main/charts/backstage/values.yaml
+ingress:
+  enabled: true  
+  className: "nginx"  
+  annotations: {}  
+  host: "backstage.skynet.com.br"
+backstage:  
+  replicas: 1
+  image:    
+    registry: docker.io    
+    repository: mrsilvestrini/backstage    
+    tag: latest    
+    pullPolicy: Always
+    debug: false  
+  containerPorts:
+    backend: 7007  
+  command: ["node", "packages/backend"]
+  extraEnvVarsSecrets: 
+    - backstage-secret
+  installDir: /app
+
+postgresql:
+
+  # -- Switch to enable or disable the PostgreSQL helm chart
+  enabled: false
+
+  # -- The authentication details of the Postgres database
+  auth:
+
+    # -- Name for a custom user to create
+    username: bn_backstage
+
+    # -- Password for the custom user to create
+    password: ""
+
+    # -- Name of existing secret to use for PostgreSQL credentials
+    existingSecret: ""
+
+    # -- The secret keys Postgres will look for to retrieve the relevant password
+    secretKeys:
+
+      # -- The key in which Postgres will look for, for the admin password, in the existing Secret
+      adminPasswordKey: admin-password
+
+      # -- The key in which Postgres will look for, for the user password, in the existing Secret
+      userPasswordKey: user-password
+
+      # -- The key in which Postgres will look for, for the replication password, in the existing Secret
+      replicationPasswordKey: replication-password
+
+  # -- PostgreSQL architecture (`standalone` or `replication`)
+  architecture: standalone
+

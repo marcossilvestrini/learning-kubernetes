@@ -1,0 +1,415 @@
+#
+# LICENSE UPL 1.0
+#
+# Copyright (c) 1982-2020 Oracle and/or its affiliates. All rights reserved.
+#
+# Since: January, 2020
+# Author: gerald.venzl@oracle.com
+# Description: Creates an Oracle Linux virtual machine.
+#
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS HEADER.
+#
+
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Require for create disks
+require "fileutils"
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+# EXPERIMENTAL FEATURES
+VAGRANT_EXPERIMENTAL = "disks"
+
+# INSTALL PLUGIN RELLOAD
+unless Vagrant.has_plugin?("vagrant-reload")
+  puts "Installing vagrant-reload Plugin..."
+  system("vagrant plugin install vagrant-reload")
+end
+
+# INSTALL PLUGIN VBguest
+unless Vagrant.has_plugin?("vagrant-vbguest")
+  puts "Installing vagrant-vbguest Plugin..."
+  system("vagrant plugin install vagrant-vbguest")
+end
+
+# INSTALL PLUGIN DISKSIZE
+unless Vagrant.has_plugin?("vagrant-disksize")
+  puts "Installing vagrant-disksize Plugin..."
+  system("vagrant plugin install vagrant-disksize")
+end
+
+# GLOBAL BOX CONFIGURATIONS
+#BOX_OL_URL = "https://oracle.github.io/vagrant-projects/boxes"
+#BOX_OL_NAME = "oraclelinux/9"
+BOX_DNS = "silvestrini-ol9-dns"
+BOX_LB = "silvestrini-ol9-lb"
+BOX_CP = "silvestrini-ol9-rke2-cp"
+BOX_WK = "silvestrini-ol9-rke2-wk"
+
+# DEFINE CONFIGS FOR ADICTIONAL DISKS
+
+## controller definition
+VAGRANT_CONTROLLER_NAME = "Virtual I/O Device SCSI controller"
+VAGRANT_CONTROLLER_TYPE = "virtio-scsi"
+
+## directory that will contain VDI files
+VAGRANT_DISKS_DIRECTORY = "disks"
+
+## define disks
+## The format is filename, size (GB), port (see controller docs)
+local_disks = [
+  { :filename => "disk1", :size => 100, :port => 5 },
+]
+
+## file operations needs to be relative to this file
+VAGRANT_STORAGE = "E:/Servers/Virtualbox/Storage/infra-server01"
+
+## SECONDARY DISK /dev/sdb
+disks_directory = File.join(VAGRANT_STORAGE, VAGRANT_DISKS_DIRECTORY)
+
+#DEFINE VM
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  # GLOBAL CONFIGURATIONS
+
+  ## SSH CONFIG
+  #config.ssh.insert_key = false
+
+  ## GUEST CONFIG
+  config.vbguest.auto_update = false
+  config.vbguest.no_install = true
+  config.vbguest.no_remote = true
+  config.vm.box_download_insecure = true
+
+  ## MOUNTS
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+  config.vm.synced_folder "../../security/", "/home/vagrant/security"
+  config.vm.synced_folder "../../configs/linux/", "/home/vagrant/configs"
+  config.vm.synced_folder "../../scripts/linux/", "/home/vagrant/scripts"
+  config.vm.synced_folder "../../api/", "/home/vagrant/api"
+  config.vm.synced_folder "../../kubernetes", "/home/vagrant/kubernetes"
+  config.vm.synced_folder "../../apps", "/home/vagrant/apps"
+  config.vm.synced_folder "../../charts", "/home/vagrant/charts"
+
+  ## PROVIDER
+  config.vm.provider "virtualbox" do |vb|
+    vb.linked_clone = true
+    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+  end
+
+  # VM infra-server01 - DNS Bind, Postfix,Samba, NFS, Pure-FTP
+  config.vm.define "infra-server01" do |infra_server01|
+    infra_server01.vm.box = BOX_DNS
+
+    # STORAGE
+
+    ## create disks before "up" action
+    infra_server01.trigger.before :up do |trigger|
+      trigger.name = "Create disks"
+      trigger.ruby do
+        unless File.directory?(disks_directory)
+          FileUtils.mkdir_p(disks_directory)
+        end
+        local_disks.each do |local_disk|
+          local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
+          unless File.exist?(local_disk_filename)
+            puts "Creating \"#{local_disk[:filename]}\" disk"
+            system("vboxmanage createmedium --filename #{local_disk_filename} --size #{local_disk[:size] * 1024} --format VDI")
+          end
+        end
+      end
+    end
+
+    ## create storage controller on first run
+    unless File.directory?(disks_directory)
+      infra_server01.vm.provider "virtualbox" do |storage_provider|
+        storage_provider.customize ["storagectl", :id, "--name", VAGRANT_CONTROLLER_NAME, "--add", VAGRANT_CONTROLLER_TYPE, "--hostiocache", "off"]
+      end
+    end
+
+    ## attach storage devices
+    infra_server01.vm.provider "virtualbox" do |storage_provider|
+      local_disks.each do |local_disk|
+        local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
+        unless File.exist?(local_disk_filename)
+          storage_provider.customize ["storageattach", :id, "--storagectl", VAGRANT_CONTROLLER_NAME, "--port", local_disk[:port], "--device", 0, "--type", "hdd", "--medium", local_disk_filename]
+        end
+      end
+    end
+
+    # VARIABLE HOSTNAME
+    VM_INFRA_SERVER01 = "infra-server01"
+
+    # HOSTNAM
+    infra_server01.vm.hostname = VM_INFRA_SERVER01
+
+    # NETWORK
+    infra_server01.vm.network "public_network", nic_type: "virtio", mac: "080027f3066a", ip: "192.168.0.130", netmask: "255.255.255.0", mode: "bridge", bridge: [
+                                                  "Intel(R) I211 Gigabit Network Connection",
+                                                  "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
+                                                ]
+
+    # PROVIDER
+    infra_server01.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name = VM_INFRA_SERVER01
+      vb.memory = 2048
+      vb.cpus = 1
+    end
+
+    # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+    infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+    # SET DNS BIND
+    infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-BIND-MASTER.SH]", path: "../../scripts/linux/bind/userdata-bind-master.sh"
+
+    # INSTALL SALT MASTER AND MINIONS
+    infra_server01.vm.provision "shell", name: "[SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
+
+    # SET ISC DHCP
+    #infra_server01.vm.provision "shell", name: "[SCRIPT USERDATA-DHCP.SH]", path: "../../scripts/linux/dhcp/userdata-dhcp.sh"
+
+    # CONFIGURE STORAGE NFS
+    #infra_server01.vm.provision "shell", name: "[SCRIPT STORAGE.SH]", path: "../../scripts/linux/commons/storage-nfs.sh"
+
+    # cleanup after "destroy" action
+    infra_server01.trigger.after :destroy do |trigger|
+      trigger.name = "Cleanup operation"
+      trigger.ruby do
+        # the following loop is now obsolete as these files will be removed automatically as machine dependency
+        local_disks.each do |local_disk|
+          local_disk_filename = File.join(disks_directory, "#{local_disk[:filename]}.vdi")
+          if File.exist?(local_disk_filename)
+            puts "Deleting \"#{local_disk[:filename]}\" disk"
+            system("vboxmanage closemedium disk #{local_disk_filename} --delete")
+          end
+        end
+        if File.exist?(disks_directory)
+          FileUtils.rmdir(disks_directory)
+        end
+      end
+    end
+  end
+
+  # VM load_balancer - racher.skynet.com.br
+  config.vm.define "load-balance" do |load_balance|
+    load_balance.vm.box = BOX_LB
+
+    # VARIABLE HOSTNAME
+    VM_LOAD_BALANCE = "load-balance"
+
+    # HOSTNAM
+    load_balance.vm.hostname = VM_LOAD_BALANCE
+
+    # NETWORK
+    load_balance.vm.network "public_network", nic_type: "virtio", mac: "080027f3066b", ip: "192.168.0.131", netmask: "255.255.255.0", mode: "bridge", bridge: [
+                                                "Intel(R) I211 Gigabit Network Connection",
+                                                "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
+                                              ]
+
+    # PROVIDER
+    load_balance.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name = VM_LOAD_BALANCE
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+
+    # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+    load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+    # CONFIGURE NGINX LOAD BALANCE
+    load_balance.vm.provision "shell", name: "[SCRIPT GENERATE-CERTIFICATES.SH]", path: "../../scripts/linux/commons/generate-certificates.sh"
+
+    # CONFIGURE NGINX LOAD BALANCE
+    load_balance.vm.provision "shell", name: "[SCRIPT USERDATA-LOAD-BALANCE.SH]", path: "../../scripts/linux/load-balance/userdata-load-balance.sh"
+
+    # INSTALL SALT MASTER AND MINIONS
+    load_balance.vm.provision "shell", name: "[SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
+
+    # UP API UPDATE NGINX CONFIG
+    load_balance.vm.provision "shell", name: "[SCRIPT START-API-UPDATE-NGINX-CONFIG.SH]", path: "../../scripts/linux/load-balance/start-api-update-nginx-config.sh"
+  end
+
+  # Node|Control Plane Servers
+  PLANES = ["control-plane01", "control-plane02", "control-plane03"]
+  N = 2
+
+  (0..N).each do |i|
+    config.vm.define PLANES[i] do |node|
+
+      # BOX NAME
+      node.vm.box = BOX_CP
+
+      # VARIABLE HOSTNAME
+      node.vm.hostname = PLANES[i]
+
+      # NETWORK
+      node.vm.network "public_network", nic_type: "virtio", mac: "080027f3067#{i}", ip: "192.168.0.14#{i}", netmask: "255.255.255.0", mode: "bridge", bridge: [
+                                          "Intel(R) I211 Gigabit Network Connection",
+                                          "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
+                                        ]
+
+      #PROVIDER
+      node.vm.provider "virtualbox" do |vb|
+        vb.linked_clone = true
+        vb.name = PLANES[i]
+        vb.memory = 8192
+        vb.cpus = 3
+        vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
+      end
+
+      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+      # INSTALL SALT MASTER AND MINIONS
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/salt/install.sh"
+
+      # INSTALL RKE2
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/k8s/install-rke2.sh"
+    end
+  end
+
+  # Agent|Workers Servers
+  WORKERS = ["worker01", "worker02", "worker03"]
+  M = 2
+  iprange = 3
+
+  (0..M).each do |j|
+    config.vm.define WORKERS[j] do |node|
+
+      # BOX NAME
+      node.vm.box = BOX_WK
+
+      ## VARIABLE HOSTNAME
+      node.vm.hostname = WORKERS[j]
+
+      # STORAGE
+
+      ## DEFINE NUMBER OF DISKS
+      disks = [
+        { :filename => "disk1", :size => 300, :port => 5 },
+      ]
+
+      ## DEFINE PATH FOR SECONDARY DISK
+      STORAGE = "E:/Servers/Virtualbox/Storage/#{WORKERS[j]}"
+      disks_dir = File.join(STORAGE, VAGRANT_DISKS_DIRECTORY)
+      ## CREATE DISKS BEFORE "UP" ACTION
+      node.trigger.before :up do |trigger|
+        trigger.name = "Create disks"
+        trigger.ruby do
+          unless File.directory?(disks_dir)
+            FileUtils.mkdir_p(disks_dir)
+          end
+          disks.each do |disk|
+            disk_filename = File.join(disks_dir, "#{disk[:filename]}.vdi")
+            unless File.exist?(disk_filename)
+              puts "Creating \"#{disk[:filename]}\" disk"
+              system("vboxmanage createmedium --filename #{disk_filename} --size #{disk[:size] * 1024} --format VDI")
+            end
+          end
+        end
+      end
+      # END TRIGGER UP
+
+      ## CREATE STORAGE CONTROLLER ON FIRST RUN
+      unless File.directory?(disks_dir)
+        node.vm.provider "virtualbox" do |storage_provider|
+          storage_provider.customize ["storagectl", :id, "--name", VAGRANT_CONTROLLER_NAME, "--add", VAGRANT_CONTROLLER_TYPE, "--hostiocache", "off"]
+        end
+      end
+
+      ## attach storage devices
+      node.vm.provider "virtualbox" do |storage_provider|
+        disks.each do |disk|
+          disk_filename = File.join(disks_dir, "#{disk[:filename]}.vdi")
+          unless File.exist?(disk_filename)
+            storage_provider.customize ["storageattach", :id, "--storagectl", VAGRANT_CONTROLLER_NAME, "--port", disk[:port], "--device", 0, "--type", "hdd", "--medium", disk_filename]
+          end
+        end
+      end
+
+      # NETWORK
+      node.vm.network "public_network", nic_type: "virtio", mac: "080022f3067#{j}", ip: "192.168.0.14#{iprange}", netmask: "255.255.255.0", mode: "bridge", bridge: [
+                                          "Intel(R) I211 Gigabit Network Connection",
+                                          "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
+                                        ]
+      iprange += 1
+
+      #PROVIDER
+      node.vm.provider "virtualbox" do |vb|
+        vb.name = WORKERS[j]
+        vb.memory = 16000
+        vb.cpus = 3
+      end
+
+      # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+      node.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+      # INSTALL SALT MASTER AND MINIONS
+      node.vm.provision "shell", name: "[SCRIPT SCRIPT SALT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
+
+      # CONFIGURE STORAGE
+      node.vm.provision "shell", name: "[SCRIPT STORAGE-LONGHORN.SH]", path: "../../scripts/linux/commons/storage-longhorn.sh"
+
+      # INSTAL RKE2 AGENT
+      node.vm.provision "shell", name: "[SCRIPT INSTALL-RKE2.SH]", path: "../../scripts/linux/k8s/install-rke2.sh"
+
+      if WORKERS[j] == "worker03"
+        node.vm.provision "shell", name: "[SCRIPT REMOTE-DEPLOYMENT.SH]", path: "../../scripts/linux/k8s/remote-deployments.sh"
+      end
+
+      # CLEANUP AFTER "DESTROY" ACTION
+      node.trigger.after :destroy do |trigger|
+        trigger.name = "Cleanup operation"
+        trigger.ruby do
+          # the following loop is now obsolete as these files will be removed automatically as machine dependency
+          disks.each do |disk|
+            disk_filename = File.join(disks_dir, "#{disk[:filename]}.vdi")
+            if File.exist?(disk_filename)
+              puts "Deleting \"#{disk[:filename]}\" disk"
+              system("vboxmanage closemedium disk #{disk_filename} --delete")
+            end
+          end
+          if File.exist?(disks_dir)
+            FileUtils.rmdir(disks_dir)
+          end
+        end
+      end
+      # END TRIGGER DESTROY
+    end
+  end
+
+  # VM managment - managment.skynet.com.br
+  config.vm.define "managment" do |managment|
+    managment.vm.box = "silvestrini-ol9"
+
+    # VARIABLE HOSTNAME
+    VM_MANAGMENT = "managment"
+
+    # HOSTNAM
+    managment.vm.hostname = VM_MANAGMENT
+
+    # NETWORK
+    managment.vm.network "public_network", nic_type: "virtio", ip: "192.168.0.132", netmask: "255.255.255.0", mode: "bridge", bridge: [
+                                             "Intel(R) I211 Gigabit Network Connection",
+                                             "MediaTek Wi-Fi 6 MT7921 Wireless LAN",
+                                           ]
+
+    # PROVIDER
+    managment.vm.provider "virtualbox" do |vb|
+      vb.linked_clone = true
+      vb.name = VM_MANAGMENT
+      vb.memory = 1024
+      vb.cpus = 1
+    end
+
+    # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
+    managment.vm.provision "shell", name: "[SCRIPT USERDATA-OL9.SH]", path: "../../scripts/linux/commons/userdata-ol9.sh"
+
+    # INSTALL SALT MASTER AND MINIONS
+    managment.vm.provision "shell", name: "[SCRIPT SCRIPT INSTALL.SH]", path: "../../scripts/linux/salt/install.sh"
+  end
+end

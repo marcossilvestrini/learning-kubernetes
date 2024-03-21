@@ -1,0 +1,66 @@
+# Deployment App
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: app-silvestrini
+  name: app-silvestrini
+  namespace: silvestrini
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-silvestrini  
+  template:
+    metadata:
+      labels:
+        app: app-silvestrini
+    spec:
+      containers:
+      - image: mrsilvestrini/app-silvestrini:v1.0.0      
+        name: app-silvestrini
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "256Mi"
+          requests:
+            cpu: "0.3"
+            memory: "128Mi"
+        ports:
+          - containerPort: 80
+            hostPort: 9001
+        volumeMounts:
+          - name:  pvc-app-silvestrini
+            mountPath: /var/k8s/storage/app-silvestrini
+        # startupProbe: # Onde definimos a nossa probe de inicialização
+        #   httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
+        #     path: / # O caminho que iremos testar
+        #     port: 80 # A porta que iremos testar
+        #   initialDelaySeconds: 10 # O tempo que iremos esperar para executar a primeira vez a probe
+        #   periodSeconds: 10 # De quanto em quanto tempo iremos executar a probe
+        #   timeoutSeconds: 5 # O tempo que iremos esperar para considerar que a probe falhou
+        #   successThreshold: 1 # O número de vezes que a probe precisa passar para considerar que o container está pronto
+        #   failureThreshold: 1 # O número de vezes que a probe precisa falhar para considerar que o container não está pronto    
+        # livenessProbe: # Aqui é onde vamos adicionar a nossa livenessProbe
+        #   httpGet: # Aqui vamos utilizar o httpGet, onde vamos se conectar ao container através do protocolo HTTP
+        #     path: / # Qual o endpoint que vamos utilizar para se conectar ao container
+        #     port: 80 # Qual porta TCP vamos utilizar para se conectar ao container
+        #   initialDelaySeconds: 10 # Quantos segundos vamos esperar para executar a primeira verificação
+        #   periodSeconds: 10 # A cada quantos segundos vamos executar a verificação
+        #   timeoutSeconds: 5 # Quantos segundos vamos esperar para considerar que a verificação falhou
+        #   failureThreshold: 3 # Quantos falhas consecutivas vamos aceitar antes de reiniciar o container
+        # readinessProbe: # Onde definimos a nossa probe de leitura
+        #   httpGet: # O tipo de teste que iremos executar, neste caso, iremos executar um teste HTTP
+        #     path: / # O caminho que iremos testar
+        #     port: 80 # A porta que iremos testar
+        #   initialDelaySeconds: 10 # O tempo que iremos esperar para executar a primeira vez a probe
+        #   periodSeconds: 10 # De quanto em quanto tempo iremos executar a probe
+        #   timeoutSeconds: 5 # O tempo que iremos esperar para considerar que a probe falhou
+        #   successThreshold: 2 # O número de vezes que a probe precisa passar para considerar que o container está pronto
+        #   failureThreshold: 3 # O número de vezes que a probe precisa falhar para considerar que o container não está pronto
+      volumes:
+      - name: pvc-app-silvestrini
+        persistentVolumeClaim:
+          claimName: pvc-app-silvestrini
+

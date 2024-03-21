@@ -1,0 +1,15 @@
+# Create PVC
+apiVersion: v1 # versão da API do Kubernetes
+kind: PersistentVolumeClaim # tipo de recurso, no caso, um PersistentVolumeClaim
+metadata: # metadados do recurso
+  name: pvc-app-silvestrini # nome do PVC
+  namespace: silvestrini
+  labels:
+    app: app-silvestrini
+spec: 
+  accessModes: 
+    - ReadWriteMany
+  storageClassName: longhorn
+  resources: # recursos do PVC
+    requests: # solicitação de recursos
+      storage: 1Gi # tamanho do volume que ele vai solicitar  

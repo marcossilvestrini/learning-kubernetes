@@ -1,0 +1,17 @@
+# https://github.com/hashicorp/consul-helm/blob/main/values.yaml
+
+key:
+  components:  
+    - name: cloudnative-pg
+      chart: cloudnative-pg
+      version: "0.19.1"
+      releaseName: cloudnative-pg            
+      repoUrl: "https://cloudnative-pg.github.io/charts"
+      namespace: cnpg-system    
+      values: |
+        replicaCount: 1
+        crds:
+          create: true
+        monitoring:          
+          podMonitorEnabled: true
+            

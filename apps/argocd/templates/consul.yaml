@@ -1,0 +1,35 @@
+# https://github.com/hashicorp/consul-helm/blob/main/values.yaml
+
+key:
+  components:  
+    - name: consul
+      chart: consul
+      version: "1.3.0"
+      releaseName: consul            
+      repoUrl: "https://helm.releases.hashicorp.com"
+      namespace: consul    
+      values: |
+        global:
+          enabled: true
+          name: consul
+          domain: skynet.com.br
+          datacenter: dc1
+
+        server:
+          replicas: 1
+          storage: 10Gi
+          storageClass: longhorn
+
+        ui:
+          enabled: true
+          ingress:  
+            enabled: true    
+            ingressClassName: "nginx"
+            hosts:
+              - host: consul.skynet.com.br
+
+        syncCatalog:
+          enabled: false
+          k8sAllowNamespaces: ["*"]
+          consulNamespaces:    
+            consulDestinationNamespace: "consul"

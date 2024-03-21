@@ -1,0 +1,24 @@
+# https://github.com/longhorn/charts/blob/v1.5.x/charts/longhorn/values.yaml
+networkPolicies:
+  enabled: true  
+  type: "rke2"
+
+persistence:
+  defaultClass: true
+  defaultFsType: ext4  
+  defaultClassReplicaCount: 3    
+  
+defaultSettings:  
+  defaultDataPath: /var/k8s/storage  
+  upgradeChecker: true
+  defaultReplicaCount: 3
+  autoDeletePodWhenVolumeDetachedUnexpectedly: true
+  disableSchedulingOnCordonedNode: true      
+  allowVolumeCreationWithDegradedAvailability: true
+  orphanAutoDeletion: true  
+
+ingress:  
+  enabled: true
+  ingressClassName: nginx
+  host: longhorn.skynet.com.br  
+  tls: true  

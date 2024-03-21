@@ -1,0 +1,20 @@
+# https://github.com/rancher/server-chart/blob/master/rancher/values.yaml
+
+key:
+  components:  
+    - name: rancher
+      chart: rancher
+      version: "2.7.9"
+      releaseName: rancher
+      repoUrl: "https://releases.rancher.com/server-charts/latest"                     
+      namespace:  cattle-system
+      values: |
+        hostname: rancher.skynet.com.br
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+          tls:
+          # options: rancher, letsEncrypt, secret
+            source: rancher
+            secretName: tls-rancher-ingress      
+        bootstrapPassword: "Skynet@123456"  

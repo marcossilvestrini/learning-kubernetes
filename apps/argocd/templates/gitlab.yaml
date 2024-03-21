@@ -1,0 +1,25 @@
+key:
+  components:  
+    - name: gitlab
+      chart: gitlab
+      version: "7.6.2"
+      releaseName: gitlab            
+      repoUrl: "https://charts.gitlab.io/"      
+      namespace: gitlab    
+      values: |
+        namespace: gitlab
+        certmanager:        
+          install: false
+          installCRDs: false
+        certmanager-issuer:
+          email: marcos.silvestrini@gmail.com
+        global:
+          edition: ce
+          hosts:
+            domain: skynet.com.br
+          initialRootPassword:
+            secret: 
+            key: Skynet@123456
+        postgresql:
+          image:
+            tag: 14.8.0

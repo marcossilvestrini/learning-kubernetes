@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: silvestrini
+  labels:
+    name: silvestrini
+spec:
+  containers:
+  - name: web
+    image: nginx
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+      requests:
+        memory: "64Mi"
+        cpu: "0.3"
+    ports:
+      - containerPort: 80
+  - name: backend
+    image: ubuntu
+    resources:
+      limits:
+        memory: "1024Mi"
+        cpu: "1000m"
+      requests:
+        memory: "512Mi"
+        cpu: "0.5"
+    args:
+      - sleep
+      - infinity

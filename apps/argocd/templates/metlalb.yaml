@@ -1,0 +1,10 @@
+key:
+  components:  
+    - name: metallb
+      chart: metallb
+      version: "4.7.15"
+      releaseName: metallb            
+      repoUrl: "https://charts.bitnami.com/bitnami"      
+      namespace: metallb    
+      values: ""
+      

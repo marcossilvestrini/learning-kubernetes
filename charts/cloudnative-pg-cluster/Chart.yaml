@@ -1,0 +1,19 @@
+apiVersion: v2
+name: cloudnative-pg-cluster
+description: A Helm chart for Kubernetes PostgreSQL Database Cluster
+version: 1.0.0
+home: https://marcossilvestrini.github.io/charts/
+keywords:  
+  - postgresql
+  - pg
+  - cncf
+kubeVersion: '>= 1.19.0-0'
+maintainers:
+  - name: Marcos Silvestrini
+    url: https://github.com/marcossilvestrini
+type: application
+sources:
+  - https://github.com/marcossilvestrini/charts
+  - https://github.com/marcossilvestrini/charts/tree/gh-pages/charts/cloudnative-pg-cluster
+icon: file://postgresql-cluster.png
+

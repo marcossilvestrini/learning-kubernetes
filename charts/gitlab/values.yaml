@@ -1,0 +1,60 @@
+# https://gitlab.com/gitlab-org/charts/gitlab/-/blob/master/values.yaml
+# https://docs.gitlab.com/charts/installation/secrets#initial-root-password
+
+#     --set global.hosts.domain=skynet.com.br \
+#     --set global.edition=ce \
+#     --set certmanager-issuer.email=marcos.silvestrini@gmail.com \    
+#     --set postgresql.image.tag=13.6.0 \    
+#     --set gitlab.migrations.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-rails-ce \
+#     --set gitlab.sidekiq.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-sidekiq-ce \
+#     --set gitlab.unicorn.image.repository=registry.gitlab.com/gitlab-org/build/cng/gitlab-unicorn-ce \
+#     --set gitlab.unicorn.workhorse.image=registry.gitlab.com/gitlab-org/build/cng/gitlab-workhorse-ce
+
+namespace: gitlab
+
+certmanager:
+  install: false
+  installCRDs: false
+
+certmanager-issuer:
+  email: marcos.silvestrini@gmail.com
+
+global:
+  edition: ce
+  hosts:
+    domain: skynet.com.br
+
+postgresql:
+  image:
+    tag: 14.8.0
+
+# gitlab:
+#   ## https://docs.gitlab.com/charts/charts/gitlab/toolbox
+#   toolbox:
+#     replicas: 1
+#     antiAffinityLabels:
+#       matchLabels:
+#         app: gitaly
+#   ## https://docs.gitlab.com/charts/charts/gitlab/migrations
+#   #   migrations:
+#   #     enabled: false
+#   ## https://docs.gitlab.com/charts/charts/gitlab/webservice
+#   #   webservice:
+#   #     enabled: false
+#   ## https://docs.gitlab.com/charts/charts/gitlab/sidekiq
+#   #   sidekiq:
+#   #     enabled: false
+#   ## https://docs.gitlab.com/charts/charts/gitlab/gitaly
+#   #   gitaly:
+#   ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-shell
+#   #   gitlab-shell:
+#   #     enabled: false
+#   ## https://docs.gitlab.com/charts/charts/gitlab/gitlab-pages
+#   #   gitlab-pages:
+#   ## https://docs.gitlab.com/charts/charts/gitlab/kas
+#   #   kas:
+#   ## https://docs.gitlab.com/charts/charts/gitlab/praefect
+#   #   praefect:
+
+
+    

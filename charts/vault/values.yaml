@@ -1,0 +1,19 @@
+# https://github.com/hashicorp/vault-helm/blob/main/values.yaml
+
+global:
+  namespace: "vault"
+  
+server:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - host: vault.skynet.com.br
+ui:
+  enabled: true
+
+dev:
+  enabled: true
+  # Set VAULT_DEV_ROOT_TOKEN_ID value
+  devRootToken: hvs.m1VrvxzySolItmOwPsTxPbD0
+  

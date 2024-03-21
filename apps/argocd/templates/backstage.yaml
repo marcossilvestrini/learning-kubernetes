@@ -1,0 +1,29 @@
+key:
+  components:  
+    - name: backstage
+      chart: backstage
+      version: "1.8.1"
+      releaseName: backstage            
+      repoUrl: "https://backstage.github.io/charts"      
+      namespace: backstage    
+      values: |
+        ingress:
+          enabled: true  
+          className: "nginx"  
+          annotations: {}  
+          host: "backstage.skynet.com.br"
+        backstage:  
+          replicas: 1
+          image:    
+            registry: docker.io    
+            repository: mrsilvestrini/backstage    
+            tag: latest    
+            pullPolicy: Always
+            debug: false  
+          containerPorts:
+            backend: 7007  
+          command: ["node", "packages/backend"]
+          extraEnvVarsSecrets: 
+            - backstage-secret
+          installDir: /app
+        

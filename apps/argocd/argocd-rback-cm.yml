@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-rbac-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/name: argocd-rbac-cm
+    app.kubernetes.io/part-of: argocd
+data:
+  policy.default: role:admin
+  accounts.skynet: apiKey, login  # Capacidade de login e criação de chave API para o usuário 'skynet'
+  policy.csv: |
+    # Regras para o usuário 'skynet'
+    p, skynet, applications, *, */*, allow
+    p, skynet, clusters, get, *, allow
+    p, skynet, repositories, get, *, allow
+    p, skynet, repositories, create, *, allow
+    p, skynet, repositories, update, *, allow
+    p, skynet, repositories, delete, *, allow
+    p, skynet, projects, get, *, allow
+    p, skynet, projects, create, *, allow
+    p, skynet, projects, update, *, allow
+    p, skynet, projects, delete, *, allow
+    p, skynet, logs, get, *, allow
+    p, skynet, exec, create, */*, allow

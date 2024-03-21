@@ -1,0 +1,22 @@
+{
+  "cSpell.words": [
+    "CKAD",
+    "CNCF",
+    "cpus",
+    "crictl",
+    "Daemonset",
+    "journalctl",
+    "kubelet",
+    "Linuxips",
+    "nameserver",
+    "Replicaset",
+    "Roadmap",
+    "silvestrini",
+    "skynet",
+    "VM's"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
+}
