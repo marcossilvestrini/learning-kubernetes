@@ -44,6 +44,7 @@
     </li>
     <li><a href="#usage">Usage</a></li>
     <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#linux-namespaces">Linux Namespaces</a></li>
     <li><a href="#kubernetes-architecture">Kubernetes Architecture</a></li>
     <li><a href="#install-kubernetes">Install Kubernetes</a></li>
     <li><a href="#rke2">Rancher RKE2</a></li>
@@ -185,14 +186,15 @@ Use this repository for get learning about kubernetes exam
 * [x] Create github action for automation tasks
 * [x] Install kubernetes cluster
 * [x] Install kubectl
-* [x] Add Examples kubernetes pods
-* [x] Add Examples kubernetes deployment
+* [x] Add kubernetes examples
 * [x] Add app deployment
 * [x] Create docker image with project contents
 * [x] Create github action for build docker image
 
 <p align="right">(<a href="#roadmap">back to roadmap</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+<a name="linux-namespaces"></a>
 
 ## Linux Namespaces
 
@@ -248,6 +250,9 @@ the container will have an isolated view of the cgroup hierarchy.
 *namespace: Limit/abstraction what you can see in linux proc*
 
 Font: <https://8gwifi.org/docs/linux-namespace.jsp>
+
+<p align="right">(<a href="#linux-namespaces">back to linux-namespaces</a>)</p>
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Kubernetes Architecture
 
