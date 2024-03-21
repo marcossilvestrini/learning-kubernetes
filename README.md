@@ -111,32 +111,55 @@ cp ~/.ssh/id_ecdsa.pub security/
 ssh-keygen -q -t ecdsa -b 521 -N '' -f security/kubernetes-key-ecdsa <<<y >/dev/null 2>&1
 ```
 
-#### Set network
+#### Set Node pool
 
-Set network configuration for each VM in Vagrantfile.
+You can scale dow or up number of control planes and workers in Vagrantfile array.
+
 Example:
 
 ```ruby
+...
+ # Node|Control Plane Servers
+  PLANES = ["control-plane01", "control-plane02", "control-plane03"]
+  N = 2
+
+  (0..N).each do |i|
+    config.vm.define PLANES[i] do |node|
+...
+```
+
+#### Set network
+
+Set network configuration for each VM in Vagrantfile.
+
+Example:
+
+```ruby
+...
 # NETWORK
     ol9_server01.vm.network "public_network", nic_type: "virtio", mac: "080027f3066a", ip: "192.168.0.130", netmask: "255.255.255.0", mode: "bridge",bridge: [
       "Intel(R) I211 Gigabit Network Connection",
       "MediaTek Wi-Fi 6 MT7921 Wireless LAN"
-    ]    
+    ]
+...    
 ```
 
 #### Set VM's resources
 
 Set resource configuration as CPU, Memory,etc for each VM in Vagrantfile.
+
 Example:
 
 ```ruby
+...
 # PROVIDER
 infra_server01.vm.provider "virtualbox" do |vb|
     vb.linked_clone = true
     vb.name =VM_INFRA_SERVER01
     vb.memory = 2048
     vb.cpus = 1
-end  
+end
+...  
 ```
 
 #### Up kubernetes cluster
