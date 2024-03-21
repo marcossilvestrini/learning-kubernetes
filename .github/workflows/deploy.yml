@@ -1,4 +1,4 @@
-name: generate-index
+name: Generate HTML&PDF
 
 on: [push, pull_request]
 
