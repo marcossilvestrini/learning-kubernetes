@@ -158,6 +158,8 @@ customElements.define('markdown-style', MarkdownStyle);</script><markdown-style 
     <p>
       <a href="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/powershell.yml"><img src="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/powershell.yml/badge.svg" alt="PSScriptAnalyzer"></a>
       <a href="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/release.yml"><img src="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/release.yml/badge.svg" alt="Release"></a>
+      <a href="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/jekyll-gh-pages.yml"><img src="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/jekyll-gh-pages.yml/badge.svg" alt="Deploy GitHub Pages"></a>
+      <a href="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/deploy.yml"><img src="https://github.com/marcossilvestrini/learning-kubernetes/actions/workflows/deploy.yml/badge.svg" alt="Generate HTML&#x26;PDF"></a>
     </p>
     <p>
       <a href="https://github.com/marcossilvestrini/learning-kubernetes/blob/master/LICENSE"><img src="https://img.shields.io/github/license/marcossilvestrini/learning-kubernetes.svg?style=for-the-badge" alt="MIT License"></a>
@@ -196,6 +198,7 @@ customElements.define('markdown-style', MarkdownStyle);</script><markdown-style 
         </li>
         <li><a href="#usage">Usage</a></li>
         <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#linux-namespaces">Linux Namespaces</a></li>
         <li><a href="#kubernetes-architecture">Kubernetes Architecture</a></li>
         <li><a href="#install-kubernetes">Install Kubernetes</a></li>
         <li><a href="#rke2">Rancher RKE2</a></li>
@@ -258,41 +261,65 @@ cp ~/.ssh/id_ecdsa.pub security/
 # generate ssh key pair for rancher
 ssh-keygen -q -t ecdsa -b 521 -N &#x27;&#x27; -f security/kubernetes-key-ecdsa <<<y >/dev/null 2>&#x26;1
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <h4 id="set-node-pool"><a class="anchor" aria-hidden="true" tabindex="-1" href="#set-node-pool"><span class="octicon octicon-link"></span></a>Set Node pool</h4>
+    <p>You can scale dow or up number of control planes and workers in Vagrantfile array.</p>
+    <p>Example:</p>
+    <pre class="language-ruby"><code class="language-ruby code-highlight"><span class="code-line line-number" line="1"><span class="token operator">...</span>
+</span><span class="code-line line-number" line="2"> <span class="token comment"># Node|Control Plane Servers</span>
+</span><span class="code-line line-number" line="3">  <span class="token constant">PLANES</span> <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string-literal"><span class="token string">"control-plane01"</span></span><span class="token punctuation">,</span> <span class="token string-literal"><span class="token string">"control-plane02"</span></span><span class="token punctuation">,</span> <span class="token string-literal"><span class="token string">"control-plane03"</span></span><span class="token punctuation">]</span>
+</span><span class="code-line line-number" line="4">  <span class="token constant">N</span> <span class="token operator">=</span> <span class="token number">2</span>
+</span><span class="code-line line-number" line="5">
+</span><span class="code-line line-number" line="6">  <span class="token punctuation">(</span><span class="token number">0.</span><span class="token punctuation">.</span><span class="token constant">N</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token keyword">each</span> <span class="token keyword">do</span> <span class="token operator">|</span>i<span class="token operator">|</span>
+</span><span class="code-line line-number" line="7">    config<span class="token punctuation">.</span>vm<span class="token punctuation">.</span>define <span class="token constant">PLANES</span><span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token keyword">do</span> <span class="token operator">|</span>node<span class="token operator">|</span>
+</span><span class="code-line line-number" line="8"><span class="token operator">...</span>
+</span></code><div onclick="copied(this)" data-code="...
+ # Node|Control Plane Servers
+  PLANES = [&#x22;control-plane01&#x22;, &#x22;control-plane02&#x22;, &#x22;control-plane03&#x22;]
+  N = 2
+
+  (0..N).each do |i|
+    config.vm.define PLANES[i] do |node|
+...
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h4 id="set-network"><a class="anchor" aria-hidden="true" tabindex="-1" href="#set-network"><span class="octicon octicon-link"></span></a>Set network</h4>
-    <p>
-      Set network configuration for each VM in Vagrantfile.
-      Example:
-    </p>
-    <pre class="language-ruby"><code class="language-ruby code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># NETWORK</span>
-</span><span class="code-line line-number" line="2">    ol9_server01<span class="token punctuation">.</span>vm<span class="token punctuation">.</span>network <span class="token string-literal"><span class="token string">"public_network"</span></span><span class="token punctuation">,</span> <span class="token symbol">nic_type</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"virtio"</span></span><span class="token punctuation">,</span> <span class="token symbol">mac</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"080027f3066a"</span></span><span class="token punctuation">,</span> <span class="token symbol">ip</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"192.168.0.130"</span></span><span class="token punctuation">,</span> <span class="token symbol">netmask</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"255.255.255.0"</span></span><span class="token punctuation">,</span> <span class="token symbol">mode</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"bridge"</span></span><span class="token punctuation">,</span><span class="token symbol">bridge</span><span class="token operator">:</span> <span class="token punctuation">[</span>
-</span><span class="code-line line-number" line="3">      <span class="token string-literal"><span class="token string">"Intel(R) I211 Gigabit Network Connection"</span></span><span class="token punctuation">,</span>
-</span><span class="code-line line-number" line="4">      <span class="token string-literal"><span class="token string">"MediaTek Wi-Fi 6 MT7921 Wireless LAN"</span></span>
-</span><span class="code-line line-number" line="5">    <span class="token punctuation">]</span>    
-</span></code><div onclick="copied(this)" data-code="# NETWORK
+    <p>Set network configuration for each VM in Vagrantfile.</p>
+    <p>Example:</p>
+    <pre class="language-ruby"><code class="language-ruby code-highlight"><span class="code-line line-number" line="1"><span class="token operator">...</span>
+</span><span class="code-line line-number" line="2"><span class="token comment"># NETWORK</span>
+</span><span class="code-line line-number" line="3">    ol9_server01<span class="token punctuation">.</span>vm<span class="token punctuation">.</span>network <span class="token string-literal"><span class="token string">"public_network"</span></span><span class="token punctuation">,</span> <span class="token symbol">nic_type</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"virtio"</span></span><span class="token punctuation">,</span> <span class="token symbol">mac</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"080027f3066a"</span></span><span class="token punctuation">,</span> <span class="token symbol">ip</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"192.168.0.130"</span></span><span class="token punctuation">,</span> <span class="token symbol">netmask</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"255.255.255.0"</span></span><span class="token punctuation">,</span> <span class="token symbol">mode</span><span class="token operator">:</span> <span class="token string-literal"><span class="token string">"bridge"</span></span><span class="token punctuation">,</span><span class="token symbol">bridge</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+</span><span class="code-line line-number" line="4">      <span class="token string-literal"><span class="token string">"Intel(R) I211 Gigabit Network Connection"</span></span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="5">      <span class="token string-literal"><span class="token string">"MediaTek Wi-Fi 6 MT7921 Wireless LAN"</span></span>
+</span><span class="code-line line-number" line="6">    <span class="token punctuation">]</span>
+</span><span class="code-line line-number" line="7"><span class="token operator">...</span>    
+</span></code><div onclick="copied(this)" data-code="...
+# NETWORK
     ol9_server01.vm.network &#x22;public_network&#x22;, nic_type: &#x22;virtio&#x22;, mac: &#x22;080027f3066a&#x22;, ip: &#x22;192.168.0.130&#x22;, netmask: &#x22;255.255.255.0&#x22;, mode: &#x22;bridge&#x22;,bridge: [
       &#x22;Intel(R) I211 Gigabit Network Connection&#x22;,
       &#x22;MediaTek Wi-Fi 6 MT7921 Wireless LAN&#x22;
-    ]    
+    ]
+...    
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h4 id="set-vms-resources"><a class="anchor" aria-hidden="true" tabindex="-1" href="#set-vms-resources"><span class="octicon octicon-link"></span></a>Set VM's resources</h4>
-    <p>
-      Set resource configuration as CPU, Memory,etc for each VM in Vagrantfile.
-      Example:
-    </p>
-    <pre class="language-ruby"><code class="language-ruby code-highlight"><span class="code-line line-number" line="1"><span class="token comment"># PROVIDER</span>
-</span><span class="code-line line-number" line="2">infra_server01<span class="token punctuation">.</span>vm<span class="token punctuation">.</span>provider <span class="token string-literal"><span class="token string">"virtualbox"</span></span> <span class="token keyword">do</span> <span class="token operator">|</span>vb<span class="token operator">|</span>
-</span><span class="code-line line-number" line="3">    vb<span class="token punctuation">.</span>linked_clone <span class="token operator">=</span> <span class="token boolean">true</span>
-</span><span class="code-line line-number" line="4">    vb<span class="token punctuation">.</span>name <span class="token operator">=</span><span class="token constant">VM_INFRA_SERVER01</span>
-</span><span class="code-line line-number" line="5">    vb<span class="token punctuation">.</span>memory <span class="token operator">=</span> <span class="token number">2048</span>
-</span><span class="code-line line-number" line="6">    vb<span class="token punctuation">.</span>cpus <span class="token operator">=</span> <span class="token number">1</span>
-</span><span class="code-line line-number" line="7"><span class="token keyword">end</span>  
-</span></code><div onclick="copied(this)" data-code="# PROVIDER
+    <p>Set resource configuration as CPU, Memory,etc for each VM in Vagrantfile.</p>
+    <p>Example:</p>
+    <pre class="language-ruby"><code class="language-ruby code-highlight"><span class="code-line line-number" line="1"><span class="token operator">...</span>
+</span><span class="code-line line-number" line="2"><span class="token comment"># PROVIDER</span>
+</span><span class="code-line line-number" line="3">infra_server01<span class="token punctuation">.</span>vm<span class="token punctuation">.</span>provider <span class="token string-literal"><span class="token string">"virtualbox"</span></span> <span class="token keyword">do</span> <span class="token operator">|</span>vb<span class="token operator">|</span>
+</span><span class="code-line line-number" line="4">    vb<span class="token punctuation">.</span>linked_clone <span class="token operator">=</span> <span class="token boolean">true</span>
+</span><span class="code-line line-number" line="5">    vb<span class="token punctuation">.</span>name <span class="token operator">=</span><span class="token constant">VM_INFRA_SERVER01</span>
+</span><span class="code-line line-number" line="6">    vb<span class="token punctuation">.</span>memory <span class="token operator">=</span> <span class="token number">2048</span>
+</span><span class="code-line line-number" line="7">    vb<span class="token punctuation">.</span>cpus <span class="token operator">=</span> <span class="token number">1</span>
+</span><span class="code-line line-number" line="8"><span class="token keyword">end</span>
+</span><span class="code-line line-number" line="9"><span class="token operator">...</span>  
+</span></code><div onclick="copied(this)" data-code="...
+# PROVIDER
 infra_server01.vm.provider &#x22;virtualbox&#x22; do |vb|
     vb.linked_clone = true
     vb.name =VM_INFRA_SERVER01
     vb.memory = 2048
     vb.cpus = 1
-end  
+end
+...  
 " class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
     <h4 id="up-kubernetes-cluster"><a class="anchor" aria-hidden="true" tabindex="-1" href="#up-kubernetes-cluster"><span class="octicon octicon-link"></span></a>Up kubernetes cluster</h4>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token builtin class-name">cd</span> learning-kubernetes/vagrant/linux
@@ -311,17 +338,67 @@ vagrant up
       <li class="task-list-item"><input type="checkbox" checked disabled> Create github action for automation tasks</li>
       <li class="task-list-item"><input type="checkbox" checked disabled> Install kubernetes cluster</li>
       <li class="task-list-item"><input type="checkbox" checked disabled> Install kubectl</li>
-      <li class="task-list-item"><input type="checkbox" checked disabled> Add Examples kubernetes pods</li>
-      <li class="task-list-item"><input type="checkbox" checked disabled> Add Examples kubernetes deployment</li>
+      <li class="task-list-item"><input type="checkbox" checked disabled> Add kubernetes examples</li>
       <li class="task-list-item"><input type="checkbox" checked disabled> Add app deployment</li>
       <li class="task-list-item"><input type="checkbox" checked disabled> Create docker image with project contents</li>
       <li class="task-list-item"><input type="checkbox" checked disabled> Create github action for build docker image</li>
     </ul>
     <p align="right">(<a href="#roadmap">back to roadmap</a>)</p>
     <p align="right">(<a href="#readme-top">back to top</a>)</p>
-    <blockquote>
-      <p>kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.</p>
-    </blockquote>
+    <p><a name="linux-namespaces"></a></p>
+    <h2 id="linux-namespaces"><a class="anchor" aria-hidden="true" tabindex="-1" href="#linux-namespaces"><span class="octicon octicon-link"></span></a>Linux Namespaces</h2>
+    <p>kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.</p>
+    <p>
+      <img src="images/linux-namespaces.png" alt="linux-namespaces">
+    </p>
+    <h2 id="pid"><a class="anchor" aria-hidden="true" tabindex="-1" href="#pid"><span class="octicon octicon-link"></span></a>pid</h2>
+    <p>The Process ID. This file is a handle for the PID namespace of the process.PID namespaces isolate the process ID number space, meaning that processes in different PID namespaces can have the same PID. PID namespaces allow containers to provide functionality such as suspending/resuming the set of processes in the container and migrating the container to a new host while the processes inside the container maintain the same PIDs</p>
+    <h2 id="net"><a class="anchor" aria-hidden="true" tabindex="-1" href="#net"><span class="octicon octicon-link"></span></a>net</h2>
+    <p>
+      This file is a handle for the network namespace of the process. This provides the isolation of the system resources associated with networking and isolates Network devices. The ip netns - is used to process network namespace management
+      mount This file is a handle for the mount namespace of the process and isolates Mount points
+    </p>
+    <h2 id="ipc"><a class="anchor" aria-hidden="true" tabindex="-1" href="#ipc"><span class="octicon octicon-link"></span></a>ipc</h2>
+    <p>This file is a handle for the IPC namespace of the process and isolates System Vs IPC and POSIX message queues</p>
+    <h2 id="uts"><a class="anchor" aria-hidden="true" tabindex="-1" href="#uts"><span class="octicon octicon-link"></span></a>uts</h2>
+    <p>This file is a handle for the UTS namespace of the process and isolates Hostname and NIS domain name</p>
+    <h2 id="user"><a class="anchor" aria-hidden="true" tabindex="-1" href="#user"><span class="octicon octicon-link"></span></a>user</h2>
+    <p>This file is a handle for the user namespace of the process</p>
+    <h2 id="cgroup"><a class="anchor" aria-hidden="true" tabindex="-1" href="#cgroup"><span class="octicon octicon-link"></span></a>cgroup</h2>
+    <p>the container will have an isolated view of the cgroup hierarchy.</p>
+    <h2 id="cgroup-vs-namespace"><a class="anchor" aria-hidden="true" tabindex="-1" href="#cgroup-vs-namespace"><span class="octicon octicon-link"></span></a>cgroup vs namespace</h2>
+    <p><em>cgroup is a way to control group based traffic control filter, example</em></p>
+    <pre class="language-json"><code class="language-json code-highlight"><span class="code-line line-number" line="1"><span class="token property">"cgroupsPath"</span><span class="token operator">:</span> <span class="token string">"/myRuntime/myContainer"</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="2">    <span class="token property">"resources"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="3">        <span class="token property">"memory"</span><span class="token operator">:</span> <span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="4">        <span class="token property">"limit"</span><span class="token operator">:</span> <span class="token number">100000</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="5">        <span class="token property">"reservation"</span><span class="token operator">:</span> <span class="token number">200000</span>
+</span><span class="code-line line-number" line="6">        <span class="token punctuation">}</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="7">        <span class="token property">"devices"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+</span><span class="code-line line-number" line="8">            <span class="token punctuation">{</span>
+</span><span class="code-line line-number" line="9">                <span class="token property">"allow"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+</span><span class="code-line line-number" line="10">                <span class="token property">"access"</span><span class="token operator">:</span> <span class="token string">"rwm"</span>
+</span><span class="code-line line-number" line="11">            <span class="token punctuation">}</span>
+</span><span class="code-line line-number" line="12">        <span class="token punctuation">]</span>
+</span><span class="code-line line-number" line="13">   <span class="token punctuation">}</span>
+</span></code><div onclick="copied(this)" data-code="&#x22;cgroupsPath&#x22;: &#x22;/myRuntime/myContainer&#x22;,
+    &#x22;resources&#x22;: {
+        &#x22;memory&#x22;: {
+        &#x22;limit&#x22;: 100000,
+        &#x22;reservation&#x22;: 200000
+        },
+        &#x22;devices&#x22;: [
+            {
+                &#x22;allow&#x22;: false,
+                &#x22;access&#x22;: &#x22;rwm&#x22;
+            }
+        ]
+   }
+" class="copied"><svg class="octicon-copy" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z"></path><path fill-rule="evenodd" d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z"></path></svg><svg class="octicon-check" aria-hidden="true" viewBox="0 0 16 16" fill="currentColor" height="12" width="12"><path fill-rule="evenodd" d="M13.78 4.22a.75.75 0 010 1.06l-7.25 7.25a.75.75 0 01-1.06 0L2.22 9.28a.75.75 0 011.06-1.06L6 10.94l6.72-6.72a.75.75 0 011.06 0z"></path></svg></div></pre>
+    <p><em>namespace: Limit/abstraction what you can see in linux proc</em></p>
+    <p>Font: <a href="https://8gwifi.org/docs/linux-namespace.jsp">https://8gwifi.org/docs/linux-namespace.jsp</a></p>
+    <p align="right">(<a href="#linux-namespaces">back to linux-namespaces</a>)</p>
+    <p align="right">(<a href="#readme-top">back to top</a>)</p>
     <h2 id="kubernetes-architecture"><a class="anchor" aria-hidden="true" tabindex="-1" href="#kubernetes-architecture"><span class="octicon octicon-link"></span></a>Kubernetes Architecture</h2>
     <p><a name="kubernetes-architecture"></a></p>
     <p>
@@ -482,7 +559,7 @@ kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
     <p align="right">(<a href="#readme-top">back to top</a>)</p>
     <h2 id="rke2"><a class="anchor" aria-hidden="true" tabindex="-1" href="#rke2"><span class="octicon octicon-link"></span></a>RKE2</h2>
     <p><a name="rke2"></a></p>
-    <p>For create kubernetes cluster using RKE2, see scripts in folder scripts/rke2</p>
+    <p>For create kubernetes cluster using RKE2, see scripts in folder scripts/linux/k8s/install-rke2.sh</p>
     <h3 id="some-commands-of-stack-rke2"><a class="anchor" aria-hidden="true" tabindex="-1" href="#some-commands-of-stack-rke2"><span class="octicon octicon-link"></span></a>Some commands of stack rke2</h3>
     <p>Set your PATH variable:</p>
     <pre class="language-sh"><code class="language-sh code-highlight"><span class="code-line line-number" line="1"><span class="token builtin class-name">export</span> <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token environment constant">$PATH</span>:/opt/rke2/bin:/var/lib/rancher/rke2/bin

@@ -1,20 +1,32 @@
 # https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/values.yaml
 
-# Configs
-configs:
+## Argo CD configuration
+## Ref: https://github.com/argoproj/argo-cd
+##
+
+nameOverride: argocd
+
+## Globally shared configuration
+global:  
+  domain: argocd.skynet.com.br
+  logging:
+    format: text    
+    level: info
+
+## Argo Configs
+configs:  
   cm:    
     url: "https://argocd.skynet.com.br"
     accounts.skynet: apiKey, login
-
-  params:    
+    
+  # Argo CD configuration parameters
+  ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/argocd-cmd-params-cm.yaml
+  params:   
     server.insecure: true    
     applicationsetcontroller.policy: create-only
-  secret:
-    # -- Bcrypt hashed admin password
-    ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
-    ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
-    argocdServerAdminPassword: "$2a$10$1PwBWvXXUsl235gMWA8JIukpzjfC9o3jcjlZR2wNWNhjkYhP840PW"
 
+  # Argo CD RBAC policy configuration
+  ## Ref: https://github.com/argoproj/argo-cd/blob/master/docs/operator-manual/rbac.md
   rbac:
     create: true  
     policy.default: 'role:admin'
@@ -45,8 +57,17 @@ configs:
         p, skynet, gpgkeys, create, *, allow
         p, skynet, gpgkeys, delete, *, allow
         p, skynet, exec, create, */*, allow
+ 
+  # Argo CD sensitive data
+  # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#sensitive-data-and-sso-client-secrets
+  secret:    
+    # -- Bcrypt hashed admin password
+    ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+    ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+    argocdServerAdminPassword: "$2a$10$1PwBWvXXUsl235gMWA8JIukpzjfC9o3jcjlZR2wNWNhjkYhP840PW"
+    
 
-# Server
+## Server
 server:
   ingress:    
     enabled: true    
@@ -60,4 +81,4 @@ server:
       - secretName: argocd-secret
         hosts:
           - argocd.skynet.com.br    
-    https: true
+    https: true 

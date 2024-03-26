@@ -7,7 +7,6 @@
 Adicionar esta linha na build do box e nos boxes que forem usar esta build:
 config.ssh.insert_key = false
 
-
 ## Create vagrant box
 
 <https://www.engineyard.com/blog/building-a-vagrant-box-from-start-to-finish/>
