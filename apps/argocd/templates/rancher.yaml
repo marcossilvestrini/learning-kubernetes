@@ -1,12 +1,12 @@
-# https://github.com/rancher/server-chart/blob/master/rancher/values.yaml
+# https://github.com/rancher/rancher/blob/release/v2.9/chart/values.yaml
 
 key:
   components:  
     - name: rancher
       chart: rancher
-      version: "2.7.9"
+      version: "2.8.2"
       releaseName: rancher
-      repoUrl: "https://releases.rancher.com/server-charts/latest"                     
+      repoUrl: "https://releases.rancher.com/server-charts/latest"
       namespace:  cattle-system
       values: |
         hostname: rancher.skynet.com.br
