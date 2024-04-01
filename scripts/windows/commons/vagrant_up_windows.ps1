@@ -79,16 +79,34 @@ Copy-Item -Force -Recurse "$baseProject\images" -Destination "$baseProject\apps\
 # Up kubernetes stack
 $kubernetes = "$baseVagrantfile"
 Set-Location $kubernetes
-vagrant up --provision
+
+# Infra server
+vagrant up infra-server01
 Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
+
+# Loadbalanc\proxy
+vagrant up load-balance
 Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
-Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment
+
+# Control Planes
+vagrant up control-plane01
 Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
+vagrant up control-plane02
 Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
+vagrant up control-plane03
 Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
+
+# Workers
+vagrant up worker01
 Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker01
+vagrant up worker02
 Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
+vagrant up worker03
 Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
+
+# Managment(salt)
+vagrant up managment
+Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment
 
 # Deployment kubernetes applications
 #vagrant ssh control-plane01  -c 'sudo ./scripts/k8s/deployments.sh'

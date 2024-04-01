@@ -77,6 +77,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ## SSH CONFIG
   #config.ssh.insert_key = false
 
+  ## Boot timeout
+  config.vm.boot_timeout = 600
+
   ## GUEST CONFIG
   config.vbguest.auto_update = false
   config.vbguest.no_install = true
@@ -257,7 +260,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.linked_clone = true
         vb.name = PLANES[i]
         vb.memory = 8192
-        vb.cpus = 3
+        vb.cpus = 2
         vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
       end
 
@@ -342,7 +345,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.vm.provider "virtualbox" do |vb|
         vb.name = WORKERS[j]
         vb.memory = 16000
-        vb.cpus = 3
+        vb.cpus = 4
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE

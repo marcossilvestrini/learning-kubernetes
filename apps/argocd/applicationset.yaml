@@ -34,8 +34,9 @@ spec:
         - chart: '{{.chart}}'
           repoURL: '{{.repoUrl}}'
           targetRevision: '{{.version}}'                         
-          helm:
+          helm:            
             releaseName: '{{.releaseName}}'                
+            ignoreMissingValueFiles: true
             valueFiles:
               - values.yaml                    
             values: '{{.values | indent 12}}'
