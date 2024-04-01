@@ -79,34 +79,51 @@ Copy-Item -Force -Recurse "$baseProject\images" -Destination "$baseProject\apps\
 # Up kubernetes stack
 $kubernetes = "$baseVagrantfile"
 Set-Location $kubernetes
+# vagrant up infra-server01
+# vagrant up load-balance
+# vagrant up control-plane01
+# vagrant up control-plane02
+# vagrant up control-plane03
+# vagrant up worker01
+# vagrant up worker02
+# vagrant up worker03
+# vagrant up managment
+# Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
+# Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
+# Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment
+# Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
+# Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
+# Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
+# Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker01
+# Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
+# Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
 
 # Infra server
-vagrant up infra-server01
-Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
+Start-Process -FilePath "vagrant" -ArgumentList "up infra-server01" -NoNewWindow -Wait
+Copy-Item -Path ".\.vagrant\machines\infra-server01\virtualbox\private_key" -Destination "$vagrantPK\infra-server01"
 
 # Loadbalanc\proxy
-vagrant up load-balance
-Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
+Start-Process -FilePath "vagrant" -ArgumentList "up load-balance" -NoNewWindow -Wait
+Copy-Item -Path ".\.vagrant\machines\load-balance\virtualbox\private_key" -Destination "$vagrantPK\load-balance"
 
 # Control Planes
-vagrant up control-plane01
-Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
-vagrant up control-plane02
-Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
-vagrant up control-plane03
-Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
+$control_planes = @("control-plane01", "control-plane02", "control-plane03")
+foreach ($control_plane in $control_planes) {
+    Start-Process -FilePath "vagrant" -ArgumentList "up $control_plane" -NoNewWindow -Wait
+    Copy-Item -Path ".\.vagrant\machines\$control_plane\virtualbox\private_key" -Destination "$vagrantPK\$control_plane"
+}
 
 # Workers
-vagrant up worker01
-Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker01
-vagrant up worker02
-Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
-vagrant up worker03
-Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
+$workers = @("worker01", "worker02", "worker03")
+foreach ($worker in $workers) {
+    Start-Process -FilePath "vagrant" -ArgumentList "up $worker" -NoNewWindow -Wait
+    Copy-Item -Path ".\.vagrant\machines\$worker\virtualbox\private_key" -Destination "$vagrantPK\$worker"
+}
 
 # Managment(salt)
-vagrant up managment
-Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment
+Start-Process -FilePath "vagrant" -ArgumentList "up managment" -NoNewWindow -Wait
+Copy-Item -Path ".\.vagrant\machines\managment\virtualbox\private_key" -Destination "$vagrantPK\managment"
+
 
 # Deployment kubernetes applications
 #vagrant ssh control-plane01  -c 'sudo ./scripts/k8s/deployments.sh'
