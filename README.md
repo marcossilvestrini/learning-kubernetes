@@ -79,19 +79,19 @@
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
 To get a local copy up and running follow these simple example steps.
 
 <a name="prerequisites"></a>
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software
-and how to install them.
+List things you need to use the software and how to install them.
 
-* git
-* Virtual Box and extension
-* Vagrant
+```sh
+git
+Virtual Box and extension
+Vagrant
+```
 
 <a name="installation"></a>
 
@@ -176,7 +176,7 @@ vagrant up
 
 ## Usage
 
-Use this repository for get learning about kubernetes exam
+Use this repository for get learning about kubernetes
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
