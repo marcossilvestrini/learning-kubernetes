@@ -96,12 +96,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder "../../apps", "/home/vagrant/apps"
   config.vm.synced_folder "../../charts", "/home/vagrant/charts"
 
-  ## PROVIDER
-  config.vm.provider "virtualbox" do |vb|
-    vb.linked_clone = true
-    vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
-  end
-
   # VM infra-server01 - DNS Bind, Postfix,Samba, NFS, Pure-FTP
   config.vm.define "infra-server01" do |infra_server01|
     infra_server01.vm.box = BOX_DNS
@@ -261,7 +255,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.name = PLANES[i]
         vb.memory = 8192
         vb.cpus = 2
-        vb.customize ["modifyvm", :id, "--nested-hw-virt", "on"]
       end
 
       # SSH,FIREWALLD,SELINUX, UPDATES AND PROFILE
@@ -343,6 +336,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       #PROVIDER
       node.vm.provider "virtualbox" do |vb|
+        vb.linked_clone = true
         vb.name = WORKERS[j]
         vb.memory = 16000
         vb.cpus = 4
