@@ -157,7 +157,7 @@ end
 ...  
 ```
 
-#### Acima do cluster Kubernetes
+#### Cluster do Kubernetes
 
 ```sh
 cd learning-kubernetes/vagrant/linux
@@ -633,7 +633,7 @@ O objetivo de um ReplicaSet é manter um conjunto estável de pods de réplica e
 a qualquer momento. Como tal, é frequentemente usado para garantir a disponibilidade de\\
 um número especificado de pods idênticos.
 
-### Comandos - ReplicaSet
+### Comandos - RéplicaSet
 
 ````sh
 # list replicaset
@@ -890,7 +890,7 @@ spec:
     targetPort: 8080
 ```
 
-Neste exemplo, definimos um serviço chamado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
+Neste exemplo, definimos um serviço denominado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
 
 #### Serviços NodePort
 
@@ -940,7 +940,7 @@ O campo nodePort é especificado como 30080, que informa ao Kubernetes para expo
 
 #### Serviços LoadBalancer
 
-Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são críticas. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
+Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são essenciais. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
 
 Os serviços LoadBalancer são ideais para aplicações que precisam lidar com altos volumes de tráfego, como aplicações web ou APIs. Com os serviços LoadBalancer, podemos acessar nosso aplicativo usando um único endereço IP atribuído ao balanceador de carga.
 
@@ -963,7 +963,7 @@ spec:
 
 Definimos o tipo de serviço como LoadBalancer para instruir o Kubernetes a provisionar um balanceador de carga. Aqui, definimos um serviço chamado web e especificamos um seletor direcionado a pods rotulados com app: web. Além disso, expomos a porta 80 e encaminhamos o tráfego para a porta 8080 dos pods.
 
-Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar este endereço IP para acessar nosso aplicativo de fora do cluster.
+Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar esse endereço IP para acessar nosso aplicativo de fora do cluster.
 
 ![Services Types](/images/service-types.png)
 
