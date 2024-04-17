@@ -12,7 +12,7 @@ If ($null -ne $check ) {
     Get-Process -Name *git* | Stop-Process -Force
     Write-Host -ForegroundColor Red "Uncommitted files found"
     #$commit = Read-Host -Prompt "Enter comment for commit"
-    $commit = "Update files for class today"
+    $commit = "Update files"
     git add .
     git commit -m $commit
     git push origin main

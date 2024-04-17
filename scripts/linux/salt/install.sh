@@ -25,6 +25,9 @@ function init() {
     if [[ "$DISTRO" == *"Oracle"* ]]; then
         echo "CHECK IF DISTRIBUTION IS ORACLE..."
         echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
+    elif [[ "$DISTRO" == *"Rocky"* ]]; then
+        echo "CHECK IF DISTRIBUTION IS ROCKY LINUX..."
+        echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
     else
         echo "THIS SCRIPT IS AVAILABLE ONLY ORACLE LINUX SERVER DISTRIBUTIONS!!!"
         exit 1

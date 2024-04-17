@@ -17,28 +17,33 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 }
 
 # Stop vagrant process
-Get-Process -Name *vagrant* | Stop-Process -Force
-Get-Process -Name *ruby* | Stop-Process -Force
+Get-Process -Name *vagrant* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process -Name *ruby* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
 # Define variables
 switch ($(hostname)) {
     "silvestrini" {       
         $vagrant = "E:\Apps\Vagrant\bin\vagrant.exe"
-        $baseVagrantfile="F:\Projetos\learning-kubernetes\vagrant"
+        $baseVagrantfile="F:\Projetos\learning-kubernetes\vagrant\linux"
         $vagrantHome = "E:\Apps\Vagrant\vagrant.d"      
         $virtualboxFolder = "E:\Apps\VirtualBox"
-        $virtualboxVMFolder = "E:\Servers\VirtualBox" 
+        $virtualboxVMFolder = "E:\Servers\VirtualBox"         
+        $vmwareVMFolder = "E:\Servers\VMware" 
     }
     "silvestrini2" {      
         # Variables
         $vagrant = "D:\Cloud\Vagrant\bin\vagrant.exe"  
-        $baseVagrantfile="F:\Projetos\learning-kubernetes\vagrant"        
+        $baseVagrantfile="F:\Projetos\learning-kubernetes\vagrant\linux"        
         $vagrantHome = "D:\Cloud\Vagrant\.vagrant.d"      
         $virtualboxFolder = "C:\Program Files\Oracle\VirtualBox"
         $virtualboxVMFolder = "D:\Cloud\VirtualBox"
+        $vmwareVMFolder = "D:\Cloud\VMware"
     }
     Default { Write-Host "This hostname is not available for execution this script!!!"; exit 1 }
 }
+
+# Set workdir
+Set-Location $baseVagrantfile
 
 # VirtualBox home directory.
 Start-Process -Wait -NoNewWindow -FilePath "$virtualboxFolder\VBoxManage.exe" `
@@ -47,8 +52,8 @@ Start-Process -Wait -NoNewWindow -FilePath "$virtualboxFolder\VBoxManage.exe" `
 # Vagrant home directory for downloadad boxes.
 setx VAGRANT_HOME $vagrantHome >$null
 
-# Vagrant Boxes
-$kubernetes="$baseVagrantfile\linux"
+# Destroy lab stack
+Start-Process -Wait -WindowStyle Hidden  -FilePath $vagrant -ArgumentList "destroy -f"  -Verb RunAs
 
 # VM name
 $vmName= @(
@@ -59,13 +64,20 @@ $vmName= @(
     "control-plane03",
     "worker01",
     "worker02",
-    "worker03"
+    "worker03",
+    "managment"
 )
-
 # Folder vagrant virtualbox machines artefacts
 $vmFolders = @(    
     $vmName | ForEach-Object{
         "$virtualboxVMFolder\$($_)"
+    }
+)
+
+# Folder vagrant vmware machines artefacts
+$vmwareFolders = @(    
+    $vmName | ForEach-Object{
+        "$vmwareVMFolder\$($_)"
     }
 )
 
@@ -76,24 +88,37 @@ $vmStorageFolders = @(
     }    
 )
 
-# Destroy lab stack
-Set-Location $kubernetes
-Start-Process -Wait -WindowStyle Hidden  -FilePath $vagrant -ArgumentList "destroy -f"  -Verb RunAs
+# Folder vagrant vmware machines artefacts
+$vmwareStorageFolders = @(    
+    $vmName | ForEach-Object{
+        "$vmwareVMFolder\Storage\$($_)"
+    }    
+)
 
 # Delete folder virtualbox machines artefacts
 $vmFolders | ForEach-Object {
-    If (Test-Path $_) {
-        If ( (Get-ChildItem -Recurse $_).Count -lt 3 ) {            
-            Remove-Item $_ -Recurse -Force
-        }        
+    If (Test-Path $_) {                
+        Remove-Item $_ -Recurse -Force                
     }
+}
+
+# Delete folder vmware machines artefacts
+$vmwareFolders | ForEach-Object {
+    If (Test-Path $_) {        
+        Remove-Item $_ -Recurse -Force
+    }            
 }
 
 # Delete folder virtualbox machines storage
 $vmStorageFolders | ForEach-Object {
-    If (Test-Path $_) {
-        If ( (Get-ChildItem -Recurse $_).Count -lt 3 ) {            
-            Remove-Item $_ -Recurse -Force
-        }        
+    If (Test-Path $_) {        
+        Remove-Item $_ -Recurse -Force                
+    }
+}
+
+# Delete folder vmware machines storage
+$vmwareStorageFolders | ForEach-Object {
+    If (Test-Path $_) {        
+        Remove-Item $_ -Recurse -Force                
     }
 }

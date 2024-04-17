@@ -28,9 +28,12 @@ function init() {
     NODE_NAME=$(hostname)
     IP_NODE=$(hostname -i)
 
-    # Check if distribution is RPM-->Oracle Linux Server
+    # Check if distribution is RPM-->Oracle Linux Server or Rocky Linux
     if [[ "$DISTRO" == *"Oracle"* ]]; then
         echo "CHECK IF DISTRIBUTION IS ORACLE..."
+        echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
+    elif [[ "$DISTRO" == *"Rock"* ]]; then
+        echo "CHECK IF DISTRIBUTION IS ROCKY LINUX..."
         echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
     else
         echo "THIS SCRIPT IS AVAILABLE ONLY ORACLE LINUX SERVER DISTRIBUTIONS!!!"

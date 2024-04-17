@@ -1,7 +1,8 @@
 <#
 .Synopsis
-   Up lab for learning
+   Up lab for learning kubernetes
 .DESCRIPTION 
+   Set vagrant provider for machines
    Set Vagrantfile for kubernetes server
    Set folder of virtualbox VM's
    Create a semafore for vagrant up
@@ -24,8 +25,8 @@
 Clear-Host
 
 #Stop vagrant process
-Get-Process -Name *vagrant* | Stop-Process -Force
-Get-Process -Name *ruby* | Stop-Process -Force
+Get-Process -Name vagrant -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process -Name *ruby* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
 # Semafore for vagrant process
 $scriptPath = $PSScriptRoot
@@ -73,19 +74,48 @@ setx VAGRANT_HOME "$vagrantHome" >$null
 Copy-Item -Force "$baseProject\index.html" -Destination "$baseProject\apps\app-silvestrini"
 Copy-Item -Force -Recurse "$baseProject\images" -Destination "$baseProject\apps\app-silvestrini"
 
+# Select provider
+$menu=@"
+|------------------------------------------------|
+|Providers for Provisioning Kubernetes Cluster   |
+|------------------------------------------------|
+|1 - VMWare
+|2 - Virtualbox
+|------------------------------------------------|
+"@
+$menu
+$option=Read-Host "Switch Provider"
+switch ($option) {
+   1 {
+      Write-Host "Provider: VMWare OS: Rocky9"
+      $provider="vmware_desktop"
+      Copy-Item -Path "$baseVagrantfile\Vagrantfile_vmware" -Destination "$baseVagrantfile\Vagrantfile"
+   }
+   2 {
+      Write-Host "Provider: Virtualbox OS: ol9"
+      $provider="virtualbox"
+      Copy-Item -Path "$baseVagrantfile\Vagrantfile_virtualbox" -Destination "$baseVagrantfile\Vagrantfile"
+   }
+   Default {Write-Host "Provider not found";exit 1}
+}
+
+# Set workdir
+Set-Location $baseVagrantfile
+
+# Clear old files
+If(Test-Path "$baseVagrantfile\.vagrant"){Remove-Item -Recurse -Force "$baseVagrantfile\.vagrant"}
+
 # Up kubernetes stack
-$kubernetes = "$baseVagrantfile"
-Set-Location $kubernetes
 vagrant up
-Copy-Item .\.vagrant\machines\infra-server01\virtualbox\private_key $vagrantPK\infra-server01
-Copy-Item .\.vagrant\machines\load-balance\virtualbox\private_key $vagrantPK\load-balance
-Copy-Item .\.vagrant\machines\managment\virtualbox\private_key $vagrantPK\managment
-Copy-Item .\.vagrant\machines\control-plane01\virtualbox\private_key $vagrantPK\control-plane01
-Copy-Item .\.vagrant\machines\control-plane02\virtualbox\private_key $vagrantPK\control-plane02
-Copy-Item .\.vagrant\machines\control-plane03\virtualbox\private_key $vagrantPK\control-plane03
-Copy-Item .\.vagrant\machines\worker01\virtualbox\private_key $vagrantPK\worker01
-Copy-Item .\.vagrant\machines\worker02\virtualbox\private_key $vagrantPK\worker02
-Copy-Item .\.vagrant\machines\worker03\virtualbox\private_key $vagrantPK\worker03
+Copy-Item .\.vagrant\machines\infra-server01\$provider\private_key $vagrantPK\infra-server01
+Copy-Item .\.vagrant\machines\load-balance\$provider\private_key $vagrantPK\load-balance
+Copy-Item .\.vagrant\machines\managment\$provider\private_key $vagrantPK\managment
+Copy-Item .\.vagrant\machines\control-plane01\$provider\private_key $vagrantPK\control-plane01
+Copy-Item .\.vagrant\machines\control-plane02\$provider\private_key $vagrantPK\control-plane02
+Copy-Item .\.vagrant\machines\control-plane03\$provider\private_key $vagrantPK\control-plane03
+Copy-Item .\.vagrant\machines\worker01\$provider\private_key $vagrantPK\worker01
+Copy-Item .\.vagrant\machines\worker02\$provider\private_key $vagrantPK\worker02
+Copy-Item .\.vagrant\machines\worker03\$provider\private_key $vagrantPK\worker03
 
 
 # Deployment kubernetes applications

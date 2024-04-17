@@ -28,9 +28,12 @@ function init() {
     ARGOCD_PASS="Skynet@123456"
     ARGOCD_ADMIN_PASS="Skynet@123456"
 
-    # Check if distribution is RPM-->Oracle Linux Server
+    # Check if distribution is RPM-->Oracle Linux Server or Rocky Linux
     if [[ "$DISTRO" == *"Oracle"* ]]; then
         echo "CHECK IF DISTRIBUTION IS ORACLE..."
+        echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
+    elif [[ "$DISTRO" == *"Rocky"* ]]; then
+        echo "CHECK IF DISTRIBUTION IS ROCKY LINUX..."
         echo "CONGRATULATIONS, YOUR DISTRO SO GOOD!"
     else
         echo "THIS SCRIPT IS AVAILABLE ONLY ORACLE LINUX SERVER DISTRIBUTIONS!!!"
