@@ -89,7 +89,7 @@ Vagrant
 
 ### Instalação
 
-#### Clonar repositório
+#### Clone repository
 
 ```sh
 git clone https://github.com/marcossilvestrini/learning-kubernetes.git
@@ -127,7 +127,7 @@ Exemplo:
 
 Defina a configuração de rede para cada VM no Vagrantfile.
 
-Exemplo:
+Example:
 
 ```ruby
 ...
@@ -157,7 +157,7 @@ end
 ...  
 ```
 
-#### Acima do cluster Kubernetes
+#### Cluster do Kubernetes
 
 ```sh
 cd learning-kubernetes/vagrant/linux
@@ -180,7 +180,7 @@ Use este repositório para aprender sobre kubernetes
 -   [x] Crie ação no GitHub para tarefas de automação
 -   [x] Instale o cluster Kubernetes
 -   [x] Instalar o kubectl
--   [x] Adicionar exemplos de Kubernetes
+-   [x] Add kubernetes examples
 -   [x] Adicionar implantação de aplicativo
 -   [x] Crie uma imagem docker com o conteúdo do projeto
 -   [x] Criar ação no github para construir imagem docker
@@ -192,7 +192,7 @@ Use este repositório para aprender sobre kubernetes
 
 ## Namespaces Linux
 
-O Kubernetes Engine funciona com namespaces (PID,NET,IPC,MNT,UTS) e cgroups.
+kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.
 
 ![linux-namespaces](images/linux-namespaces.png)
 
@@ -633,7 +633,7 @@ O objetivo de um ReplicaSet é manter um conjunto estável de pods de réplica e
 a qualquer momento. Como tal, é frequentemente usado para garantir a disponibilidade de\\
 um número especificado de pods idênticos.
 
-### Comandos - ReplicaSet
+### Comandos - RéplicaSet
 
 ````sh
 # list replicaset
@@ -689,7 +689,7 @@ Os testes do Kubernetes também podem ser usados ​​para detectar alteraçõe
 
 ### Tipos de sondas
 
-#### Sondas de inicialização
+#### Startup Probes
 
 Uma investigação de inicialização é usada para determinar se um contêiner foi iniciado com êxito.\\
 Esse tipo de investigação normalmente é usado para aplicativos que demoram mais para inicializar,\\
@@ -814,7 +814,7 @@ Gerencia a implantação e o escalonamento de um conjunto de pods e fornece gara
 Assim como uma implantação, um StatefulSet gerencia pods baseados em especificações de contêiner idênticas.\\
 Ao contrário de uma implantação, um StatefulSet mantém uma identidade fixa para cada um de seus pods.\\
 
-Esses pods são criados a partir da mesma especificação, mas não são intercambiáveis: cada um possui um identificador persistente que mantém durante qualquer reagendamento.
+Esses pods são criados a partir da mesma especificação, mas não são intercambiáveis: cada um tem um identificador persistente que mantém durante qualquer reagendamento.
 
 Se você quiser usar volumes de armazenamento para fornecer persistência para sua carga de trabalho,\\
 você pode usar um StatefulSet como parte da solução. Embora pods individuais em\\
@@ -890,7 +890,7 @@ spec:
     targetPort: 8080
 ```
 
-Neste exemplo, definimos um serviço denominado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
+Neste exemplo, definimos um serviço chamado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
 
 #### Serviços NodePort
 
@@ -940,11 +940,11 @@ O campo nodePort é especificado como 30080, que informa ao Kubernetes para expo
 
 #### Serviços LoadBalancer
 
-Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são essenciais. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
+Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são críticas. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
 
 Os serviços LoadBalancer são ideais para aplicações que precisam lidar com altos volumes de tráfego, como aplicações web ou APIs. Com os serviços LoadBalancer, podemos acessar nosso aplicativo usando um único endereço IP atribuído ao balanceador de carga.
 
-Aqui está um exemplo de uma definição simples de serviço LoadBalancer:
+Here's an example of a simple LoadBalancer service definition:
 
 ```yaml
 apiVersion: v1
@@ -963,7 +963,7 @@ spec:
 
 Definimos o tipo de serviço como LoadBalancer para instruir o Kubernetes a provisionar um balanceador de carga. Aqui, definimos um serviço chamado web e especificamos um seletor direcionado a pods rotulados com app: web. Além disso, expomos a porta 80 e encaminhamos o tráfego para a porta 8080 dos pods.
 
-Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar este endereço IP para acessar nosso aplicativo de fora do cluster.
+Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar esse endereço IP para acessar nosso aplicativo de fora do cluster.
 
 ![Services Types](/images/service-types.png)
 
@@ -1086,7 +1086,7 @@ Se você tiver uma sugestão que possa melhorar isso, bifurque o repositório e
 crie uma solicitação pull. Você também pode simplesmente abrir um problema com a tag “aprimoramento”.
 Não se esqueça de dar uma estrela ao projeto! Obrigado novamente!
 
-1.  Bifurque o projeto
+1.  Fork the Project
 2.  Crie sua ramificação de recursos (`git checkout -b feature/AmazingFeature`)
 3.  Confirme suas alterações (`git commit -m 'Add some AmazingFeature'`)
 4.  Empurre para a filial (`git push origin feature/AmazingFeature`)
@@ -1096,7 +1096,7 @@ Não se esqueça de dar uma estrela ao projeto! Obrigado novamente!
 
 -   Este projeto está licenciado sob a licença MIT \* consulte o arquivo LICENSE.md para obter detalhes
 
-## Contato
+## Contact
 
 Marcos Silvestrini -[marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)\\[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/mrsilvestrini.svg?style=social&label=Follow%20%40mrsilvestrini)](https://twitter.com/mrsilvestrini)
 
@@ -1106,7 +1106,7 @@ Link do projeto:<https://github.com/marcossilvestrini/learning-kubernetes>
 
 ## Agradecimentos
 
--   [CNCF - Fundação de Computação Nativa em Nuvem](https://www.cncf.io/)
+-   [CNCF - Cloud Native Computing Foundation](https://www.cncf.io/)
 -   [OCI - Iniciativa de Contêineres Abertos](https://opencontainers.org/)
 -   [Borg](https://kubernetes.io/blog/2015/04/borg-predecessor-to-kubernetes/)
 -   [Site Kubernetes](https://kubernetes.io/)
