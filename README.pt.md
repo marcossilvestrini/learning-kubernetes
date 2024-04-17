@@ -157,7 +157,7 @@ end
 ...  
 ```
 
-#### Cluster do Kubernetes
+#### Acima do cluster Kubernetes
 
 ```sh
 cd learning-kubernetes/vagrant/linux
@@ -633,7 +633,7 @@ O objetivo de um ReplicaSet é manter um conjunto estável de pods de réplica e
 a qualquer momento. Como tal, é frequentemente usado para garantir a disponibilidade de\\
 um número especificado de pods idênticos.
 
-### Comandos - RéplicaSet
+### Comandos - ReplicaSet
 
 ````sh
 # list replicaset
@@ -814,7 +814,7 @@ Gerencia a implantação e o escalonamento de um conjunto de pods e fornece gara
 Assim como uma implantação, um StatefulSet gerencia pods baseados em especificações de contêiner idênticas.\\
 Ao contrário de uma implantação, um StatefulSet mantém uma identidade fixa para cada um de seus pods.\\
 
-Esses pods são criados a partir da mesma especificação, mas não são intercambiáveis: cada um tem um identificador persistente que mantém durante qualquer reagendamento.
+Esses pods são criados a partir da mesma especificação, mas não são intercambiáveis: cada um possui um identificador persistente que mantém durante qualquer reagendamento.
 
 Se você quiser usar volumes de armazenamento para fornecer persistência para sua carga de trabalho,\\
 você pode usar um StatefulSet como parte da solução. Embora pods individuais em\\
@@ -963,7 +963,7 @@ spec:
 
 Definimos o tipo de serviço como LoadBalancer para instruir o Kubernetes a provisionar um balanceador de carga. Aqui, definimos um serviço chamado web e especificamos um seletor direcionado a pods rotulados com app: web. Além disso, expomos a porta 80 e encaminhamos o tráfego para a porta 8080 dos pods.
 
-Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar esse endereço IP para acessar nosso aplicativo de fora do cluster.
+Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar este endereço IP para acessar nosso aplicativo de fora do cluster.
 
 ![Services Types](/images/service-types.png)
 
