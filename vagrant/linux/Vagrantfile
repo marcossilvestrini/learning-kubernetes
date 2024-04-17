@@ -19,8 +19,8 @@ end
 # GLOBAL BOX CONFIGURATIONS
 BOX_DNS = "silvestrini-rocky9-dns"
 BOX_LB = "silvestrini-rocky9-lb"
-BOX_CP = "silvestrini-rocky9-rke2-cp"
-BOX_WK = "silvestrini-rocky9-rke2-wk"
+BOX_CP = "silvestrini-rocky9-cp"
+BOX_WK = "silvestrini-rocky9-wk"
 
 # GLOBAL VARIABLES
 VDISKMANAGER = "E:\\Apps\\VMWare\\vmware-vdiskmanager.exe"
@@ -56,19 +56,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # LOCAL VARIABLES
     INFRA_VM_NAME = "infra-server01"
-    INFRA_VAGRANT_STORAGE = "E:\\Servers\\VMWare\\Storage\\#{INFRA_VM_NAME}"
-
-    # STORAGE
-
-    ## DEFINE CONFIGS FOR ADICTIONAL DISKS
-    INFRA_ADDITIONAL_DISKS = [
-      { filename: "#{INFRA_VM_NAME}-disk1.vmdk", size_gb: 100 },
-    ]
 
     ## TRIGGER FOR CREATE ADDITIONAL DISKS - vagrant up
     infra_server01.trigger.before :up do |trigger|
       trigger.name = "Create additional disks"
       trigger.ruby do |env, machine|
+        INFRA_VAGRANT_STORAGE = "E:\\Servers\\VMWare\\Storage\\#{INFRA_VM_NAME}"
+        INFRA_ADDITIONAL_DISKS = [
+          { filename: "#{INFRA_VM_NAME}-disk1.vmdk", size_gb: 100 },
+        ]
         dir = INFRA_VAGRANT_STORAGE
         unless File.directory?(dir)
           FileUtils.mkdir_p dir
@@ -156,21 +152,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                               ]
 
     # PROVIDER
-    load_balance.vm.provider "virtualbox" do |vb|
-      vb.linked_clone = true
-      vb.name = VM_LOAD_BALANCE
-      vb.memory = 1024
-      vb.cpus = 1
-    end
-
     load_balance.vm.provider "vmware_desktop" do |vm|
       vm.vmx["virtualHW.version"] = "10"
       vm.linked_clone = true
       vm.whitelist_verified = true
       vm.vmx["allowNested"] = "true"
       vm.utility_certificate_path = "C:\\ProgramData\\HashiCorp\\vagrant-vmware-desktop\\certificates"
-      vm.clone_directory = "E:\\Servers\\VMWare\\#{INFRA_VM_NAME}"
-      vm.vmx["displayName"] = INFRA_VM_NAME
+      vm.clone_directory = "E:\\Servers\\VMWare\\#{VM_LOAD_BALANCE}"
+      vm.vmx["displayName"] = VM_LOAD_BALANCE
       vm.vmx["memsize"] = "2048"
       vm.vmx["numvcpus"] = "1"
       vm.vmx["cpuid.coresPerSocket"] = "1"
@@ -252,18 +241,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       ## VARIABLE HOSTNAME
       node.vm.hostname = WORKERS[j]
 
-      # STORAGE
-
-      ## DEFINE CONFIGS FOR ADICTIONAL DISKS
-      WK_VAGRANT_STORAGE = "E:\\Servers\\VMWare\\Storage\\#{WORKERS[j]}"
-      WK_ADDITIONAL_DISKS = [
-        { filename: "#{WORKERS[j]}-disk1.vmdk", size_gb: 200 },
-      ]
-
       ## TRIGGER FOR CREATE ADDITIONAL DISKS - vagrant up
       node.trigger.before :up do |trigger|
         trigger.name = "Create additional disks"
         trigger.ruby do |env, machine|
+          WK_VAGRANT_STORAGE = "E:\\Servers\\VMWare\\Storage\\#{WORKERS[j]}"
+          WK_ADDITIONAL_DISKS = [
+            { filename: "#{WORKERS[j]}-disk1.vmdk", size_gb: 200 },
+          ]
           dir = WK_VAGRANT_STORAGE
           unless File.directory?(dir)
             FileUtils.mkdir_p dir
@@ -289,13 +274,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       iprange += 1
 
       #PROVIDER
-      node.vm.provider "virtualbox" do |vb|
-        vb.linked_clone = true
-        vb.name = WORKERS[j]
-        vb.memory = 16000
-        vb.cpus = 4
-      end
-
       node.vm.provider "vmware_desktop" do |vm|
         vm.vmx["virtualHW.version"] = "10"
         vm.linked_clone = true
@@ -360,12 +338,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                            ]
 
     # PROVIDER
-    managment.vm.provider "virtualbox" do |vb|
-      vb.linked_clone = true
-      vb.name = VM_MANAGMENT
-      vb.memory = 1024
-      vb.cpus = 1
-    end
     managment.vm.provider "vmware_desktop" do |vm|
       vm.vmx["virtualHW.version"] = "10"
       vm.linked_clone = true

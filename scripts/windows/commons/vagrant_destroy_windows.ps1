@@ -19,6 +19,12 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # Stop vagrant process
 Get-Process -Name *vagrant* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Get-Process -Name *ruby* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+Get-Process -name "vmrest" -ErrorAction SilentlyContinue | Stop-Process -force -ErrorAction SilentlyContinue
+
+# Restart vmware utility
+net.exe stop vagrant-vmware-utility 
+Start-Sleep 2
+net.exe start vagrant-vmware-utility 
 
 # Define variables
 switch ($(hostname)) {
@@ -53,7 +59,9 @@ Start-Process -Wait -NoNewWindow -FilePath "$virtualboxFolder\VBoxManage.exe" `
 setx VAGRANT_HOME $vagrantHome >$null
 
 # Destroy lab stack
-Start-Process -Wait -WindowStyle Hidden  -FilePath $vagrant -ArgumentList "destroy -f"  -Verb RunAs
+#Start-Process -Wait -WindowStyle Hidden  -FilePath $vagrant -ArgumentList "destroy -f"  -Verb RunAs
+Write-Host "Execute vagrant destroy...."
+vagrant destroy -f
 
 # VM name
 $vmName= @(

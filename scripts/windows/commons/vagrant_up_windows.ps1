@@ -28,6 +28,11 @@ Clear-Host
 Get-Process -Name vagrant -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Get-Process -Name *ruby* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
+# # Restart vmware utility
+# net.exe stop vagrant-vmware-utility 
+# Start-Sleep 2
+# net.exe start vagrant-vmware-utility 
+
 # Semafore for vagrant process
 $scriptPath = $PSScriptRoot
 $semafore = "$scriptPath\vagrant-up.silvestrini"
@@ -42,8 +47,7 @@ switch ($(hostname)) {
    "silvestrini" {
       # Variables
       $virtualboxFolder = "E:\Apps\VirtualBox"
-      $virtualboxVMFolder = "E:\Servers\VirtualBox"       
-      $vagrant = "E:\Apps\Vagrant\bin\vagrant.exe"
+      $virtualboxVMFolder = "E:\Servers\VirtualBox"              
       $vagrantHome = "E:\Apps\Vagrant\vagrant.d"  
       $baseProject = "F:\Projetos\learning-kubernetes"          
       $baseVagrantfile = "$baseProject\vagrant\linux"                  
@@ -52,8 +56,7 @@ switch ($(hostname)) {
    "silvestrini2" {      
       # Variables
       $virtualboxFolder = "C:\Program Files\Oracle\VirtualBox"
-      $virtualboxVMFolder = "D:\Cloud\VirtualBox"          
-      $vagrant = "D:\Cloud\Vagrant\bin\vagrant.exe"
+      $virtualboxVMFolder = "D:\Cloud\VirtualBox"                
       $vagrantHome = "D:\Cloud\Vagrant\.vagrant.d"             
       $baseProject = "F:\Projetos\learning-kubernetes"                
       $baseVagrantfile = "$baseProject\vagrant\linux"         
