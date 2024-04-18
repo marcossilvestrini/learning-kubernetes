@@ -89,7 +89,7 @@ Vagrant
 
 ### Instalação
 
-#### Clone repository
+#### Clonar repositório
 
 ```sh
 git clone https://github.com/marcossilvestrini/learning-kubernetes.git
@@ -127,7 +127,7 @@ Exemplo:
 
 Defina a configuração de rede para cada VM no Vagrantfile.
 
-Example:
+Exemplo:
 
 ```ruby
 ...
@@ -180,7 +180,7 @@ Use este repositório para aprender sobre kubernetes
 -   [x] Crie ação no GitHub para tarefas de automação
 -   [x] Instale o cluster Kubernetes
 -   [x] Instalar o kubectl
--   [x] Add kubernetes examples
+-   [x] Adicionar exemplos de Kubernetes
 -   [x] Adicionar implantação de aplicativo
 -   [x] Crie uma imagem docker com o conteúdo do projeto
 -   [x] Criar ação no github para construir imagem docker
@@ -192,7 +192,7 @@ Use este repositório para aprender sobre kubernetes
 
 ## Namespaces Linux
 
-kubernetes Engine work with namespaces(PID,NET,IPC,MNT,UTS) and cgroups.
+O Kubernetes Engine funciona com namespaces (PID,NET,IPC,MNT,UTS) e cgroups.
 
 ![linux-namespaces](images/linux-namespaces.png)
 
@@ -633,7 +633,7 @@ O objetivo de um ReplicaSet é manter um conjunto estável de pods de réplica e
 a qualquer momento. Como tal, é frequentemente usado para garantir a disponibilidade de\\
 um número especificado de pods idênticos.
 
-### Comandos - RéplicaSet
+### Comandos - ReplicaSet
 
 ````sh
 # list replicaset
@@ -689,7 +689,7 @@ Os testes do Kubernetes também podem ser usados ​​para detectar alteraçõe
 
 ### Tipos de sondas
 
-#### Startup Probes
+#### Sondas de inicialização
 
 Uma investigação de inicialização é usada para determinar se um contêiner foi iniciado com êxito.\\
 Esse tipo de investigação normalmente é usado para aplicativos que demoram mais para inicializar,\\
@@ -821,7 +821,7 @@ você pode usar um StatefulSet como parte da solução. Embora pods individuais 
 um StatefulSet são suscetíveis a falhas, os identificadores de pod persistentes fazem\\
 é mais fácil combinar os volumes existentes com os novos pods que substituem aqueles que falharam.
 
-### DNS para pods em StatefulSet
+### DNS for pods in StatefulSet
 
 ```sh
 <pod-name>.<service-name>.<namespace>.svc.cluster.local
@@ -890,7 +890,7 @@ spec:
     targetPort: 8080
 ```
 
-Neste exemplo, definimos um serviço chamado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
+Neste exemplo, definimos um serviço denominado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
 
 #### Serviços NodePort
 
@@ -917,7 +917,7 @@ spec:
 
 Definimos um serviço chamado frontend que tem como alvo pods rotulados com app: frontend definindo um seletor. O serviço expõe a porta 80 e encaminha o tráfego para a porta 8080 dos pods. Definimos o tipo de serviço como NodePort e o Kubernetes expõe o serviço em uma porta específica em um nó qualificado dentro do cluster.
 
-Quando criamos um serviço NodePort, o Kubernetes atribui um número de porta de um intervalo predefinido de 30000-32767. Além disso, podemos especificar um número de porta personalizado adicionando o campo nodePort à definição de serviço:
+When we create a NodePort service, Kubernetes assigns a port number from a predefined range of 30000-32767. Additionally, we can specify a custom port number by adding the nodePort field to the service definition:
 
 ```yaml
 
@@ -940,11 +940,11 @@ O campo nodePort é especificado como 30080, que informa ao Kubernetes para expo
 
 #### Serviços LoadBalancer
 
-Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são críticas. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
+Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são essenciais. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
 
 Os serviços LoadBalancer são ideais para aplicações que precisam lidar com altos volumes de tráfego, como aplicações web ou APIs. Com os serviços LoadBalancer, podemos acessar nosso aplicativo usando um único endereço IP atribuído ao balanceador de carga.
 
-Here's an example of a simple LoadBalancer service definition:
+Aqui está um exemplo de uma definição simples de serviço LoadBalancer:
 
 ```yaml
 apiVersion: v1
@@ -963,7 +963,7 @@ spec:
 
 Definimos o tipo de serviço como LoadBalancer para instruir o Kubernetes a provisionar um balanceador de carga. Aqui, definimos um serviço chamado web e especificamos um seletor direcionado a pods rotulados com app: web. Além disso, expomos a porta 80 e encaminhamos o tráfego para a porta 8080 dos pods.
 
-Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar esse endereço IP para acessar nosso aplicativo de fora do cluster.
+Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar este endereço IP para acessar nosso aplicativo de fora do cluster.
 
 ![Services Types](/images/service-types.png)
 
@@ -1025,7 +1025,7 @@ Os segredos são semelhantes aos ConfigMaps, mas destinam-se especificamente a a
 
 -   kubernetes.io/dockercfg e kubernetes.io/dockerconfigjson - usados ​​para armazenar credenciais de registro do Docker. Eles são usados ​​para autenticar pods com um registro Docker. Eles são montados em pods que usam imagens de contêiner privadas.
 
--   kubernetes.io/tls, kubernetes.io/ssh-auth e kubernetes.io/basic-auth – usados ​​para armazenar certificados TLS, chaves SSH e credenciais básicas de autenticação, respectivamente. Eles são usados ​​para autenticar pods com outros serviços.
+-   kubernetes.io/tls, kubernetes.io/ssh-auth, and kubernetes.io/basic-auth - used to store TLS certificates, SSH keys, and basic authentication credentials, respectively. They are used to authenticate Pods with other services.
 
 -   bootstrap.kubernetes.io/token - usado para armazenar tokens de inicialização de cluster. Eles são usados ​​para autenticar nós com o plano de controle do Kubernetes.
 
@@ -1086,7 +1086,7 @@ Se você tiver uma sugestão que possa melhorar isso, bifurque o repositório e
 crie uma solicitação pull. Você também pode simplesmente abrir um problema com a tag “aprimoramento”.
 Não se esqueça de dar uma estrela ao projeto! Obrigado novamente!
 
-1.  Fork the Project
+1.  Bifurque o projeto
 2.  Crie sua ramificação de recursos (`git checkout -b feature/AmazingFeature`)
 3.  Confirme suas alterações (`git commit -m 'Add some AmazingFeature'`)
 4.  Empurre para a filial (`git push origin feature/AmazingFeature`)
@@ -1096,7 +1096,7 @@ Não se esqueça de dar uma estrela ao projeto! Obrigado novamente!
 
 -   Este projeto está licenciado sob a licença MIT \* consulte o arquivo LICENSE.md para obter detalhes
 
-## Contact
+## Contato
 
 Marcos Silvestrini -[marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)\\[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/mrsilvestrini.svg?style=social&label=Follow%20%40mrsilvestrini)](https://twitter.com/mrsilvestrini)
 
@@ -1106,7 +1106,7 @@ Link do projeto:<https://github.com/marcossilvestrini/learning-kubernetes>
 
 ## Agradecimentos
 
--   [CNCF - Cloud Native Computing Foundation](https://www.cncf.io/)
+-   [CNCF - Fundação de Computação Nativa em Nuvem](https://www.cncf.io/)
 -   [OCI - Iniciativa de Contêineres Abertos](https://opencontainers.org/)
 -   [Borg](https://kubernetes.io/blog/2015/04/borg-predecessor-to-kubernetes/)
 -   [Site Kubernetes](https://kubernetes.io/)
