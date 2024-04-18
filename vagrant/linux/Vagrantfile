@@ -19,8 +19,8 @@ end
 # GLOBAL BOX CONFIGURATIONS
 BOX_DNS = "silvestrini-rocky9-dns"
 BOX_LB = "silvestrini-rocky9-lb"
-BOX_CP = "silvestrini-rocky9-cp"
-BOX_WK = "silvestrini-rocky9-wk"
+BOX_CP = "silvestrini-rocky9-rke2-cp"
+BOX_WK = "silvestrini-rocky9-rke2-wk"
 
 # GLOBAL VARIABLES
 VDISKMANAGER = "E:\\Apps\\VMWare\\vmware-vdiskmanager.exe"
@@ -124,6 +124,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     infra_server01.trigger.after :destroy do |trigger|
       trigger.name = "Cleanup additional disks and storage directory"
       trigger.ruby do |env, machine|
+        INFRA_VAGRANT_STORAGE = "E:\\Servers\\VMWare\\Storage\\#{INFRA_VM_NAME}"
+        INFRA_ADDITIONAL_DISKS = [
+          { filename: "#{INFRA_VM_NAME}-disk1.vmdk", size_gb: 100 },
+        ]
         dir = INFRA_VAGRANT_STORAGE
         additional_disk_files = INFRA_ADDITIONAL_DISKS.map { |disk| "#{dir}/#{disk[:filename].split("-")[0]}" }
         if Dir.exist?(dir) && (Dir.entries(dir) - [".", ".."] - additional_disk_files).empty?
@@ -308,6 +312,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       node.trigger.after :destroy do |trigger|
         trigger.name = "Cleanup additional disks and storage directory"
         trigger.ruby do |env, machine|
+          WK_VAGRANT_STORAGE = "E:\\Servers\\VMWare\\Storage\\#{WORKERS[j]}"
+          WK_ADDITIONAL_DISKS = [
+            { filename: "#{WORKERS[j]}-disk1.vmdk", size_gb: 200 },
+          ]
           dir = WK_VAGRANT_STORAGE
           additional_disk_files = WK_ADDITIONAL_DISKS.map { |disk| "#{dir}/#{disk[:filename].split("-")[0]}" }
           if Dir.exist?(dir) && (Dir.entries(dir) - [".", ".."] - additional_disk_files).empty?

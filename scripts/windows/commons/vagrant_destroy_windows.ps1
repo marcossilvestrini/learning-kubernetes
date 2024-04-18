@@ -19,7 +19,10 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
 # Stop vagrant process
 Get-Process -Name *vagrant* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 Get-Process -Name *ruby* -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
-Get-Process -name "vmrest" -ErrorAction SilentlyContinue | Stop-Process -force -ErrorAction SilentlyContinue
+
+# Stop vmware process
+Get-Process -name "*vmrest*" -ErrorAction SilentlyContinue | Stop-Process -force -ErrorAction SilentlyContinue
+Get-Process -name "*vmware-vmx*" -ErrorAction SilentlyContinue | Stop-Process -force -ErrorAction SilentlyContinue
 
 # Restart vmware utility
 net.exe stop vagrant-vmware-utility 
