@@ -202,8 +202,8 @@ O ID do processo. Este arquivo é um identificador para o namespace PID do proce
 
 ## líquido
 
-Este arquivo é um identificador para o namespace de rede do processo. Isso fornece o isolamento dos recursos do sistema associados à rede e isola os dispositivos de rede. O ip netns - é usado para processar o gerenciamento de namespace de rede
-mount Este arquivo é um identificador para o namespace de montagem do processo e isola os pontos de montagem
+This file is a handle for the network namespace of the process. This provides the isolation of the system resources associated with networking and isolates Network devices. The ip netns - is used to process network namespace management
+mount This file is a handle for the mount namespace of the process and isolates Mount points
 
 ## ipc
 
@@ -279,7 +279,7 @@ Fonte:<https://8gwifi.org/docs/linux-namespace.jsp>
 
 <a name="install-kubernetes"></a>
 
-### Feio
+### Minikubo
 
 ```sh
 # install
@@ -354,7 +354,7 @@ kind create cluster --name kind-multinodes --config $HOME/kind-3nodes.yaml
 <p align="right">(<a href="#install-kubernetes">back to install-kubernetes</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## delicado
+## RKE2
 
 <a name="rke2"></a>
 
@@ -701,7 +701,7 @@ e o Kubernetes tentará reiniciar o contêiner.
 
 #### Sondas de prontidão
 
-Uma investigação de prontidão é usada para determinar se um contêiner está pronto para receber tráfego.\\
+Uma sondagem de prontidão é usada para determinar se um contêiner está pronto para receber tráfego.\\
 Este tipo de investigação é usado para garantir que um contêiner esteja totalmente instalado e funcionando e possa\\
 aceita conexões de entrada antes de serem adicionadas ao balanceador de carga de serviço.\\
 Uma sondagem de prontidão pode ser usada para verificar a disponibilidade das dependências de um aplicativo\\
@@ -821,7 +821,7 @@ você pode usar um StatefulSet como parte da solução. Embora pods individuais 
 um StatefulSet são suscetíveis a falhas, os identificadores de pod persistentes fazem\\
 é mais fácil combinar os volumes existentes com os novos pods que substituem aqueles que falharam.
 
-### DNS for pods in StatefulSet
+### DNS para pods em StatefulSet
 
 ```sh
 <pod-name>.<service-name>.<namespace>.svc.cluster.local
@@ -890,7 +890,7 @@ spec:
     targetPort: 8080
 ```
 
-Neste exemplo, definimos um serviço denominado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
+Neste exemplo, definimos um serviço chamado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
 
 #### Serviços NodePort
 
@@ -917,7 +917,7 @@ spec:
 
 Definimos um serviço chamado frontend que tem como alvo pods rotulados com app: frontend definindo um seletor. O serviço expõe a porta 80 e encaminha o tráfego para a porta 8080 dos pods. Definimos o tipo de serviço como NodePort e o Kubernetes expõe o serviço em uma porta específica em um nó qualificado dentro do cluster.
 
-When we create a NodePort service, Kubernetes assigns a port number from a predefined range of 30000-32767. Additionally, we can specify a custom port number by adding the nodePort field to the service definition:
+Quando criamos um serviço NodePort, o Kubernetes atribui um número de porta de um intervalo predefinido de 30000-32767. Além disso, podemos especificar um número de porta personalizado adicionando o campo nodePort à definição de serviço:
 
 ```yaml
 
@@ -1025,7 +1025,7 @@ Os segredos são semelhantes aos ConfigMaps, mas destinam-se especificamente a a
 
 -   kubernetes.io/dockercfg e kubernetes.io/dockerconfigjson - usados ​​para armazenar credenciais de registro do Docker. Eles são usados ​​para autenticar pods com um registro Docker. Eles são montados em pods que usam imagens de contêiner privadas.
 
--   kubernetes.io/tls, kubernetes.io/ssh-auth, and kubernetes.io/basic-auth - used to store TLS certificates, SSH keys, and basic authentication credentials, respectively. They are used to authenticate Pods with other services.
+-   kubernetes.io/tls, kubernetes.io/ssh-auth e kubernetes.io/basic-auth – usados ​​para armazenar certificados TLS, chaves SSH e credenciais básicas de autenticação, respectivamente. Eles são usados ​​para autenticar pods com outros serviços.
 
 -   bootstrap.kubernetes.io/token - usado para armazenar tokens de inicialização de cluster. Eles são usados ​​para autenticar nós com o plano de controle do Kubernetes.
 
@@ -1117,16 +1117,16 @@ Link do projeto:<https://github.com/marcossilvestrini/learning-kubernetes>
 -   [Certificação CKAD](https://www.cncf.io/certification/ckad/)
 -   [Certificação CKS](https://www.cncf.io/certification/cks/)
 -   [Tipo](https://kind.sigs.k8s.io/docs/user/quick-start)
--   [Feio](https://github.com/kubernetes/minikube)
+-   [Minikubo](https://github.com/kubernetes/minikube)
 -   [k0s](https://k0sproject.io/)
 -   [Como um bastão](https://k3s.io/)
--   [delicado](https://docs.rke2.io/architecture)
+-   [RKE2](https://docs.rke2.io/architecture)
 -   [Acima do cluster RKE2 HA](https://computingforgeeks.com/deploy-kubernetes-on-rocky-using-rke2/?expand_article=1)
 -   [Cargas de trabalho do Kubernetes](https://www.suse.com/c/rancher_blog/introduction-to-kubernetes-workloads/)
 -   [Provisionador de caminho local rancheiro](https://github.com/rancher/local-path-provisioner)
 -   [Painel do Kubernetes](https://upcloud.com/resources/tutorials/deploy-kubernetes-dashboard)
 -   [Gerenciamento de cluster Openlens](https://github.com/MuhammedKalkan/OpenLens)
--   [Reserve Linux Ps](https://livro.descomplicandokubernetes.com.br/pt/)
+-   [Reserve Linuxips](https://livro.descomplicandokubernetes.com.br/pt/)
 -   [Serviços Kubernetes](https://cast.ai/blog/kubernetes-load-balancer-expert-guide-with-examples/)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
