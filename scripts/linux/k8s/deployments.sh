@@ -40,7 +40,7 @@ function init() {
         exit 1
     fi
 
-    # Add helm my repositories     
+    # Add my helm repositories     
      helm repo add silvestrini https://marcossilvestrini.github.io/learning-helm/
      helm repo update
      helm search repo silvestrini
@@ -60,25 +60,27 @@ function deploy-cert-manager() {
     ## Install cert-manager
     helm upgrade --install \
         cert-manager jetstack/cert-manager \
+        --wait \
         --namespace cert-manager \
         --create-namespace \
         --version v1.12.0 \
         --set installCRDs=true
-    echo "Waiting for deployment cert-manager to complete..."
-    sleep 10s
-    kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=600s
+    # echo "Waiting for deployment cert-manager to complete..."
+    # sleep 10s
+    #kubectl wait --for condition=containersready -n cert-manager pod --all --timeout=600s
 }
 
 # Metallb
 function deploy-metalLB() {    
     echo "DEPLOY METALLB STACK"
     # Deploy metallb    
-    helm install metallb oci://registry-1.docker.io/bitnamicharts/metallb \
+    helm upgrade --install metallb oci://registry-1.docker.io/bitnamicharts/metallb \
+        --wait \
         --namespace metallb \
         --create-namespace
-    echo "Waiting for deployment metallb to complete..."
-    sleep 10s
-    kubectl wait --for condition=containersready -n metallb pod --all --timeout=600s    
+    # echo "Waiting for deployment metallb to complete..."
+    # sleep 10s
+    #kubectl wait --for condition=containersready -n metallb pod --all --timeout=600s    
     kubectl -n metallb apply -f apps/metallb/metallb.yaml
     echo "MetalLB deployment has complete with success!!!"
 }
@@ -94,11 +96,11 @@ function deploy-argocd() {
     helm repo add argo https://argoproj.github.io/argo-helm
     
     helm repo update
-    helm upgrade --install argocd argo/argo-cd -f charts/argocd/values.yaml --create-namespace --namespace argocd
+    helm upgrade --install --wait argocd argo/argo-cd -f charts/argocd/values.yaml --create-namespace --namespace argocd
     
-    echo "Waiting for deployment argocd to complete..."
-    sleep 10s    
-    kubectl wait --for condition=containersready -n argocd pod --all --timeout=1800s
+    # echo "Waiting for deployment argocd to complete..."
+    # sleep 10s    
+    #kubectl wait --for condition=containersready -n argocd pod --all --timeout=1800s
     STATUS=$(curl -Ik --silent https://argocd.skynet.com.br | head -n 1 | awk -F' ' '{print $2}')
     while [ "$STATUS" != 200 ]; do
         clear
@@ -177,12 +179,13 @@ function deploy-longhorn() {
     helm repo add longhorn https://charts.longhorn.io
     helm repo update
     helm upgrade --install longhorn longhorn/longhorn \
+        --wait \
         --namespace longhorn-system \
         --create-namespace \
         --values charts/longhorn/values.yaml
     echo "Waiting for deployment longhorn to complete..."
-    sleep 10s
-    kubectl wait --for condition=containersready -n longhorn-system  pod --all --timeout=900s    
+    # sleep 10s
+    # kubectl wait --for condition=containersready -n longhorn-system  pod --all --timeout=900s    
     
 }
 
@@ -199,11 +202,12 @@ function deploy-rancher() {
 
     ## Install Rancher using Helm
     helm upgrade -i rancher rancher-stable/rancher \
+        --wait\
         --namespace cattle-system \
         --set hostname=rancher.skynet.com.br \
         --set bootstrapPassword=Rancher@123456
-    echo "Waiting for deployment rancher to complete..."
-    sleep 10s
+    # echo "Waiting for deployment rancher to complete..."
+    # sleep 10s
     #kubectl wait --for condition=containersready -n cattle-system pod --all --timeout=60s
 }
 

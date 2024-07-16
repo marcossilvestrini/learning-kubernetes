@@ -110,6 +110,8 @@ If(Test-Path "$baseVagrantfile\.vagrant"){Remove-Item -Recurse -Force "$baseVagr
 
 # Up kubernetes stack
 vagrant up
+
+
 Copy-Item .\.vagrant\machines\infra-server01\$provider\private_key $vagrantPK\infra-server01
 Copy-Item .\.vagrant\machines\load-balance\$provider\private_key $vagrantPK\load-balance
 Copy-Item .\.vagrant\machines\managment\$provider\private_key $vagrantPK\managment

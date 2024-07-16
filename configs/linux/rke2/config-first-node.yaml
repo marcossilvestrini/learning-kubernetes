@@ -5,7 +5,6 @@ node-ip: ipNode
 bind-address: ipNode
 advertise-address: ipNode
 etcd-expose-metrics: true
-
 tls-san:
   - rancher.skynet.com.br
   - 192.168.0.131
@@ -16,6 +15,7 @@ tls-san:
   - control-plane03.skynet.com.br
   - 192.168.0.142
 cni:
-  - canal
+  #- canal
+  - cilium 
 node-taint:
   - "CriticalAddonsOnly=true:NoExecute"
