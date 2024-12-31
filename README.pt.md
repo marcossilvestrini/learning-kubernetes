@@ -202,8 +202,8 @@ O ID do processo. Este arquivo é um identificador para o namespace PID do proce
 
 ## líquido
 
-This file is a handle for the network namespace of the process. This provides the isolation of the system resources associated with networking and isolates Network devices. The ip netns - is used to process network namespace management
-mount This file is a handle for the mount namespace of the process and isolates Mount points
+Este arquivo é um identificador para o namespace de rede do processo. Isso fornece o isolamento dos recursos do sistema associados à rede e isola os dispositivos de rede. O ip netns - é usado para processar o gerenciamento de namespace de rede
+mount Este arquivo é um identificador para o namespace de montagem do processo e isola os pontos de montagem
 
 ## ipc
 
@@ -213,7 +213,7 @@ Este arquivo é um identificador para o namespace IPC do processo e isola filas 
 
 Este arquivo é um identificador para o namespace UTS do processo e isola o nome do host e o nome de domínio NIS
 
-## do utilizador
+## usuário
 
 Este arquivo é um identificador para o namespace do usuário do processo
 
@@ -279,7 +279,7 @@ Fonte:<https://8gwifi.org/docs/linux-namespace.jsp>
 
 <a name="install-kubernetes"></a>
 
-### Minikubo
+### Feio
 
 ```sh
 # install
@@ -395,7 +395,7 @@ crictl --runtime-endpoint unix:///run/k3s/containerd/containerd.sock ps -a
 crictl stats
 ```
 
-### Exploração madeireira
+### Registro
 
 ```sh
 journalctl -f -u rke2-server
@@ -408,7 +408,7 @@ Referência:<https://gist.github.com/superseb/3b78f47989e0dbc1295486c186e944bf>
 <p align="right">(<a href="#rke2">back to rke2</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Kubectl
+## Para bectl
 
 <a name="kubectl"></a>
 
@@ -468,7 +468,7 @@ kubectl logs -n kube-system --all-containers=true etcd-control-plane01
 <p align="right">(<a href="#kubectl">back to kubectl</a>)</p>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-## Containers
+## Recipientes
 
 <a name="containers"></a>
 
@@ -633,7 +633,7 @@ O objetivo de um ReplicaSet é manter um conjunto estável de pods de réplica e
 a qualquer momento. Como tal, é frequentemente usado para garantir a disponibilidade de\\
 um número especificado de pods idênticos.
 
-### Comandos - ReplicaSet
+### Comandos - RéplicaSet
 
 ````sh
 # list replicaset
@@ -814,7 +814,7 @@ Gerencia a implantação e o escalonamento de um conjunto de pods e fornece gara
 Assim como uma implantação, um StatefulSet gerencia pods baseados em especificações de contêiner idênticas.\\
 Ao contrário de uma implantação, um StatefulSet mantém uma identidade fixa para cada um de seus pods.\\
 
-Esses pods são criados a partir da mesma especificação, mas não são intercambiáveis: cada um tem um identificador persistente que mantém durante qualquer reagendamento.
+Esses pods são criados a partir da mesma especificação, mas não são intercambiáveis: cada um possui um identificador persistente que mantém durante qualquer reagendamento.
 
 Se você quiser usar volumes de armazenamento para fornecer persistência para sua carga de trabalho,\\
 você pode usar um StatefulSet como parte da solução. Embora pods individuais em\\
@@ -890,7 +890,7 @@ spec:
     targetPort: 8080
 ```
 
-Neste exemplo, definimos um serviço chamado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
+Neste exemplo, definimos um serviço denominado backend com um seletor direcionado a pods rotulados com app: backend. O serviço expõe a porta 80, que é a porta usada pelos clientes para acessar o serviço, e encaminha o tráfego para a porta 8080 dos pods, que é onde o aplicativo backend está sendo executado.
 
 #### Serviços NodePort
 
@@ -940,7 +940,7 @@ O campo nodePort é especificado como 30080, que informa ao Kubernetes para expo
 
 #### Serviços LoadBalancer
 
-Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são essenciais. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
+Os serviços LoadBalancer conectam nossos aplicativos externamente e os ambientes de produção os utilizam onde alta disponibilidade e escalabilidade são críticas. Quando criamos um serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga em nosso ambiente de nuvem e encaminha o tráfego para os nós que executam o serviço.
 
 Os serviços LoadBalancer são ideais para aplicações que precisam lidar com altos volumes de tráfego, como aplicações web ou APIs. Com os serviços LoadBalancer, podemos acessar nosso aplicativo usando um único endereço IP atribuído ao balanceador de carga.
 
@@ -963,7 +963,7 @@ spec:
 
 Definimos o tipo de serviço como LoadBalancer para instruir o Kubernetes a provisionar um balanceador de carga. Aqui, definimos um serviço chamado web e especificamos um seletor direcionado a pods rotulados com app: web. Além disso, expomos a porta 80 e encaminhamos o tráfego para a porta 8080 dos pods.
 
-Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar este endereço IP para acessar nosso aplicativo de fora do cluster.
+Depois de criar o serviço LoadBalancer, o Kubernetes provisiona um balanceador de carga no ambiente de nuvem com um endereço IP público. Podemos usar esse endereço IP para acessar nosso aplicativo de fora do cluster.
 
 ![Services Types](/images/service-types.png)
 
@@ -1098,7 +1098,7 @@ Não se esqueça de dar uma estrela ao projeto! Obrigado novamente!
 
 ## Contato
 
-Marcos Silvestrini -[marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)\\[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/mrsilvestrini.svg?style=social&label=Follow%20%40mrsilvestrini)](https://twitter.com/mrsilvestrini)
+Marcos Silvestrini[marcos.silvestrini@gmail.com](mailto:marcos.silvestrini@gmail.com)\\[![Twitter](https://img.shields.io/twitter/url/https/twitter.com/mrsilvestrini.svg?style=social&label=Follow%20%40mrsilvestrini)](https://twitter.com/mrsilvestrini)
 
 Link do projeto:<https://github.com/marcossilvestrini/learning-kubernetes>
 
@@ -1109,7 +1109,7 @@ Link do projeto:<https://github.com/marcossilvestrini/learning-kubernetes>
 -   [CNCF - Fundação de Computação Nativa em Nuvem](https://www.cncf.io/)
 -   [OCI - Iniciativa de Contêineres Abertos](https://opencontainers.org/)
 -   [Borg](https://kubernetes.io/blog/2015/04/borg-predecessor-to-kubernetes/)
--   [Site Kubernetes](https://kubernetes.io/)
+-   [site kubernetes](https://kubernetes.io/)
 -   [Arquitetura Kubernetes](https://platform9.com/blog/kubernetes-enterprise-chapter-2-kubernetes-architecture-concepts/)
 -   [GitHub](https://github.com/kubernetes/kubernetes/)
 -   [Problemas](https://github.com/kubernetes/kubernetes/issues)
@@ -1117,7 +1117,7 @@ Link do projeto:<https://github.com/marcossilvestrini/learning-kubernetes>
 -   [Certificação CKAD](https://www.cncf.io/certification/ckad/)
 -   [Certificação CKS](https://www.cncf.io/certification/cks/)
 -   [Tipo](https://kind.sigs.k8s.io/docs/user/quick-start)
--   [Minikubo](https://github.com/kubernetes/minikube)
+-   [Feio](https://github.com/kubernetes/minikube)
 -   [k0s](https://k0sproject.io/)
 -   [Como um bastão](https://k3s.io/)
 -   [RKE2](https://docs.rke2.io/architecture)
